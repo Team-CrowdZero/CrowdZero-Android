@@ -38,9 +38,7 @@ fun BaseTopAppBar(
     }
 
     CenterAlignedTopAppBar(
-        modifier = modifier
-            .fillMaxWidth()
-            .showIf(route != "Splash"),
+        modifier = modifier.fillMaxWidth(),
         title = {
             Text(
                 text = stringResource(id = title),

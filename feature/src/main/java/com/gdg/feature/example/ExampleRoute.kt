@@ -89,7 +89,7 @@ fun ExampleRoute(
 
 @Composable
 fun ExampleScreen(
-    followers: List<ExampleEntity>,
+    followers: List<ExampleEntity>
 ) {
     Column(
         modifier = Modifier

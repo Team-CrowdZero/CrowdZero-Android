@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
@@ -49,8 +48,8 @@ import com.gdg.core.util.NoRippleInteractionSource
 import com.gdg.crowdzero_android.navigation.calendarNavGraph
 import com.gdg.crowdzero_android.navigation.detailNavGraph
 import com.gdg.crowdzero_android.navigation.mapNavGraph
-import com.gdg.crowdzero_android.navigation.splashNavGraph
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -85,10 +84,9 @@ fun MainScreen(
         } else {
             backPressedState = true
             coroutineScope.launch {
-                snackBarHostState.showSnackbar(
-                    message = "버튼을 한 번 더 누르면 종료돼요",
-                    duration = SnackbarDuration.Short
-                )
+                val job = launch { snackBarHostState.showSnackbar(message = "버튼을 한 번 더 누르면 종료돼요") }
+                delay(2000)
+                job.cancel()
             }
         }
         backPressedTime = System.currentTimeMillis()
@@ -148,7 +146,6 @@ fun MainScreen(
                 navController = navigator.navController,
                 startDestination = navigator.startDestination
             ) {
-                splashNavGraph(navHostController = navigator.navController)
                 mapNavGraph(
                     paddingValues = paddingValues,
                     navHostController = navigator.navController

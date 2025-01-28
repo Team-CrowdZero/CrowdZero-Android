@@ -14,5 +14,4 @@ class CrowdZero : Application() {
     private fun setTimber() {
         Timber.plant(Timber.DebugTree())
     }
-
 }
