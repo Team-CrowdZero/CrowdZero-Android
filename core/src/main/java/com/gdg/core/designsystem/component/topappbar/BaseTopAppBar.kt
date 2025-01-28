@@ -10,8 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -19,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gdg.core.R
 import com.gdg.core.designsystem.theme.CrowdZeroAndroidTheme
+import com.gdg.core.designsystem.theme.CrowdZeroTheme
 import com.gdg.core.extension.noRippleClickable
 import com.gdg.core.extension.showIf
 
@@ -43,7 +42,8 @@ fun BaseTopAppBar(
             Text(
                 text = stringResource(id = title),
                 textAlign = TextAlign.Center,
-                color = Black
+                color = CrowdZeroTheme.colors.gray800,
+                style = CrowdZeroTheme.typography.h4JalnanGothic
             )
         },
         navigationIcon = {
@@ -54,10 +54,10 @@ fun BaseTopAppBar(
                     .padding(start = 8.dp)
                     .noRippleClickable { onBackButtonClick() }
                     .showIf(isIconVisible),
-                tint = Black
+                tint = CrowdZeroTheme.colors.gray800
             )
         },
-        colors = TopAppBarDefaults.topAppBarColors(White),
+        colors = TopAppBarDefaults.topAppBarColors(CrowdZeroTheme.colors.white),
         windowInsets = WindowInsets(0)
     )
 }

@@ -197,13 +197,14 @@ fun MainTabBar(
                         }
                         onTabSelected(tab)
                     },
-                    modifier = Modifier.padding(vertical = 8.dp),
+                    modifier = Modifier.padding(vertical = 8.5.dp),
                     selectedContentColor = CrowdZeroTheme.colors.green700,
                     unselectedContentColor = CrowdZeroTheme.colors.gray600,
                     interactionSource = NoRippleInteractionSource
                 ) {
                     Text(
-                        text = stringResource(tab.contentDescription)
+                        text = stringResource(tab.contentDescription),
+                        style = CrowdZeroTheme.typography.c2JalnanGothic
                     )
                 }
             }
