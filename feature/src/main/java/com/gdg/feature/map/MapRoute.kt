@@ -12,13 +12,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gdg.core.designsystem.theme.CrowdZeroAndroidTheme
-import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
@@ -95,7 +93,7 @@ fun MapScreen(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
         ) {
-            Text(text = "Go to Detail")
+            Text(text = "상세 페이지로 이동")
         }
     }
 }
