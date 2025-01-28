@@ -29,8 +29,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
         jvmTarget = libs.versions.jvmTarget.get()
@@ -83,4 +83,9 @@ dependencies {
 
     // Accompanist System UI Controller
     implementation(libs.accompanist.systemuicontroller)
+
+    // Naver Map
+    implementation(libs.naver.map.location)
+    implementation(libs.naver.map.compose)
+    implementation(libs.play.services.location)
 }

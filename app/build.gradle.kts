@@ -28,6 +28,8 @@ android {
             useSupportLibrary = true
         }
         buildConfigField("String", "BASE_URL", properties["base.url"].toString())
+        buildConfigField("String", "NAVER_CLIENT_ID", properties["naver.client.id"].toString())
+        buildConfigField("String", "NAVER_CLIENT_SECRET", properties["naver.client.secret"].toString())
     }
 
     buildTypes {
@@ -40,8 +42,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
         jvmTarget = libs.versions.jvmTarget.get()
@@ -100,4 +102,9 @@ dependencies {
 
     // Accompanist System UI Controller
     implementation(libs.accompanist.systemuicontroller)
+
+    // Naver Map
+    implementation(libs.naver.map.compose)
+    implementation(libs.naver.map.location)
+    implementation(libs.play.services.location)
 }

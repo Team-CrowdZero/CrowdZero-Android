@@ -30,9 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.Green
-import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -44,6 +41,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.gdg.core.designsystem.component.snackbar.BaseSnackBar
 import com.gdg.core.designsystem.component.topappbar.BaseTopAppBar
 import com.gdg.core.designsystem.theme.CrowdZeroAndroidTheme
+import com.gdg.core.designsystem.theme.CrowdZeroTheme
 import com.gdg.core.util.NoRippleInteractionSource
 import com.gdg.crowdzero_android.navigation.calendarNavGraph
 import com.gdg.crowdzero_android.navigation.detailNavGraph
@@ -175,17 +173,18 @@ fun MainTabBar(
         if (currentTab != null) {
             TabRow(
                 selectedTabIndex = currentTab.index,
-                containerColor = White,
-                contentColor = Black,
+                containerColor = CrowdZeroTheme.colors.white,
+                contentColor = CrowdZeroTheme.colors.green700,
                 indicator = { tabPositions ->
                     SecondaryIndicator(
                         modifier = Modifier
                             .tabIndicatorOffset(tabPositions[currentTab.index])
                             .clip(CircleShape),
                         height = 4.dp,
-                        color = Green
+                        color = CrowdZeroTheme.colors.green700
                     )
-                }
+                },
+                divider = {}
             ) {
                 tabs.forEach { tab ->
                     Tab(
@@ -194,8 +193,8 @@ fun MainTabBar(
                             onTabSelected(tab)
                         },
                         modifier = Modifier.padding(vertical = 8.dp),
-                        selectedContentColor = Black,
-                        unselectedContentColor = LightGray,
+                        selectedContentColor = CrowdZeroTheme.colors.green700,
+                        unselectedContentColor = CrowdZeroTheme.colors.gray600,
                         interactionSource = NoRippleInteractionSource
                     ) {
                         Text(
@@ -210,8 +209,13 @@ fun MainTabBar(
 
 @Preview(showBackground = true)
 @Composable
-fun MainScreenPreview() {
+fun MainTabBarPreview() {
     CrowdZeroAndroidTheme {
-        MainScreen()
+        MainTabBar(
+            isVisible = true,
+            tabs = MainTab.entries,
+            currentTab = MainTab.MAP,
+            onTabSelected = {}
+        )
     }
 }
