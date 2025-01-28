@@ -9,7 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.gdg.crowdzero_android.navigation.Map
+import com.gdg.crowdzero_android.navigation.Splash
 import com.gdg.crowdzero_android.navigation.navigateCalendar
 import com.gdg.crowdzero_android.navigation.navigateMap
 
@@ -20,7 +20,7 @@ class MainNavigator(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val startDestination = Map
+    val startDestination = Splash
 
     val currentTab: MainTab?
         @Composable get() = MainTab.find { tab ->
