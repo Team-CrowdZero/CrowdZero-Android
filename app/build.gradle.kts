@@ -65,7 +65,6 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
     implementation(project(":feature"))
-    implementation(project(":build-logic"))
 
     implementation(libs.bundles.compose)
     implementation(libs.bundles.kotlinx)
