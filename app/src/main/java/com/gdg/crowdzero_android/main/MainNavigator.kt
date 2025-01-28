@@ -3,6 +3,7 @@ package com.gdg.crowdzero_android.main
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -19,6 +20,13 @@ class MainNavigator(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
+    val startDestination = Map
+
+    val currentTab: MainTab?
+        @Composable get() = MainTab.find { tab ->
+            currentDestination?.hasRoute(tab::class) == true
+        }
+
     fun navigate(tab: MainTab) {
         val navOptions = navOptions {
             popUpTo(navController.graph.findStartDestination().id) {
@@ -34,7 +42,14 @@ class MainNavigator(
         }
     }
 
-    val startDestination = Map
+    fun navigateUp() {
+        navController.navigateUp()
+    }
+
+    @Composable
+    fun showTabRow() = MainTab.contains {
+        currentDestination?.hasRoute(it::class) == true
+    }
 }
 
 @Composable

@@ -2,6 +2,7 @@ package com.gdg.crowdzero_android.di
 
 import com.gdg.core.extension.isJsonArray
 import com.gdg.core.extension.isJsonObject
+import com.gdg.crowdzero_android.BuildConfig.BASE_URL
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -45,12 +46,12 @@ object RetrofitModule {
         return loggingInterceptor
     }
 
-//    @Singleton
-//    @Provides
-//    @ExampleRetrofit
-//    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-//        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-//        .client(okHttpClient)
-//        .baseUrl(BASE_URL)
-//        .build()
+    @Singleton
+    @Provides
+    @ExampleRetrofit
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .client(okHttpClient)
+        .baseUrl(BASE_URL)
+        .build()
 }

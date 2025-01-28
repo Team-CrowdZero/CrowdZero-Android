@@ -9,14 +9,17 @@ import com.gdg.crowdzero_android.navigation.Calendar
 import com.gdg.crowdzero_android.navigation.Map
 
 enum class MainTab(
+    val index: Int,
     @StringRes val contentDescription: Int,
     val route: MainTabRoute
 ) {
     MAP(
+        index = 0,
         contentDescription = R.string.main_tab_map,
         route = Map
     ),
     CALENDAR(
+        index = 1,
         contentDescription = R.string.main_tab_calendar,
         route = Calendar
     );

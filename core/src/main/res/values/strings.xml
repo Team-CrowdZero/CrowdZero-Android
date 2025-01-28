@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">CrowdZero-Android</string>
+
+    <!-- App Bar -->
+    <string name="ic_back">앱바 뒤로가기 버튼</string>
+    <string name="app_bar_map">주요 집회 장소</string>
+    <string name="app_bar_calendar">주요 집회 일정</string>
+    <string name="app_bar_detail">장소 상세</string>
+    <string name="app_bar_error">잘못된 경로</string>
+
+    <!-- Route -->
+    <string name="route_map">Map</string>
+    <string name="route_calendar">Calendar</string>
+    <string name="route_detail">Detail</string>
 </resources>
