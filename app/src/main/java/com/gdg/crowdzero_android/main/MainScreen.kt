@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -49,6 +50,7 @@ import com.gdg.crowdzero_android.navigation.mapNavGraph
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun MainScreen(
@@ -127,6 +129,8 @@ fun MainScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .statusBarsPadding()
+                .navigationBarsPadding()
         ) {
             NavHost(
                 enterTransition = {
@@ -152,7 +156,10 @@ fun MainScreen(
                     paddingValues = paddingValues,
                     navHostController = navigator.navController
                 )
-                detailNavGraph(navHostController = navigator.navController)
+                detailNavGraph(
+                    paddingValues = paddingValues,
+                    navHostController = navigator.navController
+                )
             }
         }
     }
@@ -165,42 +172,49 @@ fun MainTabBar(
     currentTab: MainTab?,
     onTabSelected: (MainTab) -> Unit
 ) {
+    val pagerState = rememberPagerState(initialPage = currentTab?.index ?: 0) { tabs.size }
+    val coroutineScope = rememberCoroutineScope()
+
     AnimatedVisibility(
         visible = isVisible,
         enter = EnterTransition.None,
         exit = ExitTransition.None
     ) {
-        if (currentTab != null) {
-            TabRow(
-                selectedTabIndex = currentTab.index,
-                containerColor = CrowdZeroTheme.colors.white,
-                contentColor = CrowdZeroTheme.colors.green700,
-                indicator = { tabPositions ->
-                    SecondaryIndicator(
-                        modifier = Modifier
-                            .tabIndicatorOffset(tabPositions[currentTab.index])
-                            .clip(CircleShape),
-                        height = 4.dp,
-                        color = CrowdZeroTheme.colors.green700
+        TabRow(
+            selectedTabIndex = pagerState.currentPage,
+            containerColor = CrowdZeroTheme.colors.white,
+            contentColor = CrowdZeroTheme.colors.green700,
+            indicator = { tabPositions ->
+                SecondaryIndicator(
+                    modifier = Modifier
+                        .tabIndicatorOffset(tabPositions[currentTab?.index ?: 0])
+                        .clip(CircleShape),
+                    height = 4.dp,
+                    color = CrowdZeroTheme.colors.green700
+                )
+            },
+            divider = {}
+        ) {
+            tabs.forEachIndexed { index, tab ->
+                Tab(
+                    selected = currentTab == tab,
+                    onClick = {
+                        Timber.d("Tab Index: ${tab.index}")
+                        Timber.d("Pager State Current Page: ${pagerState.currentPage}")
+                        Timber.d("Index: $index")
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                        onTabSelected(tab)
+                    },
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    selectedContentColor = CrowdZeroTheme.colors.green700,
+                    unselectedContentColor = CrowdZeroTheme.colors.gray600,
+                    interactionSource = NoRippleInteractionSource
+                ) {
+                    Text(
+                        text = stringResource(tab.contentDescription)
                     )
-                },
-                divider = {}
-            ) {
-                tabs.forEach { tab ->
-                    Tab(
-                        selected = tab == currentTab,
-                        onClick = {
-                            onTabSelected(tab)
-                        },
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        selectedContentColor = CrowdZeroTheme.colors.green700,
-                        unselectedContentColor = CrowdZeroTheme.colors.gray600,
-                        interactionSource = NoRippleInteractionSource
-                    ) {
-                        Text(
-                            text = stringResource(tab.contentDescription)
-                        )
-                    }
                 }
             }
         }

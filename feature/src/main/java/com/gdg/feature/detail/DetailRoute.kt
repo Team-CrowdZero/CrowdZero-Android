@@ -2,8 +2,10 @@ package com.gdg.feature.detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -19,6 +21,7 @@ import com.gdg.core.designsystem.theme.CrowdZeroAndroidTheme
 fun DetailRoute(
     detailViewModel: DetailViewModel = hiltViewModel(),
     id: Int,
+    paddingValues: PaddingValues,
     navigateUp: () -> Unit
 ) {
     LaunchedEffect(key1 = detailViewModel.sideEffects) {
@@ -30,17 +33,20 @@ fun DetailRoute(
     }
 
     DetailScreen(
+        paddingValues = paddingValues,
         onBackButtonClick = detailViewModel::navigateUp
     )
 }
 
 @Composable
 fun DetailScreen(
+    paddingValues: PaddingValues = PaddingValues(),
     onBackButtonClick: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(paddingValues)
             .statusBarsPadding()
             .navigationBarsPadding(),
         verticalArrangement = Arrangement.Center,
