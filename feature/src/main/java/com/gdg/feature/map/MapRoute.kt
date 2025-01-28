@@ -1,9 +1,7 @@
 package com.gdg.feature.map
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -30,7 +28,6 @@ import com.naver.maps.map.compose.rememberCameraPositionState
 @Composable
 fun MapRoute(
     mapViewModel: MapViewModel = hiltViewModel(),
-    paddingValues: PaddingValues,
     navigateToDetail: (Int) -> Unit
 ) {
     val mapProperties by remember {
@@ -60,7 +57,6 @@ fun MapRoute(
     }
 
     MapScreen(
-        paddingValues = paddingValues,
         mapProperties = mapProperties,
         mapUiSettings = mapUiSettings,
         cameraPositionState = cameraPositionState,
@@ -71,7 +67,6 @@ fun MapRoute(
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun MapScreen(
-    paddingValues: PaddingValues = PaddingValues(),
     mapProperties: MapProperties = MapProperties(),
     mapUiSettings: MapUiSettings = MapUiSettings(),
     cameraPositionState: CameraPositionState = CameraPositionState(),
@@ -81,7 +76,6 @@ fun MapScreen(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
-            .padding(paddingValues)
     ) {
         NaverMap(
             cameraPositionState = cameraPositionState,

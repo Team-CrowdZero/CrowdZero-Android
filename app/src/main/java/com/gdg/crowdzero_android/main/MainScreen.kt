@@ -50,7 +50,6 @@ import com.gdg.crowdzero_android.navigation.mapNavGraph
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 fun MainScreen(
@@ -148,18 +147,12 @@ fun MainScreen(
                 navController = navigator.navController,
                 startDestination = navigator.startDestination
             ) {
-                mapNavGraph(
-                    paddingValues = paddingValues,
-                    navHostController = navigator.navController
-                )
+                mapNavGraph(navHostController = navigator.navController)
                 calendarNavGraph(
                     paddingValues = paddingValues,
                     navHostController = navigator.navController
                 )
-                detailNavGraph(
-                    paddingValues = paddingValues,
-                    navHostController = navigator.navController
-                )
+                detailNavGraph(navHostController = navigator.navController)
             }
         }
     }
@@ -199,9 +192,6 @@ fun MainTabBar(
                 Tab(
                     selected = currentTab == tab,
                     onClick = {
-                        Timber.d("Tab Index: ${tab.index}")
-                        Timber.d("Pager State Current Page: ${pagerState.currentPage}")
-                        Timber.d("Index: $index")
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(index)
                         }
