@@ -1,5 +1,6 @@
 package com.gdg.crowdzero_android.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -20,12 +21,14 @@ fun NavController.navigateDetail(
 }
 
 fun NavGraphBuilder.detailNavGraph(
+    paddingValues: PaddingValues,
     navHostController: NavController
 ) {
     composable<Detail> {
         val args = it.toRoute<Detail>()
         DetailRoute(
             id = args.id,
+            paddingValues = paddingValues,
             navigateUp = navHostController::navigateUp
         )
     }
