@@ -21,15 +21,13 @@ fun NavController.navigateDetail(
 }
 
 fun NavGraphBuilder.detailNavGraph(
-    paddingValues: PaddingValues,
-    navHostController: NavController
+    paddingValues: PaddingValues
 ) {
     composable<Detail> {
         val args = it.toRoute<Detail>()
         DetailRoute(
             id = args.id,
-            paddingValues = paddingValues,
-            navigateUp = navHostController::navigateUp
+            paddingValues = paddingValues
         )
     }
 }

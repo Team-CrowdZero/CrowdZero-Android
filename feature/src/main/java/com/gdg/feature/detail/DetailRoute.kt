@@ -18,7 +18,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -46,29 +48,63 @@ import com.gdg.core.util.TimeFormatter
 import com.gdg.domain.entity.CongestionEntity
 import com.gdg.domain.entity.WeatherEntity
 import com.gdg.feature.R
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraAnimation
+import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.compose.LocationTrackingMode
+import com.naver.maps.map.compose.MapProperties
+import com.naver.maps.map.compose.MapUiSettings
+import com.naver.maps.map.compose.Marker
+import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.compose.rememberCameraPositionState
+import com.naver.maps.map.overlay.OverlayImage
+import timber.log.Timber
 
 
 @Composable
 fun DetailRoute(
     detailViewModel: DetailViewModel = hiltViewModel(),
     id: Int,
-    paddingValues: PaddingValues,
-    navigateUp: () -> Unit
+    paddingValues: PaddingValues
 ) {
-    LaunchedEffect(key1 = detailViewModel.sideEffects) {
-        detailViewModel.sideEffects.collect { sideEffect ->
-            when (sideEffect) {
-                is DetailSideEffect.NavigateUp -> navigateUp()
-            }
-        }
+    val location = when (id) {
+        1 -> LatLng(37.49804946088347, 127.02772319928187) // 강남역
+        2 -> LatLng(37.574187, 126.976882) // 광화문 광장
+        3 -> LatLng(37.535590177126885, 126.97405623149015) // 삼각지역
+        4 -> LatLng(37.55474913412969, 126.97067705661028) // 서울역
+        5 -> LatLng(37.52173393560175, 126.92437767000882) // 여의도
+        else -> LatLng(37.574187, 126.976882) // 광화문 광장
+    }
+    val mapProperties by remember {
+        mutableStateOf(
+            MapProperties(
+                maxZoom = 100.0,
+                minZoom = 5.0,
+                locationTrackingMode = LocationTrackingMode.Follow,
+            )
+        )
+    }
+    val mapUiSettings by remember {
+        mutableStateOf(
+            MapUiSettings(isLocationButtonEnabled = true)
+        )
+    }
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition(location, 15.0)
     }
 
     DetailScreen(
         paddingValues = paddingValues,
         weatherEntity = detailViewModel.mockWeather,
-        congestionEntity = detailViewModel.mockCongestion
+        congestionEntity = detailViewModel.mockCongestion,
+        mapProperties = mapProperties,
+        mapUiSettings = mapUiSettings,
+        cameraPositionState = cameraPositionState,
+        location = location
     )
 }
 
@@ -77,7 +113,11 @@ fun DetailRoute(
 fun DetailScreen(
     paddingValues: PaddingValues = PaddingValues(),
     weatherEntity: WeatherEntity,
-    congestionEntity: CongestionEntity
+    congestionEntity: CongestionEntity,
+    mapProperties: MapProperties = MapProperties(),
+    mapUiSettings: MapUiSettings = MapUiSettings(),
+    cameraPositionState: CameraPositionState = CameraPositionState(),
+    location: LatLng = LatLng(37.574187, 126.976882)
 ) {
     val scrollState = rememberScrollState()
 
@@ -130,8 +170,28 @@ fun DetailScreen(
         NaverMap(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
-        )
+                .weight(1f),
+            properties = mapProperties,
+            uiSettings = mapUiSettings,
+            cameraPositionState = cameraPositionState
+        ) {
+            Marker(
+                state = MarkerState(position = location),
+                icon = when (congestionEntity.level) {
+                    "여유" -> OverlayImage.fromResource(R.drawable.ic_green_crowdy)
+                    "보통" -> OverlayImage.fromResource(R.drawable.ic_yellow_crowdy)
+                    "약간 혼잡" -> OverlayImage.fromResource(R.drawable.ic_orange_crowdy)
+                    else -> OverlayImage.fromResource(R.drawable.ic_red_crowdy)
+                },
+                onClick = {
+                    val cameraUpdate = CameraUpdate
+                        .scrollAndZoomTo(location, 15.0)
+                        .animate(CameraAnimation.Easing)
+                    cameraPositionState.move(cameraUpdate)
+                    true
+                }
+            )
+        }
         CongestionItem(data = congestionEntity)
     }
 }
