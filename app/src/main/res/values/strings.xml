@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CrowdZero-Android</string>
+
+    <!-- Tab Row -->
+    <string name="main_tab_map">지도</string>
+    <string name="main_tab_calendar">집회 일정</string>
+</resources>
