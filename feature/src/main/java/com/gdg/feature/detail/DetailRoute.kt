@@ -44,6 +44,7 @@ import com.gdg.core.designsystem.theme.CrowdZeroTheme
 import com.gdg.core.type.CongestionType
 import com.gdg.core.type.DustConditionType
 import com.gdg.core.type.DustType
+import com.gdg.core.type.LocationType
 import com.gdg.core.util.TimeFormatter
 import com.gdg.domain.entity.CongestionEntity
 import com.gdg.domain.entity.WeatherEntity
@@ -70,14 +71,8 @@ fun DetailRoute(
     id: Int,
     paddingValues: PaddingValues
 ) {
-    val location = when (id) {
-        1 -> LatLng(37.49804946088347, 127.02772319928187) // 강남역
-        2 -> LatLng(37.574187, 126.976882) // 광화문 광장
-        3 -> LatLng(37.535590177126885, 126.97405623149015) // 삼각지역
-        4 -> LatLng(37.55474913412969, 126.97067705661028) // 서울역
-        5 -> LatLng(37.52173393560175, 126.92437767000882) // 여의도
-        else -> LatLng(37.574187, 126.976882) // 광화문 광장
-    }
+    val name = LocationType.extractText(id)
+    val latLng = LocationType.extractLatLng(id)
     val mapProperties by remember {
         mutableStateOf(
             MapProperties(
@@ -93,7 +88,7 @@ fun DetailRoute(
         )
     }
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(location, 15.0)
+        position = CameraPosition(latLng, 15.0)
     }
 
     DetailScreen(
@@ -103,7 +98,8 @@ fun DetailRoute(
         mapProperties = mapProperties,
         mapUiSettings = mapUiSettings,
         cameraPositionState = cameraPositionState,
-        location = location
+        name = name,
+        location = latLng
     )
 }
 
@@ -116,6 +112,7 @@ fun DetailScreen(
     mapProperties: MapProperties = MapProperties(),
     mapUiSettings: MapUiSettings = MapUiSettings(),
     cameraPositionState: CameraPositionState = CameraPositionState(),
+    name: String = "",
     location: LatLng = LatLng(37.574187, 126.976882)
 ) {
     val scrollState = rememberScrollState()
@@ -143,7 +140,7 @@ fun DetailScreen(
                             append(stringResource(R.string.detail_header_now))
                         }
                         withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.green700)) {
-                            append(congestionEntity.name)
+                            append(name)
                         }
                         withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.gray900)) {
                             append(stringResource(R.string.detail_header_adverb))
@@ -324,25 +321,10 @@ fun CongestionItem(
 @Composable
 fun DetailScreenPreview() {
     CrowdZeroAndroidTheme {
+        val detailViewModel: DetailViewModel = hiltViewModel()
         DetailScreen(
-            weatherEntity = WeatherEntity(
-                id = 1,
-                name = "광화문 광장",
-                status = "구름많음",
-                temperature = -3,
-                pm25 = "보통",
-                pm10 = "보통",
-                time = "2025-02-01T10:00:00"
-            ),
-            congestionEntity = CongestionEntity(
-                id = 1,
-                name = "광화문 광장",
-                level = "보통",
-                message = "사람이 몰려있을 가능성이 낮고 붐빔은 거의 느껴지지 않아요\n도보 이동이 자유로워요",
-                min = 3800,
-                max = 4000,
-                time = "2025-02-01T10:00:00"
-            )
+            weatherEntity = detailViewModel.mockWeather,
+            congestionEntity = detailViewModel.mockCongestion
         )
     }
 }

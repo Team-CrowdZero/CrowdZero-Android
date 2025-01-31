@@ -64,4 +64,9 @@ dependencies {
     implementation(libs.lottie.compose)
     implementation(libs.timber)
     implementation(libs.bundles.landscapist.glide)
+
+    // Naver Map
+    implementation(libs.naver.map.location)
+    implementation(libs.naver.map.compose)
+    implementation(libs.play.services.location)
 }
