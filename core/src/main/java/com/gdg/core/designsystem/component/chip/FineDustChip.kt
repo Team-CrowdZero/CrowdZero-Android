@@ -50,7 +50,7 @@ fun FineDustChip(
                     append(
                         when (dust) {
                             DustType.FINE -> "미세먼지"
-                            DustType.ULTRAFINE -> "초미세먼지"
+                            DustType.ULTRA_FINE -> "초미세먼지"
                         }
                     )
                     append(" | ")

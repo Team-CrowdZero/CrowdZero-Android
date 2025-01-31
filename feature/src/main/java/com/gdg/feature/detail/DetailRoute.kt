@@ -246,7 +246,7 @@ fun WeatherItem(
             )
             Spacer(modifier = Modifier.height(5.dp))
             FineDustChip(
-                dust = DustType.ULTRAFINE,
+                dust = DustType.ULTRA_FINE,
                 condition = when (data.pm10) {
                     "좋음" -> DustConditionType.GOOD
                     "보통" -> DustConditionType.NORMAL
