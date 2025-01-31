@@ -15,6 +15,7 @@ val Gray600 = Color(0xFFB1B1B1)
 val Gray500 = Color(0xFFE9E9EB)
 val Gray400 = Color(0xFFEFF1F3)
 val Gray300 = Color(0xFFF8F8FA)
+val Shadow = Color(0x40000000)
 val White = Color(0xFFFFFFFF)
 
 // Bar Color
@@ -41,6 +42,7 @@ class CrowdZeroColors(
     gray500: Color,
     gray400: Color,
     gray300: Color,
+    shadow: Color,
     white: Color,
     yellow: Color,
     orange: Color,
@@ -65,6 +67,8 @@ class CrowdZeroColors(
     var gray400 by mutableStateOf(gray400)
         private set
     var gray300 by mutableStateOf(gray300)
+        private set
+    var shadow by mutableStateOf(shadow)
         private set
     var white by mutableStateOf(white)
         private set
@@ -95,6 +99,7 @@ class CrowdZeroColors(
         gray500 = gray500,
         gray400 = gray400,
         gray300 = gray300,
+        shadow = shadow,
         white = white,
         yellow = yellow,
         orange = orange,
@@ -115,6 +120,7 @@ class CrowdZeroColors(
         gray500 = other.gray500
         gray400 = other.gray400
         gray300 = other.gray300
+        shadow = other.shadow
         white = other.white
         yellow = other.yellow
         orange = other.orange
@@ -137,6 +143,7 @@ fun crowdZeroColors(
     gray500: Color = Gray500,
     gray400: Color = Gray400,
     gray300: Color = Gray300,
+    shadow: Color = Shadow,
     white: Color = White,
     yellow: Color = Yellow,
     orange: Color = Orange,
@@ -155,6 +162,7 @@ fun crowdZeroColors(
     gray500 = gray500,
     gray400 = gray400,
     gray300 = gray300,
+    shadow = shadow,
     white = white,
     yellow = yellow,
     orange = orange,
