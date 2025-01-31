@@ -62,7 +62,6 @@ import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.overlay.OverlayImage
-import timber.log.Timber
 
 
 @Composable
@@ -163,9 +162,7 @@ fun DetailScreen(
                 contentDescription = null
             )
         }
-        WeatherItem(
-            data = weatherEntity
-        )
+        WeatherItem(data = weatherEntity)
         Spacer(modifier = Modifier.height(11.dp))
         NaverMap(
             modifier = Modifier
