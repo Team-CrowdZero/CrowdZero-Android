@@ -42,6 +42,8 @@ import com.gdg.core.designsystem.theme.CrowdZeroTheme
 import com.gdg.core.type.CongestionType
 import com.gdg.core.type.DustConditionType
 import com.gdg.core.type.DustType
+import com.gdg.core.util.TimeFormatter
+import com.gdg.domain.entity.CongestionEntity
 import com.gdg.domain.entity.WeatherEntity
 import com.gdg.feature.R
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
@@ -65,7 +67,8 @@ fun DetailRoute(
 
     DetailScreen(
         paddingValues = paddingValues,
-        weather = detailViewModel.mockWeather
+        weatherEntity = detailViewModel.mockWeather,
+        congestionEntity = detailViewModel.mockCongestion
     )
 }
 
@@ -73,7 +76,8 @@ fun DetailRoute(
 @Composable
 fun DetailScreen(
     paddingValues: PaddingValues = PaddingValues(),
-    weather: WeatherEntity
+    weatherEntity: WeatherEntity,
+    congestionEntity: CongestionEntity
 ) {
     val scrollState = rememberScrollState()
 
@@ -100,7 +104,7 @@ fun DetailScreen(
                             append(stringResource(R.string.detail_header_now))
                         }
                         withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.green700)) {
-                            append("광화문 광장")
+                            append(congestionEntity.name)
                         }
                         withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.gray900)) {
                             append(stringResource(R.string.detail_header_adverb))
@@ -119,43 +123,16 @@ fun DetailScreen(
                 contentDescription = null
             )
         }
-        WeatherItem(data = weather)
+        WeatherItem(
+            data = weatherEntity
+        )
         Spacer(modifier = Modifier.height(11.dp))
         NaverMap(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
         )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 10.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.detail_header_congestion),
-                style = CrowdZeroTheme.typography.h2Bold,
-                color = CrowdZeroTheme.colors.gray900
-            )
-            Text(
-                modifier = Modifier.padding(top = 6.dp, bottom = 2.dp),
-                text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.gray700)) {
-                        append(stringResource(R.string.detail_sub_header_congestion))
-                    }
-                    withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.orange)) {
-                        append("3800~4000명")
-                    }
-                },
-                style = CrowdZeroTheme.typography.c1SemiBold
-            )
-            Text(
-                text = "사람이 몰려있을 가능성이 낮고 붐빔은 거의 느껴지지 않아요\n도보 이동이 자유로워요",
-                style = CrowdZeroTheme.typography.c2Medium1,
-                color = CrowdZeroTheme.colors.gray600
-            )
-        }
-        Spacer(modifier = Modifier.padding(top = 13.dp))
-        CongestionBar(congestionType = CongestionType.LITTLE_BAD)
+        CongestionItem(data = congestionEntity)
     }
 }
 
@@ -182,7 +159,7 @@ fun WeatherItem(
     ) {
         Column {
             Text(
-                text = "2025년 1월 23일 (목)",
+                text = TimeFormatter().weatherTimeFormat(data.time),
                 style = CrowdZeroTheme.typography.c3Bold,
                 color = CrowdZeroTheme.colors.white
             )
@@ -224,7 +201,7 @@ fun WeatherItem(
         Spacer(modifier = Modifier.weight(1f))
         Text(
             modifier = Modifier.padding(end = 7.dp),
-            text = "${data.temperature}°",
+            text = stringResource(R.string.detail_weather_temperature, data.temperature),
             style = CrowdZeroTheme.typography.h1Regular,
             color = CrowdZeroTheme.colors.white
         )
@@ -243,18 +220,71 @@ fun WeatherItem(
     }
 }
 
+@Composable
+fun CongestionItem(
+    data: CongestionEntity
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 10.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.detail_header_congestion),
+            style = CrowdZeroTheme.typography.h2Bold,
+            color = CrowdZeroTheme.colors.gray900
+        )
+        Text(
+            modifier = Modifier.padding(top = 6.dp, bottom = 2.dp),
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.gray700)) {
+                    append(stringResource(R.string.detail_sub_header_congestion))
+                }
+                withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.orange)) {
+                    append(stringResource(R.string.detail_congestion_count, data.min, data.max))
+                }
+            },
+            style = CrowdZeroTheme.typography.c1SemiBold
+        )
+        Text(
+            text = data.message,
+            style = CrowdZeroTheme.typography.c2Medium1,
+            color = CrowdZeroTheme.colors.gray600
+        )
+    }
+    Spacer(modifier = Modifier.padding(top = 13.dp))
+    CongestionBar(
+        congestionType = when (data.level) {
+            "여유" -> CongestionType.GOOD
+            "보통" -> CongestionType.NORMAL
+            "약간 혼잡" -> CongestionType.LITTLE_BAD
+            else -> CongestionType.BAD
+        }
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DetailScreenPreview() {
     CrowdZeroAndroidTheme {
         DetailScreen(
-            weather = WeatherEntity(
+            weatherEntity = WeatherEntity(
                 id = 1,
                 name = "광화문 광장",
                 status = "구름많음",
                 temperature = -3,
                 pm25 = "보통",
-                pm10 = "보통"
+                pm10 = "보통",
+                time = "2025-02-01T10:00:00"
+            ),
+            congestionEntity = CongestionEntity(
+                id = 1,
+                name = "광화문 광장",
+                level = "보통",
+                message = "사람이 몰려있을 가능성이 낮고 붐빔은 거의 느껴지지 않아요\n도보 이동이 자유로워요",
+                min = 3800,
+                max = 4000,
+                time = "2025-02-01T10:00:00"
             )
         )
     }

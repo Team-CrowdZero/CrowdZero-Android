@@ -6,5 +6,6 @@ data class WeatherEntity(
     val status: String,
     val temperature: Int,
     val pm25: String,
-    val pm10: String
+    val pm10: String,
+    val time: String
 )

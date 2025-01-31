@@ -10,4 +10,6 @@
     <string name="detail_header_congestion">실시간 인구</string>
     <string name="detail_sub_header_congestion">"현재 실시간 인구: "</string>
     <string name="detail_weather_seoul">%1$s, 서울</string>
+    <string name="detail_weather_temperature">%1$s°</string>
+    <string name="detail_congestion_count">%1$s~%2$s명</string>
 </resources>
