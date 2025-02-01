@@ -63,6 +63,7 @@ import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.overlay.OverlayImage
+import okhttp3.internal.immutableListOf
 
 
 @Composable
@@ -197,7 +198,7 @@ fun WeatherItem(
             .fillMaxWidth()
             .background(
                 brush = Brush.horizontalGradient(
-                    colors = listOf(
+                    colors = immutableListOf(
                         CrowdZeroTheme.colors.blue100,
                         CrowdZeroTheme.colors.blue200
                     ),
