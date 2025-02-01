@@ -12,4 +12,11 @@
     <string name="route_map">Map</string>
     <string name="route_calendar">Calendar</string>
     <string name="route_detail">Detail</string>
+
+    <!-- 미세먼지 -->
+    <string name="dust_condition_good">좋음</string>
+    <string name="dust_condition_normal">보통</string>
+    <string name="dust_condition_bad">나쁨</string>
+    <string name="dust_fine">미세먼지</string>
+    <string name="dust_ultra_fine">초미세먼지</string>
 </resources>

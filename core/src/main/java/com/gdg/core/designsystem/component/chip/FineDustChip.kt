@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -47,30 +48,10 @@ fun FineDustChip(
         Text(
             text = buildAnnotatedString {
                 withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.gray700)) {
-                    append(
-                        when (dust) {
-                            DustType.FINE -> "미세먼지"
-                            DustType.ULTRA_FINE -> "초미세먼지"
-                        }
-                    )
-                    append(" | ")
+                    append(stringResource(id = dust.title) + " | ")
                 }
-                withStyle(
-                    style = SpanStyle(
-                        color = when (condition) {
-                            DustConditionType.GOOD -> CrowdZeroTheme.colors.green600
-                            DustConditionType.NORMAL -> CrowdZeroTheme.colors.orange
-                            DustConditionType.BAD -> CrowdZeroTheme.colors.red
-                        }
-                    )
-                ) {
-                    append(
-                        when (condition) {
-                            DustConditionType.GOOD -> "좋음"
-                            DustConditionType.NORMAL -> "보통"
-                            DustConditionType.BAD -> "나쁨"
-                        }
-                    )
+                withStyle(style = SpanStyle(color = condition.color)) {
+                    append(stringResource(id = condition.title))
                 }
             },
             style = CrowdZeroTheme.typography.c5SemiBold
