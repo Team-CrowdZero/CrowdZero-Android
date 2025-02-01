@@ -19,4 +19,11 @@
     <string name="dust_condition_bad">나쁨</string>
     <string name="dust_fine">미세먼지</string>
     <string name="dust_ultra_fine">초미세먼지</string>
+
+    <!-- Location Type -->
+    <string name="location_gangnam_station">강남역</string>
+    <string name="location_gwanghwamun">광화문 광장</string>
+    <string name="location_seoul_station">서울역</string>
+    <string name="location_samgakji_station">삼각지역</string>
+    <string name="location_yeouido">여의도</string>
 </resources>

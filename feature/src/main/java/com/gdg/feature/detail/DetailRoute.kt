@@ -71,8 +71,6 @@ fun DetailRoute(
     id: Int,
     paddingValues: PaddingValues
 ) {
-    val name = LocationType.extractText(id)
-    val latLng = LocationType.extractLatLng(id)
     val mapProperties by remember {
         mutableStateOf(
             MapProperties(
@@ -88,7 +86,7 @@ fun DetailRoute(
         )
     }
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(latLng, 15.0)
+        position = CameraPosition(LocationType.extractLatLng(id), 15.0)
     }
 
     DetailScreen(
@@ -98,8 +96,8 @@ fun DetailRoute(
         mapProperties = mapProperties,
         mapUiSettings = mapUiSettings,
         cameraPositionState = cameraPositionState,
-        name = name,
-        location = latLng
+        title = stringResource(LocationType.extractTitleResource(id)),
+        location = LocationType.extractLatLng(id)
     )
 }
 
@@ -112,7 +110,7 @@ fun DetailScreen(
     mapProperties: MapProperties = MapProperties(),
     mapUiSettings: MapUiSettings = MapUiSettings(),
     cameraPositionState: CameraPositionState = CameraPositionState(),
-    name: String = "",
+    title: String = "",
     location: LatLng = LatLng(37.574187, 126.976882)
 ) {
     val scrollState = rememberScrollState()
@@ -140,7 +138,7 @@ fun DetailScreen(
                             append(stringResource(R.string.detail_header_now))
                         }
                         withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.green700)) {
-                            append(name)
+                            append(title)
                         }
                         withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.gray900)) {
                             append(stringResource(R.string.detail_header_adverb))
