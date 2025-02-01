@@ -2,4 +2,14 @@
 <resources>
     <string name="server_success">서버 통신에 성공했습니다</string>
     <string name="server_failure">서버 통신에 실패했습니다</string>
+
+    <!-- 장소 상세 -->
+    <string name="detail_header_now">"지금의 "</string>
+    <string name="detail_header_adverb">은</string>
+    <string name="detail_sub_header">인구 혼잡도와 날씨 정보를 확인하세요</string>
+    <string name="detail_header_congestion">실시간 인구</string>
+    <string name="detail_sub_header_congestion">"현재 실시간 인구: "</string>
+    <string name="detail_weather_seoul">%1$s, 서울</string>
+    <string name="detail_weather_temperature">%1$s°</string>
+    <string name="detail_congestion_count">%1$s~%2$s명</string>
 </resources>

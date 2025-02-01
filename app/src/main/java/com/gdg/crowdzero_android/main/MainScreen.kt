@@ -152,7 +152,7 @@ fun MainScreen(
                     paddingValues = paddingValues,
                     navHostController = navigator.navController
                 )
-                detailNavGraph(navHostController = navigator.navController)
+                detailNavGraph(paddingValues = paddingValues)
             }
         }
     }
