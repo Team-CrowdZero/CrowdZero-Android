@@ -172,10 +172,10 @@ fun DetailScreen(
             Marker(
                 state = MarkerState(position = location),
                 icon = when (congestionEntity.level) {
-                    "여유" -> OverlayImage.fromResource(R.drawable.ic_green_crowdy)
-                    "보통" -> OverlayImage.fromResource(R.drawable.ic_yellow_crowdy)
-                    "약간 혼잡" -> OverlayImage.fromResource(R.drawable.ic_orange_crowdy)
-                    else -> OverlayImage.fromResource(R.drawable.ic_red_crowdy)
+                    "여유" -> OverlayImage.fromResource(CongestionType.GOOD.icon)
+                    "보통" -> OverlayImage.fromResource(CongestionType.NORMAL.icon)
+                    "약간 혼잡" -> OverlayImage.fromResource(CongestionType.LITTLE_BAD.icon)
+                    else -> OverlayImage.fromResource(CongestionType.BAD.icon)
                 },
                 onClick = {
                     val cameraUpdate = CameraUpdate
