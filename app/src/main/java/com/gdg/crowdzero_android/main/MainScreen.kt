@@ -22,6 +22,7 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +48,7 @@ import com.gdg.core.util.NoRippleInteractionSource
 import com.gdg.crowdzero_android.navigation.calendarNavGraph
 import com.gdg.crowdzero_android.navigation.detailNavGraph
 import com.gdg.crowdzero_android.navigation.mapNavGraph
+import com.gdg.feature.map.SplashScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -55,108 +57,113 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator()
 ) {
-    val context = LocalContext.current
-    val systemUiController = rememberSystemUiController()
-    val lifecycleOwner = LocalLifecycleOwner.current
-    var backPressedState by remember { mutableStateOf(true) }
-    var backPressedTime = 0L
-    val coroutineScope = rememberCoroutineScope()
-    val snackBarHostState = remember { SnackbarHostState() }
+    var showSplash by remember { mutableStateOf(true) }  // 스플래시 상태 추가
 
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = White
-        )
+    // 3초 후 스플래시 화면 종료
+    LaunchedEffect(Unit) {
+        delay(3000)
+        showSplash = false
     }
 
-    DisposableEffect(key1 = lifecycleOwner) {
-        onDispose {
+    if (showSplash) {
+        SplashScreen()  // 스플래시 화면 표시
+    } else {
+        val context = LocalContext.current
+        val systemUiController = rememberSystemUiController()
+        val lifecycleOwner = LocalLifecycleOwner.current
+        var backPressedState by remember { mutableStateOf(true) }
+        var backPressedTime = 0L
+        val coroutineScope = rememberCoroutineScope()
+        val snackBarHostState = remember { SnackbarHostState() }
+
+        SideEffect {
             systemUiController.setStatusBarColor(
-                color = Color.Transparent
+                color = White
             )
         }
-    }
 
-    BackHandler(enabled = backPressedState) {
-        if (System.currentTimeMillis() - backPressedTime <= 3000) {
-            (context as Activity).finish()
-        } else {
-            backPressedState = true
-            coroutineScope.launch {
-                val job = launch { snackBarHostState.showSnackbar(message = "버튼을 한 번 더 누르면 종료돼요") }
-                delay(2000)
-                job.cancel()
-            }
-        }
-        backPressedTime = System.currentTimeMillis()
-    }
-
-    Scaffold(
-        modifier = Modifier
-            .navigationBarsPadding()
-            .statusBarsPadding(),
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackBarHostState,
-                modifier = Modifier.padding(bottom = 10.dp)
-            ) { snackBarData ->
-                BaseSnackBar(
-                    message = snackBarData.visuals.message
-                )
-            }
-        },
-        topBar = {
-            Column {
-                val navBackStackEntry by navigator.navController.currentBackStackEntryAsState()
-                val currentRoute = navBackStackEntry?.destination?.route?.substringAfterLast(".")
-                    ?.substringBefore("/")
-
-                BaseTopAppBar(
-                    route = currentRoute,
-                    isIconVisible = currentRoute == "Detail",
-                    onBackButtonClick = navigator::navigateUp
-                )
-                MainTabBar(
-                    isVisible = navigator.showTabRow(),
-                    tabs = MainTab.entries.toList(),
-                    currentTab = navigator.currentTab,
-                    onTabSelected = navigator::navigate
+        DisposableEffect(key1 = lifecycleOwner) {
+            onDispose {
+                systemUiController.setStatusBarColor(
+                    color = Color.Transparent
                 )
             }
         }
-    ) { paddingValues ->
-        Column(
+
+        BackHandler(enabled = backPressedState) {
+            if (System.currentTimeMillis() - backPressedTime <= 3000) {
+                (context as Activity).finish()
+            } else {
+                backPressedState = true
+                coroutineScope.launch {
+                    val job = launch { snackBarHostState.showSnackbar(message = "버튼을 한 번 더 누르면 종료돼요") }
+                    delay(2000)
+                    job.cancel()
+                }
+            }
+            backPressedTime = System.currentTimeMillis()
+        }
+
+        Scaffold(
             modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
                 .navigationBarsPadding()
-        ) {
-            NavHost(
-                enterTransition = {
-                    EnterTransition.None
-                },
-                exitTransition = {
-                    ExitTransition.None
-                },
-                popEnterTransition = {
-                    EnterTransition.None
-                },
-                popExitTransition = {
-                    ExitTransition.None
-                },
-                navController = navigator.navController,
-                startDestination = navigator.startDestination
+                .statusBarsPadding(),
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = snackBarHostState,
+                    modifier = Modifier.padding(bottom = 10.dp)
+                ) { snackBarData ->
+                    BaseSnackBar(
+                        message = snackBarData.visuals.message
+                    )
+                }
+            },
+            topBar = {
+                Column {
+                    val navBackStackEntry by navigator.navController.currentBackStackEntryAsState()
+                    val currentRoute = navBackStackEntry?.destination?.route?.substringAfterLast(".")
+                        ?.substringBefore("/")
+
+                    BaseTopAppBar(
+                        route = currentRoute,
+                        isIconVisible = currentRoute == "Detail",
+                        onBackButtonClick = navigator::navigateUp
+                    )
+                    MainTabBar(
+                        isVisible = navigator.showTabRow(),
+                        tabs = MainTab.entries.toList(),
+                        currentTab = navigator.currentTab,
+                        onTabSelected = navigator::navigate
+                    )
+                }
+            }
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding()
+                    .navigationBarsPadding()
             ) {
-                mapNavGraph(navHostController = navigator.navController)
-                calendarNavGraph(
-                    paddingValues = paddingValues,
-                    navHostController = navigator.navController
-                )
-                detailNavGraph(paddingValues = paddingValues)
+                NavHost(
+                    enterTransition = { EnterTransition.None },
+                    exitTransition = { ExitTransition.None },
+                    popEnterTransition = { EnterTransition.None },
+                    popExitTransition = { ExitTransition.None },
+                    navController = navigator.navController,
+                    startDestination = navigator.startDestination
+                ) {
+                    mapNavGraph(navHostController = navigator.navController)
+                    calendarNavGraph(
+                        paddingValues = paddingValues,
+                        navHostController = navigator.navController
+                    )
+                    detailNavGraph(paddingValues = paddingValues)
+                }
             }
         }
     }
 }
+
 
 @Composable
 fun MainTabBar(

@@ -25,6 +25,17 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.NaverMapConstants
 import com.naver.maps.map.compose.rememberCameraPositionState
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.gdg.core.designsystem.theme.CrowdZeroTheme
+import com.gdg.feature.R
+
 @Composable
 fun MapRoute(
     mapViewModel: MapViewModel = hiltViewModel(),
@@ -90,6 +101,70 @@ fun MapScreen(
             Text(text = "상세 페이지로 이동")
         }
     }
+}
+
+
+@Composable
+fun SplashScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(CrowdZeroTheme.colors.green600, CrowdZeroTheme.colors.green700)
+                )
+            )
+    ) {
+
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(R.string.splash_title1),
+                style = CrowdZeroTheme.typography.h1JalnanGothic,
+                color = CrowdZeroTheme.colors.white,
+                modifier = Modifier.graphicsLayer(rotationZ = -2f)
+                    .offset(y = -20.dp)
+            )
+
+            Text(
+                text = stringResource(R.string.splash_title2),
+                style = CrowdZeroTheme.typography.h1JalnanGothic,
+                color = CrowdZeroTheme.colors.white,
+                modifier = Modifier.graphicsLayer(rotationZ = -2f)
+                    .offset(x = 2.dp, y=-27.dp)
+            )
+
+            Text(
+                text = stringResource(R.string.splash_subtitle),
+                style = CrowdZeroTheme.typography.c4Regular,
+                color = CrowdZeroTheme.colors.white,
+                modifier = Modifier.offset(x=20.dp, y=-35.dp)
+
+            )
+
+
+        }
+
+
+        Image(
+            painter = painterResource(id = R.drawable.ic_buildings),
+            contentDescription = stringResource(id = R.string.splash_desc),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(360.dp)
+                .align(Alignment.BottomCenter)
+                . offset(y = 17.dp)
+        )
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewSplashScreen() {
+    SplashScreen()
 }
 
 @Preview(showBackground = true)

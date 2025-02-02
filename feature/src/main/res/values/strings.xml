@@ -12,4 +12,10 @@
     <string name="detail_weather_seoul">%1$s, 서울</string>
     <string name="detail_weather_temperature">%1$s°</string>
     <string name="detail_congestion_count">%1$s~%2$s명</string>
+
+    <!--스플래시 -->
+    <string name="splash_title1">혼잡</string>
+    <string name="splash_title2">제로</string>
+    <string name="splash_subtitle">Inc. CrowdZero</string>
+    <string name="splash_desc">스플래시</string>
 </resources>
