@@ -12,4 +12,20 @@
     <string name="detail_weather_seoul">%1$s, 서울</string>
     <string name="detail_weather_temperature">%1$s°</string>
     <string name="detail_congestion_count">%1$s~%2$s명</string>
+
+    <!-- 캘린더 -->
+    <string name="calender_header_1">"날짜별 "</string>
+    <string name="calender_header_2">집회정보</string>
+    <string name="calender_header_3">를 확인해보세요</string>
+    <string name="calender_sub_header_1">서울 경찰청 알림마당에서</string>
+    <string name="calender_sub_header_2">오늘의 집회 정보를 실시간으로 가져와요</string>
+    <string name="calender_component_date">%1$s년 %2$s월</string>
+    <string name="calender_selected_date">"%1$s년 %2$s월 %3$s일 "</string>
+    <string name="calender_selected_date_2">%1$s요일</string>
+    <string name="calender_time">%1$s</string>
+    <string name="calender_people_reporting_title">신고인원</string>
+    <string name="calender_people_reporting">%1$s명</string>
+    <string name="calender_slash">" / "</string>
+    <string name="calender_jurisdiction">관할시</string>
+
 </resources>

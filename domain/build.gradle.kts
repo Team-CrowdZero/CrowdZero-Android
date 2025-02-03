@@ -19,3 +19,7 @@ dependencies {
     implementation(libs.javax.inject)
     implementation(libs.hilt.core)
 }
+
+kotlin {
+    jvmToolchain(17) // Kotlin에서도 JVM 17을 사용하도록 설정
+}
