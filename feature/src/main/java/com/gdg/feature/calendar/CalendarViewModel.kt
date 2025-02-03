@@ -5,6 +5,7 @@ import com.gdg.domain.entity.ScheduleEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,4 +21,12 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
         )
     )
     val mockSchedule: StateFlow<ScheduleEntity> = _mockSchedule
+
+    private val _selectedDate = MutableStateFlow(LocalDate.now())
+    val selectedDate: StateFlow<LocalDate> = _selectedDate
+
+    fun updateSelectedDate(date: LocalDate) {
+        _selectedDate.value = date
+    }
 }
+
