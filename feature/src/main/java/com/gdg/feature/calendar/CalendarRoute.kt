@@ -5,9 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -35,18 +37,20 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-
 @Composable
 fun CalendarRoute(
     paddingValues: PaddingValues,
     calendarViewModel: CalendarViewModel = hiltViewModel()
 ) {
-    val scheduleEntity by calendarViewModel.mockSchedule.collectAsState()
+    val scheduleList by calendarViewModel.scheduleList.collectAsState() // 전체 일정 리스트
     val selectedDate by calendarViewModel.selectedDate.collectAsState()
+
+    // 선택한 날짜의 일정만 필터링
+    val filteredSchedules = scheduleList.filter { it.date == selectedDate }
 
     CalendarScreen(
         paddingValues = paddingValues,
-        scheduleEntity = scheduleEntity,
+        scheduleList = filteredSchedules, // 선택한 날짜의 일정만 전달
         selectedDate = selectedDate,
         onDateSelected = { calendarViewModel.updateSelectedDate(it) }
     )
@@ -54,7 +58,7 @@ fun CalendarRoute(
 
 @Composable
 fun CalendarScreen(
-    scheduleEntity: ScheduleEntity,
+    scheduleList: List<ScheduleEntity>,
     selectedDate: LocalDate,
     onDateSelected: (LocalDate) -> Unit,
     paddingValues: PaddingValues = PaddingValues()
@@ -113,14 +117,13 @@ fun CalendarScreen(
             )
         }
 
-// 캘린더 컴포넌트
+        // 캘린더 컴포넌트
         CalendarComponent(
             currentMonth = currentMonth,
             selectedDate = selectedDate,
             onMonthChange = { currentMonth = it },
-            onDateSelected = onDateSelected,
+            onDateSelected = onDateSelected
         )
-
 
         Spacer(
             modifier = Modifier
@@ -131,9 +134,7 @@ fun CalendarScreen(
 
         Spacer(modifier = Modifier.height(25.dp))
 
-
         // 선택한 날짜 표시
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -155,14 +156,32 @@ fun CalendarScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        CalendarInfoBox(data = scheduleEntity)
+        if (scheduleList.isEmpty()) {
+            // 정보 없는 경우 메시지 표시
+            Spacer(modifier = Modifier.height(80.dp))
+            Text(
+                text = "해당 날짜의 집회 정보가 없습니다",
+                style = CrowdZeroTheme.typography.h5Medium,
+                color = CrowdZeroTheme.colors.gray900,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(scheduleList) { schedule ->
+                    CalendarInfoBox(data = schedule)
+                }
+            }
+        }
     }
 }
 
 @Composable
-fun CalendarInfoBox(
-    data: ScheduleEntity
-) {
+fun CalendarInfoBox(data: ScheduleEntity) {
     Box(
         modifier = Modifier
             .size(370.dp, 85.dp)
@@ -242,7 +261,6 @@ fun CalendarComponent(
     selectedDate: LocalDate,
     onMonthChange: (YearMonth) -> Unit,
     onDateSelected: (LocalDate) -> Unit,
-
 ) {
     val days = remember(currentMonth) { generateDaysForMonth(currentMonth) }
 
@@ -254,12 +272,12 @@ fun CalendarComponent(
     ) {
         // 상단: 년/월 & < > 버튼
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 5.dp),
-        verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-
             Text(
                 text = stringResource(
                     R.string.calender_component_date,
@@ -291,7 +309,6 @@ fun CalendarComponent(
                     .size(16.dp)
                     .clickable { onMonthChange(currentMonth.plusMonths(1)) }
             )
-
         }
 
         Spacer(modifier = Modifier.height(6.dp))
@@ -355,18 +372,20 @@ fun generateDaysForMonth(month: YearMonth): List<LocalDate> {
     return (1..lastDay.dayOfMonth).map { day -> firstDay.plusDays((day - 1).toLong()) }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun CalendarScreenPreview() {
     CrowdZeroAndroidTheme {
         CalendarScreen(
-            scheduleEntity = ScheduleEntity(
-                duration = "07:30 ~ 24:00",
-                location = "두터교회 앞 인도 및 2개 차로",
-                region = "한남동",
-                people = "3000",
-                jurisdiction = "용산"
+            scheduleList = listOf(
+                ScheduleEntity(
+                    date = LocalDate.now(),
+                    duration = "07:30 ~ 24:00",
+                    location = "두터교회 앞 인도 및 2개 차로",
+                    region = "한남동",
+                    people = "3000",
+                    jurisdiction = "용산"
+                )
             ),
             selectedDate = LocalDate.now(),
             onDateSelected = {}
