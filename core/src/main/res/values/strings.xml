@@ -26,4 +26,10 @@
     <string name="location_seoul_station">서울역</string>
     <string name="location_samgakji_station">삼각지역</string>
     <string name="location_yeouido">여의도</string>
+
+    <!-- 캘린더 -->
+    <string name="calender_component_date">%1$s년 %2$s월</string>
+    <string name="previous_month">이전 달</string>
+    <string name="next_month">다음 달</string>
+
 </resources>
