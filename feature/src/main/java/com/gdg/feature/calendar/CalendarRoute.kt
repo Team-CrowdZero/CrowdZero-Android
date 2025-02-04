@@ -233,6 +233,11 @@ fun CalendarInfoBox(data: ScheduleEntity) {
                         style = CrowdZeroTheme.typography.c3Regular,
                         color = CrowdZeroTheme.colors.gray800
                     )
+                    Text(
+                        text = stringResource(R.string.calender_people_reporting),
+                        style = CrowdZeroTheme.typography.c3Regular,
+                        color = CrowdZeroTheme.colors.gray800
+                    )
                 }
 
                 Spacer(modifier = Modifier.width(8.dp))

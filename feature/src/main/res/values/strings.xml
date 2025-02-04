@@ -24,7 +24,7 @@
     <string name="calender_selected_date_2">%1$s요일</string>
     <string name="calender_time">%1$s</string>
     <string name="calender_people_reporting_title">신고인원</string>
-    <string name="calender_people_reporting">%1$s명</string>
+    <string name="calender_people_reporting">명</string>
     <string name="calender_slash">" / "</string>
     <string name="calender_jurisdiction">관할시</string>
 
