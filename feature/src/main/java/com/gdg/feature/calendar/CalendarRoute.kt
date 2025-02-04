@@ -170,12 +170,13 @@ fun CalendarScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(11.dp)
             ) {
                 items(scheduleList) { schedule ->
                     CalendarInfoBox(data = schedule)
                 }
             }
+            Spacer(modifier = Modifier.width(30.dp))
         }
     }
 }
