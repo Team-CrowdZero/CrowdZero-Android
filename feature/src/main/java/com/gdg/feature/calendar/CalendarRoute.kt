@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -19,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,6 +33,8 @@ import com.gdg.domain.entity.ScheduleEntity
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.util.Locale
+
 
 @Composable
 fun CalendarRoute(
@@ -70,7 +74,6 @@ fun CalendarScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
-            horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
@@ -103,27 +106,21 @@ fun CalendarScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.width(16.dp))
-
             Image(
                 painter = painterResource(R.drawable.ic_alert),
                 contentDescription = null,
-                modifier = Modifier.size(100.dp)
+                modifier = Modifier.size(105.dp)
             )
         }
 
-
-
-        Spacer(modifier = Modifier.height(15.dp))
-
-
-        // 캘린더 컴포넌트
+// 캘린더 컴포넌트
         CalendarComponent(
             currentMonth = currentMonth,
             selectedDate = selectedDate,
             onMonthChange = { currentMonth = it },
-            onDateSelected = onDateSelected
+            onDateSelected = onDateSelected,
         )
+
 
         Spacer(
             modifier = Modifier
@@ -150,12 +147,12 @@ fun CalendarScreen(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = selectedDate.dayOfWeek.toString(), // 요일 표시
+                text = selectedDate.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.KOREAN), // 한글 요일 표시
                 style = CrowdZeroTheme.typography.h3Bold,
                 color = CrowdZeroTheme.colors.green700
             )
         }
-        
+
         Spacer(modifier = Modifier.height(18.dp))
 
         CalendarInfoBox(data = scheduleEntity)
@@ -244,29 +241,24 @@ fun CalendarComponent(
     currentMonth: YearMonth,
     selectedDate: LocalDate,
     onMonthChange: (YearMonth) -> Unit,
-    onDateSelected: (LocalDate) -> Unit
+    onDateSelected: (LocalDate) -> Unit,
+
 ) {
     val days = remember(currentMonth) { generateDaysForMonth(currentMonth) }
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // 상단: 년/월 & < > 버튼
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = 5.dp),
+        verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.calender_button_l),
-                contentDescription = "Previous Month",
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable { onMonthChange(currentMonth.minusMonths(1)) }
-            )
 
             Text(
                 text = stringResource(
@@ -274,19 +266,44 @@ fun CalendarComponent(
                     currentMonth.year.toString(),
                     currentMonth.monthValue.toString()
                 ),
-                style = CrowdZeroTheme.typography.h3Bold
+                style = CrowdZeroTheme.typography.h3Bold,
+                color = CrowdZeroTheme.colors.green700
             )
+
+            Spacer(modifier = Modifier.width(225.dp))
+
+            Icon(
+                painter = painterResource(id = R.drawable.calender_button_l),
+                tint = CrowdZeroTheme.colors.green700,
+                contentDescription = "Next Month",
+                modifier = Modifier
+                    .size(16.dp)
+                    .clickable { onMonthChange(currentMonth.minusMonths(1)) }
+            )
+
+            Spacer(modifier = Modifier.width(15.dp))
 
             Icon(
                 painter = painterResource(id = R.drawable.calender_button_r),
+                tint = CrowdZeroTheme.colors.green700,
                 contentDescription = "Next Month",
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(16.dp)
                     .clickable { onMonthChange(currentMonth.plusMonths(1)) }
             )
+
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(6.dp))
+
+        Spacer(
+            modifier = Modifier
+                .height(1.dp)
+                .fillMaxWidth()
+                .background(CrowdZeroTheme.colors.gray500)
+        )
+
+        Spacer(modifier = Modifier.height(15.dp))
 
         // 요일 헤더
         Row(
@@ -296,13 +313,13 @@ fun CalendarComponent(
             listOf("일", "월", "화", "수", "목", "금", "토").forEach { day ->
                 Text(
                     text = day,
-                    style = CrowdZeroTheme.typography.c3Bold,
-                    color = CrowdZeroTheme.colors.gray800
+                    style = CrowdZeroTheme.typography.c2Medium2,
+                    color = CrowdZeroTheme.colors.gray600
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(5.dp))
 
         // 달력 (7열 그리드)
         LazyVerticalGrid(
@@ -313,15 +330,17 @@ fun CalendarComponent(
                 val isSelected = date == selectedDate
                 Box(
                     modifier = Modifier
-                        .padding(4.dp)
+                        .padding(6.dp)
                         .size(40.dp)
-                        .background(if (isSelected) CrowdZeroTheme.colors.green700 else Color.Transparent)
+                        .clip(CircleShape)
+                        .background(if (isSelected) CrowdZeroTheme.colors.green500 else Color.Transparent)
                         .clickable { onDateSelected(date) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = date.dayOfMonth.toString(),
-                        color = if (isSelected) Color.White else CrowdZeroTheme.colors.gray900
+                        style = CrowdZeroTheme.typography.c2Medium2,
+                        color = CrowdZeroTheme.colors.gray800
                     )
                 }
             }
