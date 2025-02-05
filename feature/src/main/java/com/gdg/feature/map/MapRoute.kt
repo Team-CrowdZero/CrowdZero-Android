@@ -1,8 +1,23 @@
 package com.gdg.feature.map
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -11,35 +26,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.naver.maps.map.CameraPosition
-import com.naver.maps.map.compose.CameraPositionState
-import com.naver.maps.map.compose.ExperimentalNaverMapApi
-import com.naver.maps.map.compose.LocationTrackingMode
-import com.naver.maps.map.compose.MapProperties
-import com.naver.maps.map.compose.MapUiSettings
-import com.naver.maps.map.compose.NaverMap
-import com.naver.maps.map.compose.NaverMapConstants
-import com.naver.maps.map.compose.rememberCameraPositionState
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.gdg.core.designsystem.component.chip.MapChip
 import com.gdg.core.designsystem.theme.CrowdZeroTheme
 import com.gdg.core.extension.noRippleClickable
@@ -47,9 +45,18 @@ import com.gdg.core.type.LocationType
 import com.gdg.domain.entity.PlaceEntity
 import com.gdg.feature.R
 import com.naver.maps.map.CameraAnimation
+import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.compose.CameraPositionState
+import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.compose.LocationTrackingMode
+import com.naver.maps.map.compose.MapProperties
+import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.MarkerState
+import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.compose.NaverMapConstants
+import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.overlay.OverlayImage
 
 @Composable
@@ -113,7 +120,6 @@ fun MapScreen(
     locations: List<LocationType>
 ) {
     val selectedLocation = remember { mutableStateOf<LocationType?>(null) }
-    val selectedPlace by mapViewModel.selectedPlace.collectAsState()
 
     Box(
         modifier = Modifier
@@ -125,7 +131,6 @@ fun MapScreen(
             properties = mapProperties,
             uiSettings = mapUiSettings
         ) {
-
             selectedLocation.value?.let { location ->
                 Marker(
                     state = MarkerState(position = location.latLng),
@@ -134,7 +139,6 @@ fun MapScreen(
                     captionColor = CrowdZeroTheme.colors.gray900,
                     captionHaloColor = CrowdZeroTheme.colors.white
                 )
-
             }
         }
 
@@ -148,21 +152,23 @@ fun MapScreen(
                     title = location,
                     isSelected = selectedLocation.value == location,
                     onClick = {
-                        selectedLocation.value = location
-                        cameraPositionState.move(
-                            CameraUpdate.scrollAndZoomTo(location.latLng, 10.0)
-                                .animate(CameraAnimation.Easing)
-                        )
-                        mapViewModel.selectPlace(location.id)
-                    },
-
-                )
+                        if (selectedLocation.value == location) {
+                            selectedLocation.value = null
+                        } else {
+                            selectedLocation.value = location
+                            cameraPositionState.move(
+                                CameraUpdate.scrollAndZoomTo(location.latLng, 10.0)
+                                    .animate(CameraAnimation.Easing)
+                            )
+                        }
+                    })
             }
         }
 
-        selectedPlace?.let {
+        selectedLocation.value?.let { location ->
+            val place = mapViewModel.getPlaceInfo(location.id)
             PlaceInfoCard(
-                place = it,
+                place = place,
                 modifier = Modifier.align(Alignment.BottomCenter),
                 onButtonClick = onButtonClick
             )
@@ -170,92 +176,33 @@ fun MapScreen(
     }
 }
 
-
-
-
-
 @Composable
-fun SplashScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(CrowdZeroTheme.colors.green600, CrowdZeroTheme.colors.green700)
-                )
-            )
-    ) {
-
-        Column(
-            modifier = Modifier.align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = stringResource(R.string.splash_title1),
-                style = CrowdZeroTheme.typography.h1JalnanGothic,
-                color = CrowdZeroTheme.colors.white,
-                modifier = Modifier.graphicsLayer(rotationZ = -2f)
-                    .offset(y = -20.dp)
-            )
-
-            Text(
-                text = stringResource(R.string.splash_title2),
-                style = CrowdZeroTheme.typography.h1JalnanGothic,
-                color = CrowdZeroTheme.colors.white,
-                modifier = Modifier.graphicsLayer(rotationZ = -2f)
-                    .offset(x = 2.dp, y=-27.dp)
-            )
-
-            Text(
-                text = stringResource(R.string.splash_subtitle),
-                style = CrowdZeroTheme.typography.c4Regular,
-                color = CrowdZeroTheme.colors.white,
-                modifier = Modifier.offset(x=20.dp, y=-35.dp)
-
-            )
-
-
-        }
-
-
-        Image(
-            painter = painterResource(id = R.drawable.ic_buildings),
-            contentDescription = stringResource(id = R.string.splash_desc),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(360.dp)
-                .align(Alignment.BottomCenter)
-                . offset(y = 17.dp)
-        )
-    }
-}
-
-@Composable
-fun PlaceInfoCard(place: PlaceEntity?, modifier: Modifier = Modifier,onButtonClick: (Int) -> Unit) {
+fun PlaceInfoCard(
+    place: PlaceEntity?, modifier: Modifier = Modifier, onButtonClick: (Int) -> Unit
+) {
     if (place == null) return
 
-    Box(
-        modifier = modifier
-            .width(500.dp)
-            .height(170.dp)
-            .padding(horizontal = 15.dp, vertical = 20.dp)
-            .graphicsLayer {
-                shadowElevation = 20f
-                shape = RoundedCornerShape(20.dp)
-                clip = false
-            }
-            .shadow(
-                elevation = 20.dp,
-                shape = RoundedCornerShape(20.dp),
-                ambientColor = Color.Black.copy(alpha = 1f),
-                spotColor = Color.Black.copy(alpha = 4f)
-            )
-            .background(CrowdZeroTheme.colors.white, shape = RoundedCornerShape(20.dp)),
-        contentAlignment = Alignment.TopStart
-    ) {
+    Box(modifier = modifier
+        .noRippleClickable { onButtonClick(place.id) }
+        .fillMaxWidth()
+        .fillMaxHeight(0.2f)
+        .padding(horizontal = 15.dp, vertical = 20.dp)
+        .graphicsLayer {
+            shadowElevation = 20f
+            shape = RoundedCornerShape(9.dp)
+            clip = false
+        }
+        .shadow(
+            elevation = 20.dp,
+            shape = RoundedCornerShape(9.dp),
+            ambientColor = CrowdZeroTheme.colors.shadow.copy(alpha = 1f),
+            spotColor = CrowdZeroTheme.colors.shadow.copy(alpha = 4f)
+        )
+        .background(CrowdZeroTheme.colors.white, shape = RoundedCornerShape(9.dp)),
+        contentAlignment = Alignment.TopStart) {
         Image(
-            painter = painterResource(id = R.drawable.ic_nextbuildings),
-            contentDescription = "배경 빌딩 아이콘",
+            painter = painterResource(id = R.drawable.ic_map_buildings),
+            contentDescription = stringResource(R.string.place_info_card_buildings),
             modifier = Modifier
                 .fillMaxSize()
                 .align(Alignment.BottomEnd),
@@ -268,37 +215,30 @@ fun PlaceInfoCard(place: PlaceEntity?, modifier: Modifier = Modifier,onButtonCli
                 .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.Top
         ) {
-
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.weight(0.5f))
                 Image(
-                    painter = painterResource(id = R.drawable.ic_right_arrow),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_right_arrow),
                     contentDescription = stringResource(R.string.place_info_detail_view),
                     modifier = Modifier
                         .size(35.dp)
-                        .padding(start = 15.dp, top = 15.dp)
-                        .noRippleClickable { onButtonClick(1) },
+                        .padding(start = 15.dp, top = 20.dp)
                 )
             }
-
 
             Text(
                 text = place.name,
                 style = CrowdZeroTheme.typography.h3JalnanGothic,
-                color = CrowdZeroTheme.colors.gray900,
-                modifier = Modifier
-                    .offset(y = -7.dp)
+                color = CrowdZeroTheme.colors.gray900
             )
 
             Spacer(modifier = Modifier.height(15.dp))
 
-
             Text(
                 text = buildAnnotatedString {
                     append(stringResource(R.string.place_info_congestion))
-                    append(" ")
                     withStyle(
                         style = SpanStyle(
                             color = when (place.congestion) {
@@ -313,61 +253,27 @@ fun PlaceInfoCard(place: PlaceEntity?, modifier: Modifier = Modifier,onButtonCli
                     }
                 },
                 style = CrowdZeroTheme.typography.c4SemiBold,
-                color = CrowdZeroTheme.colors.gray700
+                color = CrowdZeroTheme.colors.gray800
             )
 
-
             Spacer(modifier = Modifier.height(3.dp))
-
 
             Text(
                 text = buildAnnotatedString {
                     append(stringResource(R.string.place_info_realtime_population))
-                    append(" ")
                     withStyle(
                         style = SpanStyle(color = CrowdZeroTheme.colors.green700)
                     ) {
-                        append(stringResource(R.string.place_info_realtime_population_count, place.min, place.max))
+                        append(
+                            stringResource(
+                                R.string.place_info_realtime_population_count, place.min, place.max
+                            )
+                        )
                     }
                 },
                 style = CrowdZeroTheme.typography.c4SemiBold,
                 color = CrowdZeroTheme.colors.gray700
             )
         }
-    }
-}
-
-
-
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewSplashScreen() {
-    SplashScreen()
-}
-
-/*@Preview(showBackground = true)
-@Composable
-fun MapScreenPreview() {
-    CrowdZeroAndroidTheme {
-        MapScreen()
-    }
-}*/
-@Preview(showBackground = true)
-@Composable
-fun TestMapChipPreview() {
-    Column {
-        MapChip(
-            title = LocationType.GANGNAM_STATION,
-            isSelected = true,
-            onClick = {}
-        )
-        MapChip(
-            title = LocationType.GWANGHWAMUN,
-            isSelected = false,
-            onClick = {}
-        )
     }
 }

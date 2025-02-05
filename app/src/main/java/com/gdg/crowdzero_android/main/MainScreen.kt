@@ -49,7 +49,8 @@ import com.gdg.core.util.NoRippleInteractionSource
 import com.gdg.crowdzero_android.navigation.calendarNavGraph
 import com.gdg.crowdzero_android.navigation.detailNavGraph
 import com.gdg.crowdzero_android.navigation.mapNavGraph
-import com.gdg.feature.map.SplashScreen
+import com.gdg.crowdzero_android.navigation.splashNavGraph
+import com.gdg.feature.splash.SplashScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -65,7 +66,7 @@ fun MainScreen(
     var backPressedState by remember { mutableStateOf(true) }
     var backPressedTime = 0L
     val coroutineScope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
 
     SideEffect {
         systemUiController.setStatusBarColor(
@@ -89,35 +90,14 @@ fun MainScreen(
     if (showSplash) {
         SplashScreen()  // 스플래시 화면 표시
     } else {
-        val context = LocalContext.current
-        val systemUiController = rememberSystemUiController()
-        val lifecycleOwner = LocalLifecycleOwner.current
-        var backPressedState by remember { mutableStateOf(true) }
-        var backPressedTime = 0L
-        val coroutineScope = rememberCoroutineScope()
-        val snackBarHostState = remember { SnackbarHostState() }
-
-        SideEffect {
-            systemUiController.setStatusBarColor(
-                color = White
-            )
-        }
-
-        DisposableEffect(key1 = lifecycleOwner) {
-            onDispose {
-                systemUiController.setStatusBarColor(
-                    color = Color.Transparent
-                )
-            }
-        }
-
         BackHandler(enabled = backPressedState) {
             if (System.currentTimeMillis() - backPressedTime <= 3000) {
                 (context as Activity).finish()
             } else {
                 backPressedState = true
                 coroutineScope.launch {
-                    val job = launch { snackBarHostState.showSnackbar(message = "버튼을 한 번 더 누르면 종료돼요") }
+                    val job =
+                        launch { snackBarHostState.showSnackbar(message = "버튼을 한 번 더 누르면 종료돼요") }
                     delay(2000)
                     job.cancel()
                 }
@@ -125,60 +105,54 @@ fun MainScreen(
             backPressedTime = System.currentTimeMillis()
         }
 
-        Scaffold(
-            modifier = Modifier
-                .navigationBarsPadding()
-                .statusBarsPadding(),
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = snackBarHostState,
-                    modifier = Modifier.padding(bottom = 10.dp)
-                ) { snackBarData ->
-                    BaseSnackBar(
-                        message = snackBarData.visuals.message
-                    )
-                }
-            },
-            topBar = {
-                Column {
-                    val navBackStackEntry by navigator.navController.currentBackStackEntryAsState()
-                    val currentRoute = navBackStackEntry?.destination?.route?.substringAfterLast(".")
-                        ?.substringBefore("/")
-
-                    BaseTopAppBar(
-                        route = currentRoute,
-                        isIconVisible = currentRoute == "Detail",
-                        onBackButtonClick = navigator::navigateUp
-                    )
-                    MainTabBar(
-                        isVisible = navigator.showTabRow(),
-                        tabs = MainTab.entries.toList(),
-                        currentTab = navigator.currentTab,
-                        onTabSelected = navigator::navigate
-                    )
-                }
+        Scaffold(modifier = Modifier
+            .navigationBarsPadding()
+            .statusBarsPadding(), snackbarHost = {
+            SnackbarHost(
+                hostState = snackBarHostState, modifier = Modifier.padding(bottom = 10.dp)
+            ) { snackBarData ->
+                BaseSnackBar(
+                    message = snackBarData.visuals.message
+                )
             }
-        ) { paddingValues ->
+        }, topBar = {
+            Column {
+                val navBackStackEntry by navigator.navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route?.substringAfterLast(".")
+                    ?.substringBefore("/")
+
+                BaseTopAppBar(
+                    route = currentRoute,
+                    isIconVisible = currentRoute == "Detail",
+                    onBackButtonClick = navigator::navigateUp
+                )
+                MainTabBar(
+                    isVisible = navigator.showTabRow(),
+                    tabs = MainTab.entries.toList(),
+                    currentTab = navigator.currentTab,
+                    onTabSelected = navigator::navigate
+                )
+            }
+        }) { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .statusBarsPadding()
                     .navigationBarsPadding()
             ) {
-                NavHost(
-                    enterTransition = { EnterTransition.None },
+                NavHost(enterTransition = { EnterTransition.None },
                     exitTransition = { ExitTransition.None },
                     popEnterTransition = { EnterTransition.None },
                     popExitTransition = { ExitTransition.None },
                     navController = navigator.navController,
                     startDestination = navigator.startDestination
                 ) {
+                    splashNavGraph(paddingValues = paddingValues)
                     mapNavGraph(
-                        paddingValues = paddingValues,
-                        navHostController = navigator.navController)
+                        paddingValues = paddingValues, navHostController = navigator.navController
+                    )
                     calendarNavGraph(
-                        paddingValues = paddingValues,
-                        navHostController = navigator.navController
+                        paddingValues = paddingValues, navHostController = navigator.navController
                     )
                     detailNavGraph(paddingValues = paddingValues)
                 }
@@ -190,34 +164,25 @@ fun MainScreen(
 
 @Composable
 fun MainTabBar(
-    isVisible: Boolean,
-    tabs: List<MainTab>,
-    currentTab: MainTab?,
-    onTabSelected: (MainTab) -> Unit
+    isVisible: Boolean, tabs: List<MainTab>, currentTab: MainTab?, onTabSelected: (MainTab) -> Unit
 ) {
     val pagerState = rememberPagerState(initialPage = currentTab?.index ?: 0) { tabs.size }
     val coroutineScope = rememberCoroutineScope()
 
     AnimatedVisibility(
-        visible = isVisible,
-        enter = EnterTransition.None,
-        exit = ExitTransition.None
+        visible = isVisible, enter = EnterTransition.None, exit = ExitTransition.None
     ) {
-        TabRow(
-            selectedTabIndex = pagerState.currentPage,
+        TabRow(selectedTabIndex = pagerState.currentPage,
             containerColor = CrowdZeroTheme.colors.white,
             contentColor = CrowdZeroTheme.colors.green700,
             indicator = { tabPositions ->
                 SecondaryIndicator(
                     modifier = Modifier
                         .tabIndicatorOffset(tabPositions[currentTab?.index ?: 0])
-                        .clip(CircleShape),
-                    height = 4.dp,
-                    color = CrowdZeroTheme.colors.green700
+                        .clip(CircleShape), height = 4.dp, color = CrowdZeroTheme.colors.green700
                 )
             },
-            divider = {}
-        ) {
+            divider = {}) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
                     selected = currentTab == tab,
@@ -250,7 +215,6 @@ fun MainTabBarPreview() {
             isVisible = true,
             tabs = MainTab.entries,
             currentTab = MainTab.MAP,
-            onTabSelected = {}
-        )
+            onTabSelected = {})
     }
 }
