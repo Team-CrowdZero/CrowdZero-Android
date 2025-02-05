@@ -1,7 +1,6 @@
 package com.gdg.core.designsystem.component.calendar
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -22,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.gdg.core.designsystem.theme.CrowdZeroTheme
 import com.gdg.core.R
 import com.gdg.core.extension.noRippleClickable
+import com.gdg.core.util.getDaysForMonth
 import okhttp3.internal.immutableListOf
 import java.time.LocalDate
 import java.time.YearMonth
@@ -58,38 +58,30 @@ fun CalendarComponent(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Icon(
-                painter = painterResource(id = R.drawable.calender_button_l),
+            Icon(painter = painterResource(id = R.drawable.calender_button_l),
                 tint = CrowdZeroTheme.colors.green700,
                 contentDescription = stringResource(R.string.previous_month),
                 modifier = Modifier
                     .size(16.dp)
-                    .noRippleClickable { onMonthChange(currentMonth.minusMonths(1)) }
-            )
+                    .noRippleClickable { onMonthChange(currentMonth.minusMonths(1)) })
 
             Spacer(modifier = Modifier.width(15.dp))
 
-            Icon(
-                painter = painterResource(id = R.drawable.calender_button_r),
+            Icon(painter = painterResource(id = R.drawable.calender_button_r),
                 tint = CrowdZeroTheme.colors.green700,
                 contentDescription = stringResource(R.string.next_month),
                 modifier = Modifier
                     .size(16.dp)
-                    .noRippleClickable { onMonthChange(currentMonth.plusMonths(1)) }
-            )
+                    .noRippleClickable { onMonthChange(currentMonth.plusMonths(1)) })
         }
-
-        Spacer(modifier = Modifier.height(6.dp))
 
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 6.dp, bottom = 15.dp),
+                .padding(top = 12.dp, bottom = 30.dp),
             thickness = 1.dp,
             color = CrowdZeroTheme.colors.gray500
         )
-
-        Spacer(modifier = Modifier.height(15.dp))
 
         // 요일 헤더
         Row(

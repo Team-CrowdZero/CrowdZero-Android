@@ -141,7 +141,6 @@ fun CalendarScreen(
             color = CrowdZeroTheme.colors.gray500
         )
 
-        Spacer(modifier = Modifier.height(25.dp))
 
         // 선택한 날짜 표시
         Column(
@@ -168,7 +167,7 @@ fun CalendarScreen(
             if (scheduleList.isEmpty()) {
                 // 정보 없는 경우 메시지 표시
                 Text(
-                    text = "해당 날짜의 집회 정보가 없습니다",
+                    text = stringResource(R.string.calender_no_info),
                     style = CrowdZeroTheme.typography.h5Medium,
                     color = CrowdZeroTheme.colors.gray900,
                     modifier = Modifier.padding(top = 72.dp)
