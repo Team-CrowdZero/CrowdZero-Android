@@ -18,4 +18,12 @@
     <string name="splash_title2">제로</string>
     <string name="splash_subtitle">Inc. CrowdZero</string>
     <string name="splash_desc">스플래시</string>
+
+    <!--지도 -->
+    <string name="place_info_background_icon">배경 빌딩 아이콘</string>
+    <string name="place_info_detail_view">상세보기</string>
+    <string name="place_info_congestion">인구혼잡도</string>
+    <string name="place_info_realtime_population">실시간 인구</string>
+    <string name="place_info_realtime_population_count">%1$s~%2$s명</string>
+
 </resources>

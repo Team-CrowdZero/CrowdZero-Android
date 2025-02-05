@@ -44,6 +44,7 @@ import com.gdg.core.designsystem.component.snackbar.BaseSnackBar
 import com.gdg.core.designsystem.component.topappbar.BaseTopAppBar
 import com.gdg.core.designsystem.theme.CrowdZeroAndroidTheme
 import com.gdg.core.designsystem.theme.CrowdZeroTheme
+import com.gdg.core.designsystem.theme.Green600
 import com.gdg.core.util.NoRippleInteractionSource
 import com.gdg.crowdzero_android.navigation.calendarNavGraph
 import com.gdg.crowdzero_android.navigation.detailNavGraph
@@ -58,6 +59,26 @@ fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator()
 ) {
     var showSplash by remember { mutableStateOf(true) }  // 스플래시 상태 추가
+    val context = LocalContext.current
+    val systemUiController = rememberSystemUiController()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var backPressedState by remember { mutableStateOf(true) }
+    var backPressedTime = 0L
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = if (showSplash) Green600 else White
+        )
+    }
+    DisposableEffect(key1 = lifecycleOwner) {
+        onDispose {
+            systemUiController.setStatusBarColor(
+                color = Color.Transparent
+            )
+        }
+    }
 
     // 3초 후 스플래시 화면 종료
     LaunchedEffect(Unit) {
@@ -152,7 +173,9 @@ fun MainScreen(
                     navController = navigator.navController,
                     startDestination = navigator.startDestination
                 ) {
-                    mapNavGraph(navHostController = navigator.navController)
+                    mapNavGraph(
+                        paddingValues = paddingValues,
+                        navHostController = navigator.navController)
                     calendarNavGraph(
                         paddingValues = paddingValues,
                         navHostController = navigator.navController
