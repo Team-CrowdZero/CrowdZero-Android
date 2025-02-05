@@ -1,4 +1,4 @@
-package com.gdg.core.designsystem.component.calendar
+package com.gdg.core.util
 
 import java.time.LocalDate
 import java.time.YearMonth
