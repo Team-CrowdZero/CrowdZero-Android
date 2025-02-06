@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -212,29 +213,35 @@ fun PlaceInfoCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = 5.dp),
             verticalArrangement = Arrangement.Top
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()
+                    .padding(top = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Spacer(modifier = Modifier.weight(0.5f))
+                Text(
+                    text = place.name,
+                    style = CrowdZeroTheme.typography.h3JalnanGothic,
+                    color = CrowdZeroTheme.colors.gray900,
+                    modifier = Modifier
+                        .padding(start = 20.dp, top = 9.dp)
+                )
+
+                Spacer(modifier = Modifier.weight(1f)) // Text와 Image 사이 간격 확보
+
                 Image(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_right_arrow),
                     contentDescription = stringResource(R.string.place_info_detail_view),
                     modifier = Modifier
-                        .size(35.dp)
-                        .padding(start = 15.dp, top = 20.dp)
+                        .size(40.dp)
+                        .padding(start = 10.dp,end = 3.dp), // 여백 추가 가능
+                    colorFilter = ColorFilter.tint(CrowdZeroTheme.colors.gray800)
                 )
             }
 
-            Text(
-                text = place.name,
-                style = CrowdZeroTheme.typography.h3JalnanGothic,
-                color = CrowdZeroTheme.colors.gray900
-            )
-
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Text(
                 text = buildAnnotatedString {
@@ -253,7 +260,9 @@ fun PlaceInfoCard(
                     }
                 },
                 style = CrowdZeroTheme.typography.c4SemiBold,
-                color = CrowdZeroTheme.colors.gray800
+                color = CrowdZeroTheme.colors.gray800,
+                modifier = Modifier
+                    .padding(start = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(3.dp))
@@ -272,7 +281,9 @@ fun PlaceInfoCard(
                     }
                 },
                 style = CrowdZeroTheme.typography.c4SemiBold,
-                color = CrowdZeroTheme.colors.gray700
+                color = CrowdZeroTheme.colors.gray700,
+                modifier = Modifier
+                    .padding(start = 20.dp)
             )
         }
     }
