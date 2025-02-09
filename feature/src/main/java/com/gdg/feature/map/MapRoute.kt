@@ -1,25 +1,19 @@
 package com.gdg.feature.map
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,29 +23,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gdg.core.designsystem.component.chip.MapChip
-import com.gdg.core.designsystem.theme.CrowdZeroAndroidTheme
 import com.gdg.core.designsystem.theme.CrowdZeroTheme
-import com.gdg.core.extension.noRippleClickable
 import com.gdg.core.type.LocationType
 import com.gdg.domain.entity.PlaceEntity
 import com.gdg.domain.entity.RoadEntity
 import com.gdg.feature.R
+import com.gdg.feature.map.component.PlaceInfoCard
+import com.gdg.feature.map.component.RoadInfoSheet
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraPosition
@@ -111,7 +93,7 @@ fun MapRoute(
     )
 }
 
-@OptIn(ExperimentalNaverMapApi::class)
+@OptIn(ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MapScreen(
     mapProperties: MapProperties = MapProperties(),
@@ -123,8 +105,11 @@ fun MapScreen(
     onButtonClick: (Int) -> Unit = { }
 ) {
     var selectedLocation by remember { mutableStateOf<LocationType?>(null) }
+    var selectedRoad by remember { mutableStateOf<RoadEntity?>(null) }
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
+    val sheetState = rememberModalBottomSheetState()
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     BackHandler(
         enabled = selectedLocation != null,
@@ -158,7 +143,15 @@ fun MapScreen(
                         width = 20.dp,
                         height = 20.dp,
                         state = MarkerState(position = LatLng(road.acdntY, road.acdntX)),
-                        icon = OverlayImage.fromResource(R.drawable.ic_ban_marker)
+                        icon = OverlayImage.fromResource(R.drawable.ic_ban_marker),
+                        onClick = {
+                            selectedRoad = road
+                            showBottomSheet = true
+                            coroutineScope.launch {
+                                sheetState.show()
+                            }
+                            true
+                        }
                     )
                 }
             }
@@ -199,121 +192,15 @@ fun MapScreen(
             )
         }
     }
-}
 
-@Composable
-fun PlaceInfoCard(
-    place: PlaceEntity?,
-    modifier: Modifier = Modifier,
-    onButtonClick: (Int) -> Unit
-) {
-    if (place == null) return
-
-    Box(
-        modifier = modifier
-            .padding(horizontal = 16.dp, vertical = 21.dp)
-            .noRippleClickable { onButtonClick(place.id) }
-            .fillMaxWidth()
-            .graphicsLayer {
-                shadowElevation = 20f
-                shape = RoundedCornerShape(9.dp)
-                clip = false
-            }
-            .shadow(
-                elevation = 20.dp,
-                shape = RoundedCornerShape(9.dp),
-                ambientColor = CrowdZeroTheme.colors.shadow.copy(alpha = 1f),
-                spotColor = CrowdZeroTheme.colors.shadow.copy(alpha = 4f)
-            )
-            .background(CrowdZeroTheme.colors.white, shape = RoundedCornerShape(9.dp))
-            .zIndex(1f)
-    ) {
-        Image(
-            modifier = Modifier
-                .matchParentSize()
-                .align(Alignment.CenterEnd)
-                .offset(x = (LocalConfiguration.current.screenWidthDp.dp * 0.14f)),
-            painter = painterResource(id = R.drawable.ic_map_buildings),
-            contentDescription = stringResource(R.string.place_info_card_buildings),
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 21.dp, start = 19.dp, bottom = 21.dp, end = 6.dp),
-            verticalArrangement = Arrangement.Top
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            sheetState = sheetState,
+            onDismissRequest = { showBottomSheet = false },
+            containerColor = CrowdZeroTheme.colors.white,
+            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 13.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = place.name,
-                    style = CrowdZeroTheme.typography.h3JalnanGothic,
-                    color = CrowdZeroTheme.colors.gray900,
-                    textAlign = TextAlign.Start
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_right_arrow),
-                    contentDescription = stringResource(R.string.place_info_detail_view),
-                    tint = CrowdZeroTheme.colors.gray800
-                )
-            }
-            Text(
-                modifier = Modifier.padding(bottom = 3.dp),
-                text = buildAnnotatedString {
-                    append(stringResource(R.string.place_info_congestion))
-                    withStyle(
-                        style = SpanStyle(
-                            color = when (place.congestion) {
-                                "여유" -> CrowdZeroTheme.colors.green600
-                                "보통" -> CrowdZeroTheme.colors.yellow
-                                "약간 혼잡" -> CrowdZeroTheme.colors.orange
-                                else -> CrowdZeroTheme.colors.red
-                            }
-                        )
-                    ) {
-                        append(place.congestion)
-                    }
-                },
-                style = CrowdZeroTheme.typography.c4SemiBold,
-                color = CrowdZeroTheme.colors.gray800
-            )
-            Text(
-                text = buildAnnotatedString {
-                    append(stringResource(R.string.place_info_realtime_population))
-                    withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.green700)) {
-                        append(
-                            stringResource(
-                                R.string.place_info_realtime_population_count,
-                                place.min,
-                                place.max
-                            )
-                        )
-                    }
-                },
-                style = CrowdZeroTheme.typography.c4SemiBold,
-                color = CrowdZeroTheme.colors.gray800
-            )
+            RoadInfoSheet(road = selectedRoad)
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PlaceInfoCardPreview() {
-    CrowdZeroAndroidTheme {
-        PlaceInfoCard(
-            place = PlaceEntity(
-                id = 1,
-                name = "강남역",
-                congestion = "보통",
-                min = 100,
-                max = 200
-            ),
-            onButtonClick = { }
-        )
     }
 }
