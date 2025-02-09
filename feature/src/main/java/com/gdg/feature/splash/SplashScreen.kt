@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,9 +18,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.gdg.core.designsystem.theme.CrowdZeroAndroidTheme
 import com.gdg.core.designsystem.theme.CrowdZeroTheme
 import com.gdg.feature.R
+import okhttp3.internal.immutableListOf
 
 @Composable
 fun SplashScreen() {
@@ -28,7 +32,10 @@ fun SplashScreen() {
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = listOf(CrowdZeroTheme.colors.green600, CrowdZeroTheme.colors.green700)
+                    colors = immutableListOf(
+                        CrowdZeroTheme.colors.green600,
+                        CrowdZeroTheme.colors.green700
+                    )
                 )
             )
     ) {
@@ -45,7 +52,6 @@ fun SplashScreen() {
                 color = CrowdZeroTheme.colors.white,
                 modifier = Modifier.graphicsLayer(rotationZ = -2f)
             )
-
             Text(
                 text = stringResource(R.string.splash_title2),
                 style = CrowdZeroTheme.typography.h1JalnanGothic,
@@ -54,7 +60,6 @@ fun SplashScreen() {
                     .graphicsLayer(rotationZ = -2f)
                     .padding(start = 5.dp)
             )
-
             Text(
                 text = stringResource(R.string.splash_subtitle),
                 style = CrowdZeroTheme.typography.c4Regular,
@@ -62,7 +67,6 @@ fun SplashScreen() {
                 modifier = Modifier.padding(start = 40.dp)
             )
         }
-
         Image(
             painter = painterResource(id = R.drawable.ic_splash_buildings),
             contentDescription = stringResource(id = R.string.splash_desc),
@@ -70,7 +74,14 @@ fun SplashScreen() {
                 .fillMaxWidth()
                 .height(360.dp)
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 17.dp)
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SplashScreenPreview() {
+    CrowdZeroAndroidTheme {
+        SplashScreen()
     }
 }

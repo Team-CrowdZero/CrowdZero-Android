@@ -142,7 +142,6 @@ fun MapScreen(
                 )
             }
         }
-
         LazyRow(
             modifier = Modifier
                 .align(Alignment.TopCenter)
@@ -162,10 +161,10 @@ fun MapScreen(
                                     .animate(CameraAnimation.Easing)
                             )
                         }
-                    })
+                    }
+                )
             }
         }
-
         selectedLocation.value?.let { location ->
             val place = mapViewModel.getPlaceInfo(location.id)
             PlaceInfoCard(
@@ -209,7 +208,6 @@ fun PlaceInfoCard(
                 .align(Alignment.BottomEnd),
             contentScale = ContentScale.Crop,
         )
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -240,9 +238,7 @@ fun PlaceInfoCard(
                     colorFilter = ColorFilter.tint(CrowdZeroTheme.colors.gray800)
                 )
             }
-
             Spacer(modifier = Modifier.height(10.dp))
-
             Text(
                 text = buildAnnotatedString {
                     append(stringResource(R.string.place_info_congestion))
@@ -264,9 +260,7 @@ fun PlaceInfoCard(
                 modifier = Modifier
                     .padding(start = 20.dp)
             )
-
             Spacer(modifier = Modifier.height(3.dp))
-
             Text(
                 text = buildAnnotatedString {
                     append(stringResource(R.string.place_info_realtime_population))
