@@ -50,7 +50,6 @@ import com.gdg.crowdzero_android.R
 import com.gdg.crowdzero_android.navigation.calendarNavGraph
 import com.gdg.crowdzero_android.navigation.detailNavGraph
 import com.gdg.crowdzero_android.navigation.mapNavGraph
-import com.gdg.crowdzero_android.navigation.splashNavGraph
 import com.gdg.feature.splash.SplashScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
@@ -152,7 +151,6 @@ fun MainScreen(
                     navController = navigator.navController,
                     startDestination = navigator.startDestination
                 ) {
-                    splashNavGraph(paddingValues = paddingValues)
                     mapNavGraph(navHostController = navigator.navController)
                     calendarNavGraph(
                         paddingValues = paddingValues, navHostController = navigator.navController
