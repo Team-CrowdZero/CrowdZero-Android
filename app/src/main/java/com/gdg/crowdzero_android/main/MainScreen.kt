@@ -88,7 +88,7 @@ fun MainScreen(
     }
 
     if (showSplash) {
-        SplashScreen()  // 스플래시 화면 표시
+        SplashScreen()
     } else {
         BackHandler(enabled = backPressedState) {
             if (System.currentTimeMillis() - backPressedTime <= 3000) {
@@ -107,40 +107,45 @@ fun MainScreen(
 
         Scaffold(modifier = Modifier
             .navigationBarsPadding()
-            .statusBarsPadding(), snackbarHost = {
-            SnackbarHost(
-                hostState = snackBarHostState, modifier = Modifier.padding(bottom = 10.dp)
-            ) { snackBarData ->
-                BaseSnackBar(
-                    message = snackBarData.visuals.message
-                )
-            }
-        }, topBar = {
-            Column {
-                val navBackStackEntry by navigator.navController.currentBackStackEntryAsState()
-                val currentRoute = navBackStackEntry?.destination?.route?.substringAfterLast(".")
-                    ?.substringBefore("/")
+            .statusBarsPadding(),
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = snackBarHostState, modifier = Modifier.padding(bottom = 10.dp)
+                ) { snackBarData ->
+                    BaseSnackBar(
+                        message = snackBarData.visuals.message
+                    )
+                }
+            },
+            topBar = {
+                Column {
+                    val navBackStackEntry by navigator.navController.currentBackStackEntryAsState()
+                    val currentRoute =
+                        navBackStackEntry?.destination?.route?.substringAfterLast(".")
+                            ?.substringBefore("/")
 
-                BaseTopAppBar(
-                    route = currentRoute,
-                    isIconVisible = currentRoute == "Detail",
-                    onBackButtonClick = navigator::navigateUp
-                )
-                MainTabBar(
-                    isVisible = navigator.showTabRow(),
-                    tabs = MainTab.entries.toList(),
-                    currentTab = navigator.currentTab,
-                    onTabSelected = navigator::navigate
-                )
+                    BaseTopAppBar(
+                        route = currentRoute,
+                        isIconVisible = currentRoute == "Detail",
+                        onBackButtonClick = navigator::navigateUp
+                    )
+                    MainTabBar(
+                        isVisible = navigator.showTabRow(),
+                        tabs = MainTab.entries.toList(),
+                        currentTab = navigator.currentTab,
+                        onTabSelected = navigator::navigate
+                    )
+                }
             }
-        }) { paddingValues ->
+        ) { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .statusBarsPadding()
                     .navigationBarsPadding()
             ) {
-                NavHost(enterTransition = { EnterTransition.None },
+                NavHost(
+                    enterTransition = { EnterTransition.None },
                     exitTransition = { ExitTransition.None },
                     popEnterTransition = { EnterTransition.None },
                     popExitTransition = { ExitTransition.None },
@@ -148,9 +153,7 @@ fun MainScreen(
                     startDestination = navigator.startDestination
                 ) {
                     splashNavGraph(paddingValues = paddingValues)
-                    mapNavGraph(
-                        paddingValues = paddingValues, navHostController = navigator.navController
-                    )
+                    mapNavGraph(navHostController = navigator.navController)
                     calendarNavGraph(
                         paddingValues = paddingValues, navHostController = navigator.navController
                     )

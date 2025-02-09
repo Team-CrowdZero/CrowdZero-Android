@@ -1,18 +1,30 @@
 package com.gdg.feature.map
 
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gdg.core.type.LocationType
 import com.gdg.domain.entity.PlaceEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import okhttp3.internal.immutableListOf
 import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor() : ViewModel() {
     private val _sideEffects: MutableSharedFlow<MapSideEffect> = MutableSharedFlow()
     val sideEffects: SharedFlow<MapSideEffect> get() = _sideEffects
+
+    @Stable
+    val locations = immutableListOf(
+        LocationType.GANGNAM_STATION,
+        LocationType.GWANGHWAMUN,
+        LocationType.SAMGAKJI_STATION,
+        LocationType.SEOUL_STATION,
+        LocationType.YEOUIDO
+    )
 
     private val mockPlaces = listOf(
         PlaceEntity(1, "강남역", "보통", 100, 200),

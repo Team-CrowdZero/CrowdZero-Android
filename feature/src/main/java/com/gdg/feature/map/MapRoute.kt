@@ -1,11 +1,11 @@
 package com.gdg.feature.map
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +15,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -24,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,11 +65,11 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.NaverMapConstants
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.overlay.OverlayImage
+import kotlinx.coroutines.launch
 
 @Composable
 fun MapRoute(
     mapViewModel: MapViewModel = hiltViewModel(),
-    paddingValues: PaddingValues,
     navigateToDetail: (Int) -> Unit
 ) {
     val mapProperties by remember {
@@ -85,16 +87,8 @@ fun MapRoute(
         )
     }
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(NaverMapConstants.DefaultCameraPosition.target, 10.0)
+        position = CameraPosition(NaverMapConstants.DefaultCameraPosition.target, 13.0)
     }
-
-    val locations = listOf(
-        LocationType.GANGNAM_STATION,
-        LocationType.GWANGHWAMUN,
-        LocationType.SAMGAKJI_STATION,
-        LocationType.SEOUL_STATION,
-        LocationType.YEOUIDO
-    )
 
     LaunchedEffect(key1 = mapViewModel.sideEffects) {
         mapViewModel.sideEffects.collect { sideEffect ->
@@ -108,7 +102,7 @@ fun MapRoute(
         mapProperties = mapProperties,
         mapUiSettings = mapUiSettings,
         cameraPositionState = cameraPositionState,
-        locations = locations,
+        locations = mapViewModel.locations,
         getPlaceEntity = { id -> mapViewModel.getPlaceEntity(id) },
         onButtonClick = mapViewModel::navigateToDetail
     )
@@ -125,6 +119,14 @@ fun MapScreen(
     onButtonClick: (Int) -> Unit = { }
 ) {
     var selectedLocation by remember { mutableStateOf<LocationType?>(null) }
+    val coroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
+
+    BackHandler(
+        enabled = selectedLocation != null,
+    ) {
+        selectedLocation = null
+    }
 
     Box(
         modifier = Modifier
@@ -149,10 +151,12 @@ fun MapScreen(
         }
         LazyRow(
             modifier = Modifier
+                .fillMaxWidth()
                 .align(Alignment.TopCenter)
-                .padding(top = 110.dp, start = 10.dp)
+                .padding(top = 110.dp, start = 10.dp, end = 10.dp),
+            state = listState
         ) {
-            items(locations) { location ->
+            itemsIndexed(locations) { index, location ->
                 MapChip(
                     title = location,
                     isSelected = selectedLocation == location,
@@ -162,9 +166,12 @@ fun MapScreen(
                         } else {
                             selectedLocation = location
                             cameraPositionState.move(
-                                CameraUpdate.scrollAndZoomTo(location.latLng, 15.0)
+                                CameraUpdate.scrollAndZoomTo(location.latLng, 17.0)
                                     .animate(CameraAnimation.Easing)
                             )
+                        }
+                        coroutineScope.launch {
+                            listState.animateScrollToItem(index)
                         }
                     }
                 )
@@ -210,7 +217,8 @@ fun PlaceInfoCard(
         Image(
             modifier = Modifier
                 .matchParentSize()
-                .offset(x = (LocalConfiguration.current.screenWidthDp.dp * 0.1f)),
+                .align(Alignment.CenterEnd)
+                .offset(x = (LocalConfiguration.current.screenWidthDp.dp * 0.14f)),
             painter = painterResource(id = R.drawable.ic_map_buildings),
             contentDescription = stringResource(R.string.place_info_card_buildings),
         )
