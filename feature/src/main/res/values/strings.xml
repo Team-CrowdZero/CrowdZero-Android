@@ -13,6 +13,20 @@
     <string name="detail_weather_temperature">%1$s°</string>
     <string name="detail_congestion_count">%1$s~%2$s명</string>
 
+    <!--스플래시 -->
+    <string name="splash_title1">혼잡</string>
+    <string name="splash_title2">제로</string>
+    <string name="splash_subtitle">Inc. CrowdZero</string>
+    <string name="splash_desc">스플래시</string>
+
+    <!--지도 -->
+    <string name="place_info_background_icon">배경 빌딩 아이콘</string>
+    <string name="place_info_detail_view">상세보기</string>
+    <string name="place_info_congestion">"인구혼잡도 "</string>
+    <string name="place_info_realtime_population">"실시간 인구 "</string>
+    <string name="place_info_realtime_population_count">%1$s~%2$s명</string>
+    <string name="place_info_card_buildings">"배경 빌딩 아이콘"</string>
+
     <!-- 캘린더 -->
     <string name="calender_header_1">"날짜별 "</string>
     <string name="calender_header_2">집회정보</string>
