@@ -3,6 +3,7 @@ package com.gdg.core.util
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class TimeFormatter {
     fun weatherTimeFormat(time: String): String {
@@ -23,5 +24,11 @@ class TimeFormatter {
     private fun parseDateTime(dateTime: String): LocalDateTime {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
         return LocalDateTime.parse(dateTime, formatter)
+    }
+
+    companion object {
+        val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")
+        val dayOfWeekFormatter: DateTimeFormatter =
+            DateTimeFormatter.ofPattern("EEEE", Locale.KOREAN)
     }
 }
