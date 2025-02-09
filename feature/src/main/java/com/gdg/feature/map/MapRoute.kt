@@ -50,7 +50,9 @@ import com.gdg.core.designsystem.theme.CrowdZeroTheme
 import com.gdg.core.extension.noRippleClickable
 import com.gdg.core.type.LocationType
 import com.gdg.domain.entity.PlaceEntity
+import com.gdg.domain.entity.RoadEntity
 import com.gdg.feature.R
+import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.CameraUpdate
@@ -103,6 +105,7 @@ fun MapRoute(
         mapUiSettings = mapUiSettings,
         cameraPositionState = cameraPositionState,
         locations = mapViewModel.locations,
+        roads = mapViewModel.mockRoadEntity,
         getPlaceEntity = { id -> mapViewModel.getPlaceEntity(id) },
         onButtonClick = mapViewModel::navigateToDetail
     )
@@ -115,6 +118,7 @@ fun MapScreen(
     mapUiSettings: MapUiSettings = MapUiSettings(),
     cameraPositionState: CameraPositionState = CameraPositionState(),
     locations: List<LocationType>,
+    roads: List<RoadEntity>,
     getPlaceEntity: (Int) -> PlaceEntity?,
     onButtonClick: (Int) -> Unit = { }
 ) {
@@ -147,6 +151,16 @@ fun MapScreen(
                     captionColor = CrowdZeroTheme.colors.gray900,
                     captionHaloColor = CrowdZeroTheme.colors.white
                 )
+            }
+            if (roads.isNotEmpty()) {
+                roads.forEach { road ->
+                    Marker(
+                        width = 20.dp,
+                        height = 20.dp,
+                        state = MarkerState(position = LatLng(road.acdntY, road.acdntX)),
+                        icon = OverlayImage.fromResource(R.drawable.ic_ban_marker)
+                    )
+                }
             }
         }
         LazyRow(

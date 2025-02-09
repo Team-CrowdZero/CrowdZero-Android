@@ -60,7 +60,7 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator()
 ) {
-    var showSplash by remember { mutableStateOf(true) }  // 스플래시 상태 추가
+    var showSplash by remember { mutableStateOf(true) }
     val context = LocalContext.current
     val systemUiController = rememberSystemUiController()
     val lifecycleOwner = LocalLifecycleOwner.current
