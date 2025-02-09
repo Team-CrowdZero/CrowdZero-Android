@@ -46,6 +46,7 @@ import com.gdg.core.designsystem.theme.CrowdZeroAndroidTheme
 import com.gdg.core.designsystem.theme.CrowdZeroTheme
 import com.gdg.core.designsystem.theme.Green600
 import com.gdg.core.util.NoRippleInteractionSource
+import com.gdg.crowdzero_android.R
 import com.gdg.crowdzero_android.navigation.calendarNavGraph
 import com.gdg.crowdzero_android.navigation.detailNavGraph
 import com.gdg.crowdzero_android.navigation.mapNavGraph
@@ -81,9 +82,8 @@ fun MainScreen(
         }
     }
 
-    // 3초 후 스플래시 화면 종료
     LaunchedEffect(Unit) {
-        delay(3000)
+        delay(2000)
         showSplash = false
     }
 
@@ -97,7 +97,7 @@ fun MainScreen(
                 backPressedState = true
                 coroutineScope.launch {
                     val job =
-                        launch { snackBarHostState.showSnackbar(message = "버튼을 한 번 더 누르면 종료돼요") }
+                        launch { snackBarHostState.showSnackbar(message = context.getString(R.string.snack_bar_back_message)) }
                     delay(2000)
                     job.cancel()
                 }
