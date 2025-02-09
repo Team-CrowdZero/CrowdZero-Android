@@ -14,11 +14,11 @@ class MapViewModel @Inject constructor() : ViewModel() {
     private val _sideEffects: MutableSharedFlow<MapSideEffect> = MutableSharedFlow()
     val sideEffects: SharedFlow<MapSideEffect> get() = _sideEffects
 
-    val mockPlaces = listOf(
+    private val mockPlaces = listOf(
         PlaceEntity(1, "강남역", "보통", 100, 200),
         PlaceEntity(2, "광화문 광장", "보통", 100, 200),
-        PlaceEntity(3, "서울역", "보통", 100, 200),
-        PlaceEntity(4, "삼각지역", "보통", 100, 200),
+        PlaceEntity(3, "삼각지역", "보통", 100, 200),
+        PlaceEntity(4, "서울역", "보통", 100, 200),
         PlaceEntity(5, "여의도", "보통", 100, 200)
     )
 
