@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,12 +23,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gdg.core.R
+import com.gdg.core.designsystem.theme.CrowdZeroAndroidTheme
 import com.gdg.core.designsystem.theme.CrowdZeroTheme
 import com.gdg.core.extension.noRippleClickable
 import com.gdg.core.util.getDaysForMonth
@@ -106,12 +108,17 @@ fun CalendarComponent(
         ) {
             items(days) { date ->
                 val isSelected = date == selectedDate
-                Box(modifier = Modifier
-                    .padding(5.dp)
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(if (isSelected) CrowdZeroTheme.colors.green500 else Color.Transparent)
-                    .noRippleClickable { onDateSelected(date) }) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .aspectRatio(1f)
+                        .padding(5.dp)
+                        .background(
+                            shape = CircleShape,
+                            color = if (isSelected) CrowdZeroTheme.colors.green500 else Color.Transparent
+                        )
+                        .noRippleClickable { onDateSelected(date) }
+                ) {
                     Text(
                         text = date.dayOfMonth.toString(),
                         style = CrowdZeroTheme.typography.c2Medium2,
@@ -121,5 +128,18 @@ fun CalendarComponent(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CalendarComponentPreview() {
+    CrowdZeroAndroidTheme {
+        CalendarComponent(
+            currentMonth = YearMonth.now(),
+            selectedDate = LocalDate.now(),
+            onMonthChange = {},
+            onDateSelected = {}
+        )
     }
 }
