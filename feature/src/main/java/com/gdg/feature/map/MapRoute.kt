@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -24,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -104,35 +106,36 @@ fun MapRoute(
         mapProperties = mapProperties,
         mapUiSettings = mapUiSettings,
         cameraPositionState = cameraPositionState,
-        onButtonClick = mapViewModel::navigateToDetail,
-        locations = locations
+        locations = locations,
+        getPlaceEntity = { id -> mapViewModel.getPlaceEntity(id) },
+        onButtonClick = mapViewModel::navigateToDetail
     )
 }
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun MapScreen(
-    paddingValues: PaddingValues = PaddingValues(),
     mapProperties: MapProperties = MapProperties(),
     mapUiSettings: MapUiSettings = MapUiSettings(),
     cameraPositionState: CameraPositionState = CameraPositionState(),
-    onButtonClick: (Int) -> Unit = { },
-    mapViewModel: MapViewModel = hiltViewModel(),
-    locations: List<LocationType>
+    locations: List<LocationType>,
+    getPlaceEntity: (Int) -> PlaceEntity?,
+    onButtonClick: (Int) -> Unit = { }
 ) {
-    val selectedLocation = remember { mutableStateOf<LocationType?>(null) }
+    var selectedLocation by remember { mutableStateOf<LocationType?>(null) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
+            .navigationBarsPadding()
     ) {
         NaverMap(
             cameraPositionState = cameraPositionState,
             properties = mapProperties,
             uiSettings = mapUiSettings
         ) {
-            selectedLocation.value?.let { location ->
+            selectedLocation?.let { location ->
                 Marker(
                     state = MarkerState(position = location.latLng),
                     icon = OverlayImage.fromResource(R.drawable.ic_map_marker),
@@ -150,14 +153,14 @@ fun MapScreen(
             items(locations) { location ->
                 MapChip(
                     title = location,
-                    isSelected = selectedLocation.value == location,
+                    isSelected = selectedLocation == location,
                     onClick = {
-                        if (selectedLocation.value == location) {
-                            selectedLocation.value = null
+                        if (selectedLocation == location) {
+                            selectedLocation = null
                         } else {
-                            selectedLocation.value = location
+                            selectedLocation = location
                             cameraPositionState.move(
-                                CameraUpdate.scrollAndZoomTo(location.latLng, 10.0)
+                                CameraUpdate.scrollAndZoomTo(location.latLng, 15.0)
                                     .animate(CameraAnimation.Easing)
                             )
                         }
@@ -165,10 +168,9 @@ fun MapScreen(
                 )
             }
         }
-        selectedLocation.value?.let { location ->
-            val place = mapViewModel.getPlaceInfo(location.id)
+        selectedLocation?.let { location ->
             PlaceInfoCard(
-                place = place,
+                place = getPlaceEntity(location.id),
                 modifier = Modifier.align(Alignment.BottomCenter),
                 onButtonClick = onButtonClick
             )
@@ -178,7 +180,9 @@ fun MapScreen(
 
 @Composable
 fun PlaceInfoCard(
-    place: PlaceEntity?, modifier: Modifier = Modifier, onButtonClick: (Int) -> Unit
+    place: PlaceEntity?,
+    modifier: Modifier = Modifier,
+    onButtonClick: (Int) -> Unit
 ) {
     if (place == null) return
 
@@ -215,7 +219,8 @@ fun PlaceInfoCard(
             verticalArrangement = Arrangement.Top
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(top = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -226,15 +231,13 @@ fun PlaceInfoCard(
                     modifier = Modifier
                         .padding(start = 20.dp, top = 9.dp)
                 )
-
-                Spacer(modifier = Modifier.weight(1f)) // Text와 Image 사이 간격 확보
-
+                Spacer(modifier = Modifier.weight(1f))
                 Image(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_right_arrow),
                     contentDescription = stringResource(R.string.place_info_detail_view),
                     modifier = Modifier
                         .size(40.dp)
-                        .padding(start = 10.dp,end = 3.dp), // 여백 추가 가능
+                        .padding(start = 10.dp, end = 3.dp), // 여백 추가 가능
                     colorFilter = ColorFilter.tint(CrowdZeroTheme.colors.gray800)
                 )
             }
@@ -257,8 +260,7 @@ fun PlaceInfoCard(
                 },
                 style = CrowdZeroTheme.typography.c4SemiBold,
                 color = CrowdZeroTheme.colors.gray800,
-                modifier = Modifier
-                    .padding(start = 20.dp)
+                modifier = Modifier.padding(start = 20.dp)
             )
             Spacer(modifier = Modifier.height(3.dp))
             Text(
@@ -276,8 +278,7 @@ fun PlaceInfoCard(
                 },
                 style = CrowdZeroTheme.typography.c4SemiBold,
                 color = CrowdZeroTheme.colors.gray700,
-                modifier = Modifier
-                    .padding(start = 20.dp)
+                modifier = Modifier.padding(start = 20.dp)
             )
         }
     }
