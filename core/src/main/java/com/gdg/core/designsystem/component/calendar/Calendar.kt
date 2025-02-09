@@ -1,12 +1,21 @@
 package com.gdg.core.designsystem.component.calendar
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,8 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.gdg.core.designsystem.theme.CrowdZeroTheme
 import com.gdg.core.R
+import com.gdg.core.designsystem.theme.CrowdZeroTheme
 import com.gdg.core.extension.noRippleClickable
 import com.gdg.core.util.getDaysForMonth
 import okhttp3.internal.immutableListOf
@@ -40,7 +49,6 @@ fun CalendarComponent(
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
     ) {
-        // 상단: 년/월 & < > 버튼
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -55,37 +63,33 @@ fun CalendarComponent(
                     currentMonth.monthValue.toString()
                 ), style = CrowdZeroTheme.typography.h3Bold, color = CrowdZeroTheme.colors.green700
             )
-
             Spacer(modifier = Modifier.weight(1f))
-
             Icon(painter = painterResource(id = R.drawable.calender_button_l),
                 tint = CrowdZeroTheme.colors.green700,
                 contentDescription = stringResource(R.string.previous_month),
                 modifier = Modifier
                     .size(16.dp)
-                    .noRippleClickable { onMonthChange(currentMonth.minusMonths(1)) })
-
+                    .noRippleClickable { onMonthChange(currentMonth.minusMonths(1)) }
+            )
             Spacer(modifier = Modifier.width(15.dp))
-
             Icon(painter = painterResource(id = R.drawable.calender_button_r),
                 tint = CrowdZeroTheme.colors.green700,
                 contentDescription = stringResource(R.string.next_month),
                 modifier = Modifier
                     .size(16.dp)
-                    .noRippleClickable { onMonthChange(currentMonth.plusMonths(1)) })
+                    .noRippleClickable { onMonthChange(currentMonth.plusMonths(1)) }
+            )
         }
-
-        Divider(
+        HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 12.dp, bottom = 30.dp),
             thickness = 1.dp,
             color = CrowdZeroTheme.colors.gray500
         )
-
-        // 요일 헤더
         Row(
-            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround
         ) {
             immutableListOf("일", "월", "화", "수", "목", "금", "토").forEach { day ->
                 Text(
@@ -95,12 +99,10 @@ fun CalendarComponent(
                 )
             }
         }
-
         Spacer(modifier = Modifier.height(5.dp))
-
-        // 달력 (7열 그리드)
         LazyVerticalGrid(
-            columns = GridCells.Fixed(7), modifier = Modifier.fillMaxWidth()
+            columns = GridCells.Fixed(7),
+            modifier = Modifier.fillMaxWidth()
         ) {
             items(days) { date ->
                 val isSelected = date == selectedDate
