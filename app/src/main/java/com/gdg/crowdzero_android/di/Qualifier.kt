@@ -8,4 +8,8 @@ annotation class ExampleRetrofit
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
+annotation class CrowdZeroRetrofit
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
 annotation class AccessToken

@@ -1,5 +1,6 @@
 package com.gdg.crowdzero_android.di
 
+import com.gdg.data.service.CrowdZeroService
 import com.gdg.data.service.ExampleService
 import dagger.Module
 import dagger.Provides
@@ -17,4 +18,10 @@ object ServiceModule {
     fun provideExampleService(
         @ExampleRetrofit retrofit: Retrofit
     ): ExampleService = retrofit.create(ExampleService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideCrowdZeroService(
+        @CrowdZeroRetrofit retrofit: Retrofit
+    ): CrowdZeroService = retrofit.create(CrowdZeroService::class.java)
 }

@@ -158,7 +158,10 @@ fun DetailScreen(
                 contentDescription = null
             )
         }
-        WeatherItem(data = weatherEntity)
+        WeatherItem(
+            data = weatherEntity,
+            time = congestionEntity.time
+        )
         Spacer(modifier = Modifier.height(11.dp))
         NaverMap(
             modifier = Modifier
@@ -191,7 +194,8 @@ fun DetailScreen(
 
 @Composable
 fun WeatherItem(
-    data: WeatherEntity
+    data: WeatherEntity,
+    time: String
 ) {
     Row(
         modifier = Modifier
@@ -212,7 +216,7 @@ fun WeatherItem(
     ) {
         Column {
             Text(
-                text = TimeFormatter().weatherTimeFormat(data.time),
+                text = TimeFormatter().weatherTimeFormat(time),
                 style = CrowdZeroTheme.typography.c3Bold,
                 color = CrowdZeroTheme.colors.white
             )
@@ -226,14 +230,14 @@ fun WeatherItem(
                     contentDescription = null
                 )
                 Text(
-                    text = stringResource(R.string.detail_weather_seoul, data.name),
+                    text = stringResource(R.string.detail_weather_seoul, data.areaNm),
                     style = CrowdZeroTheme.typography.c3Regular,
                     color = CrowdZeroTheme.colors.white
                 )
             }
             FineDustChip(
                 dust = DustType.FINE,
-                condition = when (data.pm25) {
+                condition = when (data.pm25Index) {
                     "좋음" -> DustConditionType.GOOD
                     "보통" -> DustConditionType.NORMAL
                     "나쁨" -> DustConditionType.BAD
@@ -243,7 +247,7 @@ fun WeatherItem(
             Spacer(modifier = Modifier.height(5.dp))
             FineDustChip(
                 dust = DustType.ULTRA_FINE,
-                condition = when (data.pm10) {
+                condition = when (data.pm10Index) {
                     "좋음" -> DustConditionType.GOOD
                     "보통" -> DustConditionType.NORMAL
                     "나쁨" -> DustConditionType.BAD
@@ -254,13 +258,13 @@ fun WeatherItem(
         Spacer(modifier = Modifier.weight(1f))
         Text(
             modifier = Modifier.padding(end = 7.dp),
-            text = stringResource(R.string.detail_weather_temperature, data.temperature),
+            text = stringResource(R.string.detail_weather_temperature, data.temp),
             style = CrowdZeroTheme.typography.h1Regular,
             color = CrowdZeroTheme.colors.white
         )
         Image(
             modifier = Modifier.size(90.dp),
-            imageVector = when (data.status) {
+            imageVector = when (data.skyStts) {
                 "맑음" -> ImageVector.vectorResource(R.drawable.ic_sunny)
                 "구름많음" -> ImageVector.vectorResource(R.drawable.ic_cloudy)
                 "비" -> ImageVector.vectorResource(R.drawable.ic_rainy)
