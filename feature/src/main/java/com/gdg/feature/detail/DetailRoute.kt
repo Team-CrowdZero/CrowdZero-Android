@@ -74,7 +74,7 @@ import timber.log.Timber
 @Composable
 fun DetailRoute(
     detailViewModel: DetailViewModel = hiltViewModel(),
-    id: Int,
+    id: Long,
     paddingValues: PaddingValues
 ) {
     val mapProperties by remember {

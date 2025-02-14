@@ -3,20 +3,45 @@ package com.gdg.feature.map
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gdg.core.state.UiState
 import com.gdg.core.type.LocationType
+import com.gdg.domain.entity.CongestionEntity
 import com.gdg.domain.entity.PlaceEntity
 import com.gdg.domain.entity.RoadEntity
+import com.gdg.domain.repository.CrowdZeroRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.internal.immutableListOf
 import javax.inject.Inject
 
 @HiltViewModel
-class MapViewModel @Inject constructor() : ViewModel() {
+class MapViewModel @Inject constructor(
+    private val crowdZeroRepository: CrowdZeroRepository
+) : ViewModel() {
+    private val _getCongestionState: MutableStateFlow<UiState<CongestionEntity>> =
+        MutableStateFlow(UiState.Empty)
+    val getCongestionState: StateFlow<UiState<CongestionEntity>> get() = _getCongestionState
+
     private val _sideEffects: MutableSharedFlow<MapSideEffect> = MutableSharedFlow()
     val sideEffects: SharedFlow<MapSideEffect> get() = _sideEffects
+
+    fun getCongestion(areaId: Long) {
+        viewModelScope.launch {
+            _getCongestionState.emit(UiState.Loading)
+            crowdZeroRepository.getCongestion(areaId).fold(
+                onSuccess = {
+                    _getCongestionState.emit(UiState.Success(it))
+                },
+                onFailure = {
+                    _getCongestionState.emit(UiState.Failure(it.message.toString()))
+                }
+            )
+        }
+    }
 
     @Stable
     val locations = immutableListOf(
@@ -27,11 +52,11 @@ class MapViewModel @Inject constructor() : ViewModel() {
         LocationType.YEOUIDO
     )
 
-    fun getPlaceEntity(id: Int): PlaceEntity? {
+    fun getPlaceEntity(id: Long): PlaceEntity? {
         return mockPlaces.find { it.id == id }
     }
 
-    fun navigateToDetail(id: Int) {
+    fun navigateToDetail(id: Long) {
         viewModelScope.launch {
             _sideEffects.emit(MapSideEffect.NavigateToDetail(id))
         }

@@ -54,7 +54,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MapRoute(
     mapViewModel: MapViewModel = hiltViewModel(),
-    navigateToDetail: (Int) -> Unit
+    navigateToDetail: (Long) -> Unit
 ) {
     val mapProperties by remember {
         mutableStateOf(
@@ -101,8 +101,8 @@ fun MapScreen(
     cameraPositionState: CameraPositionState = CameraPositionState(),
     locations: List<LocationType>,
     roads: List<RoadEntity>,
-    getPlaceEntity: (Int) -> PlaceEntity?,
-    onButtonClick: (Int) -> Unit = { }
+    getPlaceEntity: (Long) -> PlaceEntity?,
+    onButtonClick: (Long) -> Unit = { }
 ) {
     var selectedLocation by remember { mutableStateOf<LocationType?>(null) }
     var selectedRoad by remember { mutableStateOf<RoadEntity?>(null) }

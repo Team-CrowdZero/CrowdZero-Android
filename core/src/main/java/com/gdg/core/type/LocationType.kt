@@ -5,7 +5,7 @@ import com.gdg.core.R
 import com.naver.maps.geometry.LatLng
 
 enum class LocationType(
-    val id: Int,
+    val id: Long,
     @StringRes val title: Int,
     val latLng: LatLng
 ) {
@@ -36,11 +36,11 @@ enum class LocationType(
     ); // 여의도
 
     companion object {
-        fun extractTitleResource(id: Int): Int {
+        fun extractTitleResource(id: Long): Int {
             return entries.find { it.id == id }?.title ?: GWANGHWAMUN.title
         }
 
-        fun extractLatLng(id: Int): LatLng {
+        fun extractLatLng(id: Long): LatLng {
             return entries.find { it.id == id }?.latLng ?: GWANGHWAMUN.latLng
         }
     }
