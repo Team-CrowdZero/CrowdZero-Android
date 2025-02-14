@@ -18,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,10 +38,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gdg.core.designsystem.component.bar.CongestionBar
 import com.gdg.core.designsystem.component.chip.FineDustChip
+import com.gdg.core.designsystem.component.indicator.LoadingIndicator
 import com.gdg.core.designsystem.theme.CrowdZeroAndroidTheme
 import com.gdg.core.designsystem.theme.CrowdZeroTheme
+import com.gdg.core.state.UiState
 import com.gdg.core.type.CongestionType
 import com.gdg.core.type.DustConditionType
 import com.gdg.core.type.DustType
@@ -64,6 +68,7 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.overlay.OverlayImage
 import okhttp3.internal.immutableListOf
+import timber.log.Timber
 
 
 @Composable
@@ -89,9 +94,15 @@ fun DetailRoute(
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(LocationType.extractLatLng(id), 15.0)
     }
+    val getWeatherState by detailViewModel.getWeatherState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(key1 = Unit) {
+        detailViewModel.getWeather(id.toLong())
+    }
 
     DetailScreen(
         paddingValues = paddingValues,
+        weatherState = getWeatherState,
         weatherEntity = detailViewModel.mockWeather,
         congestionEntity = detailViewModel.mockCongestion,
         mapProperties = mapProperties,
@@ -106,6 +117,7 @@ fun DetailRoute(
 @Composable
 fun DetailScreen(
     paddingValues: PaddingValues = PaddingValues(),
+    weatherState: UiState<WeatherEntity> = UiState.Empty,
     weatherEntity: WeatherEntity,
     congestionEntity: CongestionEntity,
     mapProperties: MapProperties = MapProperties(),
@@ -158,10 +170,30 @@ fun DetailScreen(
                 contentDescription = null
             )
         }
-        WeatherItem(
-            data = weatherEntity,
-            time = congestionEntity.time
-        )
+        when (weatherState) {
+            is UiState.Empty -> {
+                Timber.e("날씨 api 데이터 없음")
+            }
+
+            is UiState.Loading -> {
+                LoadingIndicator()
+            }
+
+            is UiState.Success -> {
+                WeatherItem(
+                    data = weatherState.data,
+                    time = congestionEntity.time
+                )
+            }
+
+            is UiState.Failure -> {
+                Timber.e("날씨 api 오류 : ${weatherState.msg}")
+                WeatherItem(
+                    data = weatherEntity,
+                    time = congestionEntity.time
+                )
+            }
+        }
         Spacer(modifier = Modifier.height(11.dp))
         NaverMap(
             modifier = Modifier

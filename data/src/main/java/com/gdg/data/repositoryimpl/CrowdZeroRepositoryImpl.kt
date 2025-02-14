@@ -9,9 +9,10 @@ import javax.inject.Inject
 class CrowdZeroRepositoryImpl @Inject constructor(
     private val crowdZeroDataSource: CrowdZeroDataSource
 ) : CrowdZeroRepository {
-    override suspend fun getWeather(areaId: Long): Result<WeatherEntity?> {
+    override suspend fun getWeather(areaId: Long): Result<WeatherEntity> {
         return runCatching {
             crowdZeroDataSource.getWeather(areaId).data?.toWeatherEntity()
+                ?: throw Exception("Data is null")
         }
     }
 

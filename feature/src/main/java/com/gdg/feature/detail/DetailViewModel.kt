@@ -16,9 +16,9 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
     private val crowdZeroRepository: CrowdZeroRepository
 ) : ViewModel() {
-    private val _getWeatherState: MutableStateFlow<UiState<WeatherEntity?>> =
+    private val _getWeatherState: MutableStateFlow<UiState<WeatherEntity>> =
         MutableStateFlow(UiState.Empty)
-    val getWeatherState: StateFlow<UiState<WeatherEntity?>> get() = _getWeatherState
+    val getWeatherState: StateFlow<UiState<WeatherEntity>> get() = _getWeatherState
 
     fun getWeather(areaId: Long) {
         viewModelScope.launch {
