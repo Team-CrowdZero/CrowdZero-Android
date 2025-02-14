@@ -20,6 +20,10 @@ class DetailViewModel @Inject constructor(
         MutableStateFlow(UiState.Empty)
     val getWeatherState: StateFlow<UiState<WeatherEntity>> get() = _getWeatherState
 
+    private val _getCongestionState: MutableStateFlow<UiState<CongestionEntity>> =
+        MutableStateFlow(UiState.Empty)
+    val getCongestionState: StateFlow<UiState<CongestionEntity>> get() = _getCongestionState
+
     fun getWeather(areaId: Long) {
         viewModelScope.launch {
             _getWeatherState.emit(UiState.Loading)
@@ -29,6 +33,20 @@ class DetailViewModel @Inject constructor(
                 },
                 onFailure = {
                     _getWeatherState.emit(UiState.Failure(it.message.toString()))
+                }
+            )
+        }
+    }
+
+    fun getCongestion(areaId: Long) {
+        viewModelScope.launch {
+            _getCongestionState.emit(UiState.Loading)
+            crowdZeroRepository.getCongestion(areaId).fold(
+                onSuccess = {
+                    _getCongestionState.emit(UiState.Success(it))
+                },
+                onFailure = {
+                    _getCongestionState.emit(UiState.Failure(it.message.toString()))
                 }
             )
         }
