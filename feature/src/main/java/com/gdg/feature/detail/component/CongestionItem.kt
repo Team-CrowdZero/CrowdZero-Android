@@ -38,19 +38,21 @@ fun CongestionItem(
                 withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.gray700)) {
                     append(stringResource(R.string.detail_sub_header_congestion))
                 }
-                if (data.min != data.max) {
-                    withStyle(
-                        style = SpanStyle(
-                            color = when (data.level) {
-                                "여유" -> CrowdZeroTheme.colors.green600
-                                "보통" -> CrowdZeroTheme.colors.yellow
-                                "약간 혼잡" -> CrowdZeroTheme.colors.orange
-                                "혼잡" -> CrowdZeroTheme.colors.red
-                                else -> CrowdZeroTheme.colors.gray700
-                            }
-                        )
-                    ) {
+                withStyle(
+                    style = SpanStyle(
+                        color = when (data.level) {
+                            "여유" -> CrowdZeroTheme.colors.green600
+                            "보통" -> CrowdZeroTheme.colors.yellow
+                            "약간 혼잡" -> CrowdZeroTheme.colors.orange
+                            "혼잡" -> CrowdZeroTheme.colors.red
+                            else -> CrowdZeroTheme.colors.gray700
+                        }
+                    )
+                ) {
+                    if (data.min != data.max) {
                         append(stringResource(R.string.detail_congestion_count, data.min, data.max))
+                    } else {
+                        append(stringResource(R.string.detail_congestion_count_min, data.min))
                     }
                 }
             },

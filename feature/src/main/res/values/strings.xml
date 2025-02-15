@@ -12,6 +12,8 @@
     <string name="detail_weather_seoul">%1$s, 서울</string>
     <string name="detail_weather_temperature">%1$s°</string>
     <string name="detail_congestion_count">%1$s~%2$s명</string>
+    <string name="detail_congestion_failure">실시간 인구 정보를 가져오지 못했어요</string>
+    <string name="detail_congestion_count_min">%1$s명</string>
 
     <!--스플래시 -->
     <string name="splash_title1">혼잡</string>
@@ -25,6 +27,7 @@
     <string name="place_info_congestion">"인구혼잡도 "</string>
     <string name="place_info_realtime_population">"실시간 인구 "</string>
     <string name="place_info_realtime_population_count">%1$s~%2$s명</string>
+    <string name="place_info_realtime_population_count_min">%1$s명</string>
     <string name="place_info_card_buildings">"배경 빌딩 아이콘"</string>
     <string name="map_modal_header">통제</string>
     <string name="map_modal_generated_time">발생시간 %1$s</string>
@@ -43,6 +46,5 @@
     <string name="calendar_people_reporting">%1$s명</string>
     <string name="calender_jurisdiction">관할시</string>
     <string name="calender_no_info">해당 날짜의 집회 정보가 없습니다</string>
-    <string name="detail_congestion_failure">실시간 인구 정보를 가져오지 못했어요</string>
 
 </resources>
