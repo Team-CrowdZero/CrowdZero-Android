@@ -97,7 +97,7 @@ fun DetailRoute(
     val getWeatherState by detailViewModel.getWeatherState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
-        detailViewModel.getWeather(id.toLong())
+        detailViewModel.getWeather(id)
     }
 
     DetailScreen(

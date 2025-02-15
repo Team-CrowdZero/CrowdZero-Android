@@ -4,7 +4,7 @@ import com.gdg.data.dto.response.CongestionResponseDto
 import com.gdg.domain.entity.CongestionEntity
 
 fun CongestionResponseDto.toCongestionEntity() = CongestionEntity(
-    id = areaId,
+    id = areaId.toLong(),
     name = areaNm,
     level = areaCongestLvl,
     message = areaCongestMsg,

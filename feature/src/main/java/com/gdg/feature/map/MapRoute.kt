@@ -23,11 +23,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gdg.core.designsystem.component.chip.MapChip
+import com.gdg.core.designsystem.component.indicator.LoadingIndicator
 import com.gdg.core.designsystem.theme.CrowdZeroTheme
+import com.gdg.core.extension.toast
+import com.gdg.core.state.UiState
 import com.gdg.core.type.LocationType
 import com.gdg.domain.entity.PlaceEntity
 import com.gdg.domain.entity.RoadEntity
@@ -50,6 +55,7 @@ import com.naver.maps.map.compose.NaverMapConstants
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.overlay.OverlayImage
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun MapRoute(
@@ -73,11 +79,14 @@ fun MapRoute(
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(NaverMapConstants.DefaultCameraPosition.target, 13.0)
     }
+    val getCongestionState by mapViewModel.getCongestionState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = mapViewModel.sideEffects) {
         mapViewModel.sideEffects.collect { sideEffect ->
             when (sideEffect) {
                 is MapSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
+                is MapSideEffect.ShowToast -> context.toast(sideEffect.message)
             }
         }
     }
@@ -88,7 +97,8 @@ fun MapRoute(
         cameraPositionState = cameraPositionState,
         locations = mapViewModel.locations,
         roads = mapViewModel.mockRoadEntity,
-        getPlaceEntity = { id -> mapViewModel.getPlaceEntity(id) },
+        congestionState = getCongestionState,
+        getPlaceEntity = { id -> mapViewModel.getCongestion(id) },
         onButtonClick = mapViewModel::navigateToDetail
     )
 }
@@ -101,7 +111,8 @@ fun MapScreen(
     cameraPositionState: CameraPositionState = CameraPositionState(),
     locations: List<LocationType>,
     roads: List<RoadEntity>,
-    getPlaceEntity: (Long) -> PlaceEntity?,
+    congestionState: UiState<PlaceEntity> = UiState.Empty,
+    getPlaceEntity: (Long) -> Unit,
     onButtonClick: (Long) -> Unit = { }
 ) {
     var selectedLocation by remember { mutableStateOf<LocationType?>(null) }
@@ -172,6 +183,7 @@ fun MapScreen(
                             selectedLocation = null
                         } else {
                             selectedLocation = location
+                            getPlaceEntity(location.id)
                             cameraPositionState.move(
                                 CameraUpdate.scrollAndZoomTo(location.latLng, 17.0)
                                     .animate(CameraAnimation.Easing)
@@ -185,11 +197,21 @@ fun MapScreen(
             }
         }
         selectedLocation?.let { location ->
-            PlaceInfoCard(
-                place = getPlaceEntity(location.id),
-                modifier = Modifier.align(Alignment.BottomCenter),
-                onButtonClick = onButtonClick
-            )
+            when (congestionState) {
+                is UiState.Empty -> Timber.e("인구 혼잡도 정보 없음")
+                is UiState.Loading -> LoadingIndicator(modifier = Modifier.align(Alignment.BottomCenter))
+                is UiState.Success -> {
+                    if (congestionState.data.id == location.id) {
+                        PlaceInfoCard(
+                            place = congestionState.data,
+                            modifier = Modifier.align(Alignment.BottomCenter),
+                            onButtonClick = onButtonClick
+                        )
+                    }
+                }
+
+                is UiState.Failure -> Timber.e("인구 혼잡도 정보 실패")
+            }
         }
     }
 

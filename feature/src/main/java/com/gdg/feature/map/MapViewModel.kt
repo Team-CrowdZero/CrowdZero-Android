@@ -5,10 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gdg.core.state.UiState
 import com.gdg.core.type.LocationType
-import com.gdg.domain.entity.CongestionEntity
 import com.gdg.domain.entity.PlaceEntity
 import com.gdg.domain.entity.RoadEntity
 import com.gdg.domain.repository.CrowdZeroRepository
+import com.gdg.feature.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,9 +22,9 @@ import javax.inject.Inject
 class MapViewModel @Inject constructor(
     private val crowdZeroRepository: CrowdZeroRepository
 ) : ViewModel() {
-    private val _getCongestionState: MutableStateFlow<UiState<CongestionEntity>> =
+    private val _getCongestionState: MutableStateFlow<UiState<PlaceEntity>> =
         MutableStateFlow(UiState.Empty)
-    val getCongestionState: StateFlow<UiState<CongestionEntity>> get() = _getCongestionState
+    val getCongestionState: StateFlow<UiState<PlaceEntity>> get() = _getCongestionState
 
     private val _sideEffects: MutableSharedFlow<MapSideEffect> = MutableSharedFlow()
     val sideEffects: SharedFlow<MapSideEffect> get() = _sideEffects
@@ -34,10 +34,18 @@ class MapViewModel @Inject constructor(
             _getCongestionState.emit(UiState.Loading)
             crowdZeroRepository.getCongestion(areaId).fold(
                 onSuccess = {
-                    _getCongestionState.emit(UiState.Success(it))
+                    val placeEntity = PlaceEntity(
+                        id = it.id,
+                        name = it.name,
+                        congestion = it.level,
+                        min = it.min,
+                        max = it.max
+                    )
+                    _getCongestionState.emit(UiState.Success(placeEntity))
                 },
                 onFailure = {
                     _getCongestionState.emit(UiState.Failure(it.message.toString()))
+                    _sideEffects.emit(MapSideEffect.ShowToast(R.string.server_failure))
                 }
             )
         }
