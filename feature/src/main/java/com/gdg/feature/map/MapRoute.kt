@@ -210,7 +210,20 @@ fun MapScreen(
                     }
                 }
 
-                is UiState.Failure -> Timber.e("인구 혼잡도 정보 실패")
+                is UiState.Failure -> {
+                    Timber.e("인구 혼잡도 정보 실패")
+                    PlaceInfoCard(
+                        place = PlaceEntity(
+                            id = location.id,
+                            name = stringResource(id = location.title),
+                            congestion = "모름",
+                            min = 0,
+                            max = 0
+                        ),
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        onButtonClick = onButtonClick
+                    )
+                }
             }
         }
     }
