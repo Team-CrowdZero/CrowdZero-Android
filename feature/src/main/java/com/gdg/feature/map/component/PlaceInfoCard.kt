@@ -106,7 +106,8 @@ fun PlaceInfoCard(
                                 "여유" -> CrowdZeroTheme.colors.green600
                                 "보통" -> CrowdZeroTheme.colors.yellow
                                 "약간 혼잡" -> CrowdZeroTheme.colors.orange
-                                else -> CrowdZeroTheme.colors.red
+                                "혼잡" -> CrowdZeroTheme.colors.red
+                                else -> CrowdZeroTheme.colors.gray700
                             }
                         )
                     ) {

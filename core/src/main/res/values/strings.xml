@@ -31,5 +31,6 @@
     <string name="calender_component_date">%1$s년 %2$s월</string>
     <string name="previous_month">이전 달</string>
     <string name="next_month">다음 달</string>
+    <string name="dust_condition_unknown">모름</string>
 
 </resources>
