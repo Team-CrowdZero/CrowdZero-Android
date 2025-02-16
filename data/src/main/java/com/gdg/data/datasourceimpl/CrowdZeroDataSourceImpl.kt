@@ -2,6 +2,7 @@ package com.gdg.data.datasourceimpl
 
 import com.gdg.data.datasource.CrowdZeroDataSource
 import com.gdg.data.dto.BaseResponse
+import com.gdg.data.dto.response.AssemblyResponseDto
 import com.gdg.data.dto.response.CongestionResponseDto
 import com.gdg.data.dto.response.RoadResponseDto
 import com.gdg.data.dto.response.WeatherResponseDto
@@ -23,4 +24,7 @@ class CrowdZeroDataSourceImpl @Inject constructor(
         return crowdZeroApiService.getRoad(areaId)
     }
 
+    override suspend fun getAssembly(date: String): BaseResponse<List<AssemblyResponseDto>> {
+        return crowdZeroApiService.getAssembly(date)
+    }
 }

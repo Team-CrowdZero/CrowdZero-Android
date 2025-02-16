@@ -1,14 +1,15 @@
 package com.gdg.data.dto.response
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class CongestionResponseDto(
-    val areaId: Int,
-    val areaNm: String,
-    val areaCongestLvl: String,
-    val areaCongestMsg: String,
-    val areaPpltnMin: Int,
-    val areaPpltnMax: Int,
-    val ppltnTime: String
+    @SerialName("areaId") val areaId: Int,
+    @SerialName("areaNm") val areaNm: String,
+    @SerialName("areaCongestLvl") val areaCongestLvl: String,
+    @SerialName("areaCongestMsg") val areaCongestMsg: String,
+    @SerialName("areaPpltnMin") val areaPpltnMin: Int,
+    @SerialName("areaPpltnMax") val areaPpltnMax: Int,
+    @SerialName("ppltnTime") val ppltnTime: String,
 )

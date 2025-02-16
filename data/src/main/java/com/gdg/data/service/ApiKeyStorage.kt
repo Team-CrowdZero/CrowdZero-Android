@@ -10,4 +10,5 @@ object ApiKeyStorage {
     const val AREA_ID = "areaId"
     const val ACDNT = "acdnt"
     const val ASSEMBLY = "assembly"
+    const val DATE = "date"
 }

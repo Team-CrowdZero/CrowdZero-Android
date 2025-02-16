@@ -38,14 +38,17 @@
     <string name="map_modal_source">제공 서울시 실시간 도로통제정보</string>
 
     <!-- 캘린더 -->
-    <string name="calender_header_1">"날짜별 "</string>
-    <string name="calender_header_2">집회정보</string>
-    <string name="calender_header_3">를 확인해보세요</string>
-    <string name="calender_sub_header_1">서울 경찰청 알림마당에서</string>
-    <string name="calender_sub_header_2">오늘의 집회 정보를 실시간으로 가져와요</string>
-    <string name="calender_people_reporting_title">신고인원</string>
+    <string name="calendar_header_1">"날짜별 "</string>
+    <string name="calendar_header_2">집회정보</string>
+    <string name="calendar_header_3">를 확인해보세요</string>
+    <string name="calendar_sub_header_1">서울 경찰청 알림마당에서</string>
+    <string name="calendar_sub_header_2">오늘의 집회 정보를 실시간으로 가져와요</string>
+    <string name="calendar_people_reporting_title">신고인원</string>
     <string name="calendar_people_reporting">%1$s명</string>
-    <string name="calender_jurisdiction">관할시</string>
-    <string name="calender_no_info">해당 날짜의 집회 정보가 없습니다</string>
+    <string name="calendar_slash">/</string>
+    <string name="calendar_jurisdiction">관할시</string>
+    <string name="calendar_no_info">해당 날짜의 집회 정보가 없습니다</string>
+    <string name="calendar_not_connected">해당 날짜의 집회 정보를 가져오지 못했어요</string>
+
 
 </resources>
