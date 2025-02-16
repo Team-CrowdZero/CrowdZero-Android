@@ -36,7 +36,6 @@ class CrowdZeroRepositoryImpl @Inject constructor(
         }
     }
 
-}
     override suspend fun getAssembly(date: String): Result<List<ScheduleEntity>> {
         return runCatching {
             crowdZeroDataSource.getAssembly(date).data?.map { it.toScheduleEntity() } ?: emptyList()
