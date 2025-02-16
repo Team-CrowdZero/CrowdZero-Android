@@ -3,6 +3,7 @@ package com.gdg.core.type
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import com.gdg.core.R
+import com.gdg.core.designsystem.theme.Gray700
 import com.gdg.core.designsystem.theme.Green600
 import com.gdg.core.designsystem.theme.Orange
 import com.gdg.core.designsystem.theme.Red
@@ -32,5 +33,10 @@ enum class CongestionType(
         color = Red,
         index = 3,
         icon = R.drawable.ic_congestion_red
+    ),
+    UNKNOWN(
+        color = Gray700,
+        index = 4,
+        icon = R.drawable.ic_congestion_gray
     )
 }

@@ -3,20 +3,53 @@ package com.gdg.feature.map
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gdg.core.state.UiState
 import com.gdg.core.type.LocationType
 import com.gdg.domain.entity.PlaceEntity
 import com.gdg.domain.entity.RoadEntity
+import com.gdg.domain.repository.CrowdZeroRepository
+import com.gdg.feature.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.internal.immutableListOf
 import javax.inject.Inject
 
 @HiltViewModel
-class MapViewModel @Inject constructor() : ViewModel() {
+class MapViewModel @Inject constructor(
+    private val crowdZeroRepository: CrowdZeroRepository
+) : ViewModel() {
+    private val _getCongestionState: MutableStateFlow<UiState<PlaceEntity>> =
+        MutableStateFlow(UiState.Empty)
+    val getCongestionState: StateFlow<UiState<PlaceEntity>> get() = _getCongestionState
+
     private val _sideEffects: MutableSharedFlow<MapSideEffect> = MutableSharedFlow()
     val sideEffects: SharedFlow<MapSideEffect> get() = _sideEffects
+
+    fun getCongestion(areaId: Long) {
+        viewModelScope.launch {
+            _getCongestionState.emit(UiState.Loading)
+            crowdZeroRepository.getCongestion(areaId).fold(
+                onSuccess = {
+                    val placeEntity = PlaceEntity(
+                        id = it.id,
+                        name = it.name,
+                        congestion = it.level,
+                        min = it.min,
+                        max = it.max
+                    )
+                    _getCongestionState.emit(UiState.Success(placeEntity))
+                },
+                onFailure = {
+                    _getCongestionState.emit(UiState.Failure(it.message.toString()))
+                    _sideEffects.emit(MapSideEffect.ShowToast(R.string.server_failure))
+                }
+            )
+        }
+    }
 
     @Stable
     val locations = immutableListOf(
@@ -27,11 +60,11 @@ class MapViewModel @Inject constructor() : ViewModel() {
         LocationType.YEOUIDO
     )
 
-    fun getPlaceEntity(id: Int): PlaceEntity? {
+    fun getPlaceEntity(id: Long): PlaceEntity? {
         return mockPlaces.find { it.id == id }
     }
 
-    fun navigateToDetail(id: Int) {
+    fun navigateToDetail(id: Long) {
         viewModelScope.launch {
             _sideEffects.emit(MapSideEffect.NavigateToDetail(id))
         }

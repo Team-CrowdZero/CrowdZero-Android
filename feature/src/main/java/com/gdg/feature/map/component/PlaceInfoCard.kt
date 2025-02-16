@@ -40,7 +40,7 @@ import com.gdg.feature.R
 fun PlaceInfoCard(
     place: PlaceEntity?,
     modifier: Modifier = Modifier,
-    onButtonClick: (Int) -> Unit
+    onButtonClick: (Long) -> Unit
 ) {
     if (place == null) return
 
@@ -106,7 +106,8 @@ fun PlaceInfoCard(
                                 "여유" -> CrowdZeroTheme.colors.green600
                                 "보통" -> CrowdZeroTheme.colors.yellow
                                 "약간 혼잡" -> CrowdZeroTheme.colors.orange
-                                else -> CrowdZeroTheme.colors.red
+                                "혼잡" -> CrowdZeroTheme.colors.red
+                                else -> CrowdZeroTheme.colors.gray700
                             }
                         )
                     ) {
@@ -119,14 +120,33 @@ fun PlaceInfoCard(
             Text(
                 text = buildAnnotatedString {
                     append(stringResource(R.string.place_info_realtime_population))
-                    withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.green700)) {
-                        append(
-                            stringResource(
-                                R.string.place_info_realtime_population_count,
-                                place.min,
-                                place.max
-                            )
+                    withStyle(
+                        style = SpanStyle(
+                            color = when (place.congestion) {
+                                "여유" -> CrowdZeroTheme.colors.green600
+                                "보통" -> CrowdZeroTheme.colors.yellow
+                                "약간 혼잡" -> CrowdZeroTheme.colors.orange
+                                "혼잡" -> CrowdZeroTheme.colors.red
+                                else -> CrowdZeroTheme.colors.gray700
+                            }
                         )
+                    ) {
+                        if (place.min != place.max) {
+                            append(
+                                stringResource(
+                                    R.string.place_info_realtime_population_count,
+                                    place.min,
+                                    place.max
+                                )
+                            )
+                        } else {
+                            append(
+                                stringResource(
+                                    R.string.place_info_realtime_population_count_min,
+                                    place.min
+                                )
+                            )
+                        }
                     }
                 },
                 style = CrowdZeroTheme.typography.c4SemiBold,

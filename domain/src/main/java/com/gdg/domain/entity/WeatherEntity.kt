@@ -1,11 +1,10 @@
 package com.gdg.domain.entity
 
 data class WeatherEntity(
-    val id: Int,
-    val name: String,
-    val status: String,
-    val temperature: Int,
-    val pm25: String,
-    val pm10: String,
-    val time: String
+    val id: Long,
+    val areaNm: String,
+    val skyStts: String,
+    val temp: Int,
+    val pm25Index: String,
+    val pm10Index: String
 )
