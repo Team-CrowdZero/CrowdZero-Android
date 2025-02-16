@@ -7,6 +7,7 @@ import com.gdg.data.dto.response.WeatherResponseDto
 import com.gdg.data.service.ApiKeyStorage.API
 import com.gdg.data.service.ApiKeyStorage.AREA_ID
 import com.gdg.data.service.ApiKeyStorage.ASSEMBLY
+import com.gdg.data.service.ApiKeyStorage.DATE
 import com.gdg.data.service.ApiKeyStorage.PPLTN
 import com.gdg.data.service.ApiKeyStorage.WEATHER
 import retrofit2.http.GET
@@ -23,9 +24,8 @@ interface CrowdZeroService {
         @Path(AREA_ID) areaId: Int
     ): BaseResponse<CongestionResponseDto>
 
-    @GET("/$API/$ASSEMBLY/")
+    @GET("/$API/$ASSEMBLY/{$DATE}")
     suspend fun getAssembly(
-        @Path(ASSEMBLY) assembly: String
-    ): BaseResponse<AssemblyResponseDto>
-
+        @Path(DATE) date: String
+    ): BaseResponse<List<AssemblyResponseDto>>
 }

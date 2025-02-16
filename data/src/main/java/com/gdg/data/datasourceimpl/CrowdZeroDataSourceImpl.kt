@@ -19,7 +19,7 @@ class CrowdZeroDataSourceImpl @Inject constructor(
         return crowdZeroApiService.getCongestion(areaId)
     }
 
-    override suspend fun getAssembly(date: String): BaseResponse<AssemblyResponseDto> {
+    override suspend fun getAssembly(date: String): BaseResponse<List<AssemblyResponseDto>> {
         return crowdZeroApiService.getAssembly(date)
     }
 }

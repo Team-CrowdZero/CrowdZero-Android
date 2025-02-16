@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +50,7 @@ import com.gdg.feature.R
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun CalendarRoute(
@@ -58,11 +60,19 @@ fun CalendarRoute(
     val getScheduleState by calendarViewModel.getScheduleState.collectAsState()
     val selectedDate by calendarViewModel.selectedDate.collectAsState()
 
+    LaunchedEffect(key1 = Unit) {
+        val today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        calendarViewModel.getAssembly(today)
+    }
+
     CalendarScreen(
         paddingValues = paddingValues,
         getScheduleState = getScheduleState,
         selectedDate = selectedDate,
-        onDateSelected = { calendarViewModel.updateSelectedDate(it) }
+        onDateSelected = {
+            calendarViewModel.updateSelectedDate(it)
+            calendarViewModel.getAssembly(it.toString())
+        }
     )
 }
 
@@ -94,25 +104,25 @@ fun CalendarScreen(
                 Text(
                     text = buildAnnotatedString {
                         withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.gray900)) {
-                            append(stringResource(R.string.calender_header_1))
+                            append(stringResource(R.string.calendar_header_1))
                         }
                         withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.green700)) {
-                            append(stringResource(R.string.calender_header_2))
+                            append(stringResource(R.string.calendar_header_2))
                         }
                         withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.gray900)) {
-                            append(stringResource(R.string.calender_header_3))
+                            append(stringResource(R.string.calendar_header_3))
                         }
                     },
                     style = CrowdZeroTheme.typography.h2Bold
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = stringResource(R.string.calender_sub_header_1),
+                    text = stringResource(R.string.calendar_sub_header_1),
                     style = CrowdZeroTheme.typography.h3Regular,
                     color = CrowdZeroTheme.colors.gray700
                 )
                 Text(
-                    text = stringResource(R.string.calender_sub_header_2),
+                    text = stringResource(R.string.calendar_sub_header_2),
                     style = CrowdZeroTheme.typography.h3Regular,
                     color = CrowdZeroTheme.colors.gray700
                 )
@@ -171,7 +181,7 @@ fun CalendarScreen(
                 is UiState.Success -> {
                     if (getScheduleState.data.isEmpty()) {
                         Text(
-                            text = stringResource(R.string.calender_no_info),
+                            text = stringResource(R.string.calendar_no_info),
                             style = CrowdZeroTheme.typography.h5Medium,
                             color = CrowdZeroTheme.colors.gray900,
                             modifier = Modifier.padding(top = 72.dp)
@@ -187,17 +197,14 @@ fun CalendarScreen(
                         }
                     }
                 }
+
                 is UiState.Failure -> {
                     Timber.e("일정 데이터 오류 : ${getScheduleState.msg}")
-                    CalendarInfoBox(
-                        data = ScheduleEntity(
-                            date = selectedDate.toString(),
-                            duration = "정보 없음",
-                            location = "정보 없음",
-                            region = "정보 없음",
-                            people = "정보 없음",
-                            jurisdiction = "정보 없음"
-                        )
+                    Text(
+                        text = stringResource(R.string.calendar_not_connected),
+                        style = CrowdZeroTheme.typography.h5Medium,
+                        color = CrowdZeroTheme.colors.gray900,
+                        modifier = Modifier.padding(top = 72.dp)
                     )
                 }
             }
@@ -244,7 +251,7 @@ fun CalendarInfoBox(data: ScheduleEntity) {
         ) {
             Text(
                 modifier = Modifier.padding(end = 4.dp),
-                text = stringResource(R.string.calender_people_reporting_title),
+                text = stringResource(R.string.calendar_people_reporting_title),
                 style = CrowdZeroTheme.typography.c3Regular,
                 color = CrowdZeroTheme.colors.gray600
             )
@@ -262,7 +269,7 @@ fun CalendarInfoBox(data: ScheduleEntity) {
             )
             Text(
                 modifier = Modifier.padding(end = 4.dp),
-                text = stringResource(R.string.calender_jurisdiction),
+                text = stringResource(R.string.calendar_jurisdiction),
                 style = CrowdZeroTheme.typography.c3Regular,
                 color = CrowdZeroTheme.colors.gray600
             )

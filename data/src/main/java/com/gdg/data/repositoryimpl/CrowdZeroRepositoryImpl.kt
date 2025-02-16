@@ -27,10 +27,9 @@ class CrowdZeroRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAssembly(date: String): Result<ScheduleEntity> {
+    override suspend fun getAssembly(date: String): Result<List<ScheduleEntity>> {
         return runCatching {
-            crowdZeroDataSource.getAssembly(date).data?.toScheduleEntity()
-                ?: throw Exception("Data is null")
+            crowdZeroDataSource.getAssembly(date).data?.map { it.toScheduleEntity() } ?: emptyList()
         }
     }
 }

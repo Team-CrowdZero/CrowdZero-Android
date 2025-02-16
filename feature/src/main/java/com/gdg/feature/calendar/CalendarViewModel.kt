@@ -21,18 +21,13 @@ class CalendarViewModel @Inject constructor(
         MutableStateFlow(UiState.Empty)
     val getScheduleState: StateFlow<UiState<List<ScheduleEntity>>> get() = _getScheduleState
 
-    private val _scheduleList: MutableStateFlow<List<ScheduleEntity>> = MutableStateFlow(emptyList())
-    val scheduleList: StateFlow<List<ScheduleEntity>> get() = _scheduleList
-
     fun getAssembly(date: String) {
         viewModelScope.launch {
             _getScheduleState.emit(UiState.Loading)
             crowdZeroRepository.getAssembly(date).fold(
-                // 성공했을 때
                 onSuccess = {
-                    _getScheduleState.emit(UiState.Success(listOf(it)))
+                    _getScheduleState.emit(UiState.Success(it))
                 },
-                // 실패했을 때
                 onFailure = {
                     _getScheduleState.emit(UiState.Failure(it.message.toString()))
                 }
