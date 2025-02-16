@@ -26,7 +26,7 @@ class DetailViewModel @Inject constructor(
         MutableStateFlow(UiState.Empty)
     val getCongestionState: StateFlow<UiState<CongestionEntity>> get() = _getCongestionState
 
-    fun getWeather(areaId: Long) {
+    fun getWeather(areaId: Int) {
         viewModelScope.launch {
             _getWeatherState.emit(UiState.Loading)
             crowdZeroRepository.getWeather(areaId).fold(
@@ -40,7 +40,7 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    fun getCongestion(areaId: Long) {
+    fun getCongestion(areaId: Int) {
         viewModelScope.launch {
             _getCongestionState.emit(UiState.Loading)
             crowdZeroRepository.getCongestion(areaId).fold(

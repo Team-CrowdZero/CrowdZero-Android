@@ -13,14 +13,14 @@ import javax.inject.Inject
 class CrowdZeroRepositoryImpl @Inject constructor(
     private val crowdZeroDataSource: CrowdZeroDataSource
 ) : CrowdZeroRepository {
-    override suspend fun getWeather(areaId: Long): Result<WeatherEntity> {
+    override suspend fun getWeather(areaId: Int): Result<WeatherEntity> {
         return runCatching {
             crowdZeroDataSource.getWeather(areaId).data?.toWeatherEntity()
                 ?: throw Exception("Data is null")
         }
     }
 
-    override suspend fun getCongestion(areaId: Long): Result<CongestionEntity> {
+    override suspend fun getCongestion(areaId: Int): Result<CongestionEntity> {
         return runCatching {
             crowdZeroDataSource.getCongestion(areaId).data?.toCongestionEntity()
                 ?: throw Exception("Data is null")

@@ -58,8 +58,6 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.overlay.OverlayImage
 import timber.log.Timber
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 
 @Composable
@@ -90,8 +88,8 @@ fun DetailRoute(
     val getCongestionState by detailViewModel.getCongestionState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
-        detailViewModel.getWeather(id)
-        detailViewModel.getCongestion(id)
+        detailViewModel.getWeather(id.toInt())
+        detailViewModel.getCongestion(id.toInt())
     }
 
     DetailScreen(
@@ -150,7 +148,8 @@ fun DetailScreen(
                             append(title)
                         }
                         withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.gray900)) {
-                            append(stringResource(R.string.detail_header_adverb))
+                            if (title == "여의도") append(stringResource(R.string.detail_header_yeoeuido_adverb))
+                            else append(stringResource(R.string.detail_header_adverb))
                         }
                     },
                     style = CrowdZeroTheme.typography.h2Bold
