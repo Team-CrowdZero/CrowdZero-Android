@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.internal.immutableListOf
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +29,9 @@ class MapViewModel @Inject constructor(
 
     private val _sideEffects: MutableSharedFlow<MapSideEffect> = MutableSharedFlow()
     val sideEffects: SharedFlow<MapSideEffect> get() = _sideEffects
+
+    private val _roads = MutableStateFlow<List<RoadEntity>>(emptyList())
+    val roads: StateFlow<List<RoadEntity>> get() = _roads
 
     fun getCongestion(areaId: Long) {
         viewModelScope.launch {
@@ -48,6 +52,23 @@ class MapViewModel @Inject constructor(
                     _sideEffects.emit(MapSideEffect.ShowToast(R.string.server_failure))
                 }
             )
+        }
+    }
+
+    fun getRoads() {
+        viewModelScope.launch {
+            _roads.emit(emptyList())
+            // 1부터 5까지의 areaId에 대해 getRoad 호출
+            (1..5).forEach { areaId ->
+                crowdZeroRepository.getRoad(areaId).fold(
+                    onSuccess = {
+                        _roads.emit(_roads.value + it) // 기존 리스트에 도로 정보를 추가
+                    },
+                    onFailure = {
+
+                    }
+                )
+            }
         }
     }
 

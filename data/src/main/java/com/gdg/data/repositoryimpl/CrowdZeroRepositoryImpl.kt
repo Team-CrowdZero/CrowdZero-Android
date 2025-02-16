@@ -3,7 +3,9 @@ package com.gdg.data.repositoryimpl
 import com.gdg.data.datasource.CrowdZeroDataSource
 import com.gdg.data.mapper.toCongestionEntity
 import com.gdg.data.mapper.toWeatherEntity
+import com.gdg.data.mapper.toRoadEntity
 import com.gdg.domain.entity.CongestionEntity
+import com.gdg.domain.entity.RoadEntity
 import com.gdg.domain.entity.WeatherEntity
 import com.gdg.domain.repository.CrowdZeroRepository
 import javax.inject.Inject
@@ -21,6 +23,13 @@ class CrowdZeroRepositoryImpl @Inject constructor(
     override suspend fun getCongestion(areaId: Long): Result<CongestionEntity> {
         return runCatching {
             crowdZeroDataSource.getCongestion(areaId).data?.toCongestionEntity()
+                ?: throw Exception("Data is null")
+        }
+    }
+
+    override suspend fun getRoad(areaId: Int): Result<RoadEntity> {
+        return runCatching {
+            crowdZeroDataSource.getRoad(areaId).data?.toRoadEntity()
                 ?: throw Exception("Data is null")
         }
     }

@@ -2,7 +2,9 @@ package com.gdg.data.service
 
 import com.gdg.data.dto.BaseResponse
 import com.gdg.data.dto.response.CongestionResponseDto
+import com.gdg.data.dto.response.RoadResponseDto
 import com.gdg.data.dto.response.WeatherResponseDto
+import com.gdg.data.service.ApiKeyStorage.ACDNT
 import com.gdg.data.service.ApiKeyStorage.API
 import com.gdg.data.service.ApiKeyStorage.AREA_ID
 import com.gdg.data.service.ApiKeyStorage.PPLTN
@@ -20,4 +22,9 @@ interface CrowdZeroService {
     suspend fun getCongestion(
         @Path(AREA_ID) areaId: Long
     ): BaseResponse<CongestionResponseDto>
+
+    @GET("/$API/$ACDNT/{$AREA_ID}")
+    suspend fun getRoad(
+        @Path(AREA_ID) areaId: Int
+    ): BaseResponse<RoadResponseDto>
 }
