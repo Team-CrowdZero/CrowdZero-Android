@@ -11,11 +11,11 @@ import javax.inject.Inject
 class CrowdZeroDataSourceImpl @Inject constructor(
     private val crowdZeroApiService: CrowdZeroService
 ) : CrowdZeroDataSource {
-    override suspend fun getWeather(areaId: Long): BaseResponse<WeatherResponseDto> {
+    override suspend fun getWeather(areaId: Int): BaseResponse<WeatherResponseDto> {
         return crowdZeroApiService.getWeather(areaId)
     }
 
-    override suspend fun getCongestion(areaId: Long): BaseResponse<CongestionResponseDto> {
+    override suspend fun getCongestion(areaId: Int): BaseResponse<CongestionResponseDto> {
         return crowdZeroApiService.getCongestion(areaId)
     }
 

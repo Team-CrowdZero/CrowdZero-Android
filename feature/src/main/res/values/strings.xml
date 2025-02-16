@@ -6,6 +6,7 @@
     <!-- 장소 상세 -->
     <string name="detail_header_now">"지금의 "</string>
     <string name="detail_header_adverb">은</string>
+    <string name="detail_header_yeoeuido_adverb">는</string>
     <string name="detail_sub_header">인구 혼잡도와 날씨 정보를 확인하세요</string>
     <string name="detail_header_congestion">실시간 인구</string>
     <string name="detail_sub_header_congestion">"현재 실시간 인구: "</string>

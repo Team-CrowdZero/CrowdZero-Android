@@ -30,6 +30,7 @@ class MapViewModel @Inject constructor(
     private val _sideEffects: MutableSharedFlow<MapSideEffect> = MutableSharedFlow()
     val sideEffects: SharedFlow<MapSideEffect> get() = _sideEffects
 
+    fun getCongestion(areaId: Int) {
     private val _roads = MutableStateFlow<List<RoadEntity>>(emptyList())
     val roads: StateFlow<List<RoadEntity>> get() = _roads
 
