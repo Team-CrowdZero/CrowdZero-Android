@@ -44,6 +44,7 @@
     <string name="calender_sub_header_2">오늘의 집회 정보를 실시간으로 가져와요</string>
     <string name="calender_people_reporting_title">신고인원</string>
     <string name="calendar_people_reporting">%1$s명</string>
+    <string name="calendar_slash">/</string>
     <string name="calender_jurisdiction">관할시</string>
     <string name="calender_no_info">해당 날짜의 집회 정보가 없습니다</string>
 

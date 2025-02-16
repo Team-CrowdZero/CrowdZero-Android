@@ -2,6 +2,7 @@ package com.gdg.data.datasourceimpl
 
 import com.gdg.data.datasource.CrowdZeroDataSource
 import com.gdg.data.dto.BaseResponse
+import com.gdg.data.dto.response.AssemblyResponseDto
 import com.gdg.data.dto.response.CongestionResponseDto
 import com.gdg.data.dto.response.WeatherResponseDto
 import com.gdg.data.service.CrowdZeroService
@@ -16,5 +17,9 @@ class CrowdZeroDataSourceImpl @Inject constructor(
 
     override suspend fun getCongestion(areaId: Long): BaseResponse<CongestionResponseDto> {
         return crowdZeroApiService.getCongestion(areaId)
+    }
+
+    override suspend fun getAssembly(date: String): BaseResponse<AssemblyResponseDto> {
+        return crowdZeroApiService.getAssembly(date)
     }
 }

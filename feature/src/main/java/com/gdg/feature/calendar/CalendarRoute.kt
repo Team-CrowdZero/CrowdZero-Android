@@ -39,11 +39,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gdg.core.designsystem.component.calendar.CalendarComponent
+import com.gdg.core.designsystem.component.indicator.LoadingIndicator
 import com.gdg.core.designsystem.theme.CrowdZeroAndroidTheme
 import com.gdg.core.designsystem.theme.CrowdZeroTheme
+import com.gdg.core.state.UiState
 import com.gdg.core.util.TimeFormatter
 import com.gdg.domain.entity.ScheduleEntity
 import com.gdg.feature.R
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -52,13 +55,12 @@ fun CalendarRoute(
     paddingValues: PaddingValues,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
 ) {
-    val scheduleList by calendarViewModel.scheduleList.collectAsState() // 전체 일정 리스트
+    val getScheduleState by calendarViewModel.getScheduleState.collectAsState()
     val selectedDate by calendarViewModel.selectedDate.collectAsState()
-    val filteredSchedules = scheduleList.filter { it.date == selectedDate.toString() }
 
     CalendarScreen(
         paddingValues = paddingValues,
-        scheduleList = filteredSchedules, // 선택한 날짜의 일정만 전달
+        getScheduleState = getScheduleState,
         selectedDate = selectedDate,
         onDateSelected = { calendarViewModel.updateSelectedDate(it) }
     )
@@ -66,7 +68,7 @@ fun CalendarRoute(
 
 @Composable
 fun CalendarScreen(
-    scheduleList: List<ScheduleEntity>,
+    getScheduleState: UiState<List<ScheduleEntity>>,
     selectedDate: LocalDate,
     onDateSelected: (LocalDate) -> Unit,
     paddingValues: PaddingValues = PaddingValues(),
@@ -155,21 +157,48 @@ fun CalendarScreen(
                 },
                 style = CrowdZeroTheme.typography.h3Bold,
             )
-            if (scheduleList.isEmpty()) {
-                Text(
-                    text = stringResource(R.string.calender_no_info),
-                    style = CrowdZeroTheme.typography.h5Medium,
-                    color = CrowdZeroTheme.colors.gray900,
-                    modifier = Modifier.padding(top = 72.dp)
-                )
-            } else {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    items(scheduleList) { schedule ->
-                        CalendarInfoBox(data = schedule)
+            when (getScheduleState) {
+                is UiState.Empty -> {
+                    Timber.e("일정 데이터 없음")
+                }
+
+                is UiState.Loading -> {
+                    LoadingIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+
+                is UiState.Success -> {
+                    if (getScheduleState.data.isEmpty()) {
+                        Text(
+                            text = stringResource(R.string.calender_no_info),
+                            style = CrowdZeroTheme.typography.h5Medium,
+                            color = CrowdZeroTheme.colors.gray900,
+                            modifier = Modifier.padding(top = 72.dp)
+                        )
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            items(getScheduleState.data) { schedule ->
+                                CalendarInfoBox(data = schedule)
+                            }
+                        }
                     }
+                }
+                is UiState.Failure -> {
+                    Timber.e("일정 데이터 오류 : ${getScheduleState.msg}")
+                    CalendarInfoBox(
+                        data = ScheduleEntity(
+                            date = selectedDate.toString(),
+                            duration = "정보 없음",
+                            location = "정보 없음",
+                            region = "정보 없음",
+                            people = "정보 없음",
+                            jurisdiction = "정보 없음"
+                        )
+                    )
                 }
             }
         }
@@ -226,6 +255,12 @@ fun CalendarInfoBox(data: ScheduleEntity) {
                 color = CrowdZeroTheme.colors.gray800
             )
             Text(
+                modifier = Modifier.padding(end = 8.dp),
+                text = stringResource(R.string.calendar_slash),
+                style = CrowdZeroTheme.typography.c3Regular,
+                color = CrowdZeroTheme.colors.gray600
+            )
+            Text(
                 modifier = Modifier.padding(end = 4.dp),
                 text = stringResource(R.string.calender_jurisdiction),
                 style = CrowdZeroTheme.typography.c3Regular,
@@ -245,14 +280,16 @@ fun CalendarInfoBox(data: ScheduleEntity) {
 fun CalendarScreenPreview() {
     CrowdZeroAndroidTheme {
         CalendarScreen(
-            scheduleList = listOf(
-                ScheduleEntity(
-                    date = LocalDate.now().toString(),
-                    duration = "07:30 ~ 24:00",
-                    location = "두터교회 앞 인도 및 2개 차로",
-                    region = "한남동",
-                    people = "3000",
-                    jurisdiction = "용산"
+            getScheduleState = UiState.Success(
+                listOf(
+                    ScheduleEntity(
+                        date = LocalDate.now().toString(),
+                        duration = "07:30 ~ 24:00",
+                        location = "두터교회 앞 인도 및 2개 차로",
+                        region = "한남동",
+                        people = "3000",
+                        jurisdiction = "용산"
+                    )
                 )
             ),
             selectedDate = LocalDate.now(),
