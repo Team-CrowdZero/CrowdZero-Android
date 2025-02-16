@@ -12,10 +12,37 @@
 
 ## 👩‍💻 Front-End 팀원
 
+<table>
+  <tbody>
+    <tr>
+             <td align="center">
+        <a href="https://github.com/nhyeonii">
+          <img src="./app/src/main/res/drawable/user2.PNG" width="100px;" alt="nhyeonii 프로필 사진"/>
+          <br /><sub><b>김나현</b></sub>
+        </a>
+        <br />숙명여자대학교 소프트웨어융합
+      <td align="center">
+        <a href="https://github.com/gaeulzzang">
+          <img src="./app/src/main/res/drawable/user2.PNG" width="100px;" alt="gaeulzzang 프로필 사진"/>
+          <br /><sub><b>이가을</b></sub>
+        </a>
+        <br />숙명여자대학교 컴퓨터과학과
+      </td>
+            <td align="center">
+        <a href="https://github.com/jjwm10625">
+          <img src="./app/src/main/res/drawable/user1.PNG" width="100px;" alt="jjwm10625 프로필 사진"/>
+          <br /><sub><b>조영서</b></sub>
+        </a>
+        <br />숙명여자대학교 컴퓨터과학과
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 | 프로필 | 이름 | 학과 |
 |--------|------|------|
 | ![김나현](이미지_경로) | 김나현 | 숙명여자대학교 소프트웨어융합 |
-| ![이가을](이미지_경로) | 이가을 | 숙명여자대학교 컴퓨터과학과 |
+| ![이가을](이미지_경로) | 이가을 |  |
 | ![조영서](이미지_경로) | 조영서 | 숙명여자대학교 컴퓨터과학과 |
 
 ## 🛠 기술 스택
