@@ -16,7 +16,7 @@ object ServiceModule {
     @Provides
     @Singleton
     fun provideExampleService(
-        @ExampleRetrofit retrofit: Retrofit
+        @CrowdZeroRetrofit retrofit: Retrofit
     ): ExampleService = retrofit.create(ExampleService::class.java)
 
     @Provides

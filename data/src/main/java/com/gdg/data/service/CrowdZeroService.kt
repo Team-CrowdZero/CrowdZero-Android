@@ -13,11 +13,11 @@ import retrofit2.http.Path
 interface CrowdZeroService {
     @GET("/$API/$WEATHER/{$AREA_ID}")
     suspend fun getWeather(
-        @Path(AREA_ID) areaId: Long
+        @Path(AREA_ID) areaId: Int
     ): BaseResponse<WeatherResponseDto>
 
     @GET("/$API/$PPLTN/{$AREA_ID}")
     suspend fun getCongestion(
-        @Path(AREA_ID) areaId: Long
+        @Path(AREA_ID) areaId: Int
     ): BaseResponse<CongestionResponseDto>
 }
