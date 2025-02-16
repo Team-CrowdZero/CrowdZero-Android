@@ -26,7 +26,8 @@ class MapViewModel @Inject constructor(
         MutableStateFlow(UiState.Empty)
     val getCongestionState: StateFlow<UiState<PlaceEntity>> get() = _getCongestionState
 
-    private val _getRoadState: MutableStateFlow<UiState<List<RoadEntity>>> = MutableStateFlow(UiState.Empty)
+    private val _getRoadState: MutableStateFlow<UiState<List<RoadEntity>>> =
+        MutableStateFlow(UiState.Empty)
     val getRoadState: StateFlow<UiState<List<RoadEntity>>> get() = _getRoadState
 
     private val _sideEffects: MutableSharedFlow<MapSideEffect> = MutableSharedFlow()
@@ -64,16 +65,16 @@ class MapViewModel @Inject constructor(
             (1..5).forEach { areaId ->
                 crowdZeroRepository.getRoad(areaId).fold(
                     onSuccess = {
-                        _roads.emit(_roads.value + it) // 기존 리스트에 도로 정보를 추가
+                        _roads.emit(_roads.value + it)
                     },
                     onFailure = {
                         _getRoadState.emit(UiState.Failure(it.message.toString()))
                     }
                 )
             }
-            // 도로 정보를 모두 가져온 후, Success 상태로 전환
+
             if (_roads.value.isNotEmpty()) {
-                _getRoadState.emit(UiState.Success(_roads.value))  // _roads.value를 Success로 전달
+                _getRoadState.emit(UiState.Success(_roads.value))
             } else {
                 _getRoadState.emit(UiState.Failure("도로 정보를 가져오는 데 실패했습니다."))
             }
@@ -89,51 +90,10 @@ class MapViewModel @Inject constructor(
         LocationType.YEOUIDO
     )
 
-    fun getPlaceEntity(id: Long): PlaceEntity? {
-        return mockPlaces.find { it.id == id }
-    }
-
     fun navigateToDetail(id: Long) {
         viewModelScope.launch {
             _sideEffects.emit(MapSideEffect.NavigateToDetail(id))
         }
     }
 
-    private val mockPlaces = listOf(
-        PlaceEntity(1, "강남역", "보통", 100, 200),
-        PlaceEntity(2, "광화문 광장", "보통", 100, 200),
-        PlaceEntity(3, "삼각지역", "보통", 100, 200),
-        PlaceEntity(4, "서울역", "보통", 100, 200),
-        PlaceEntity(5, "여의도", "보통", 100, 200)
-    )
-
-    val mockRoadEntity = listOf(
-        RoadEntity(
-            1,
-            "2021-09-01 13:00",
-            "2021-09-01 13:00",
-            "사고1",
-            126.97719959199067,
-            37.57473917460146,
-            "2021-09-01 13:00"
-        ),
-        RoadEntity(
-            2,
-            "2021-09-01 13:00",
-            "2021-09-01 13:00",
-            "사고2",
-            126.97724062015716,
-            37.57196573522649,
-            "2021-09-01 13:00"
-        ),
-        RoadEntity(
-            3,
-            "2021-09-01 13:00",
-            "2021-09-01 13:00",
-            "사고3",
-            126.97681755577895,
-            37.56963658011575,
-            "2021-09-01 13:00"
-        )
-    )
 }

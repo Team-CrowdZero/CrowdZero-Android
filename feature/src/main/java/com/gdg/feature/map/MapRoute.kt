@@ -59,8 +59,7 @@ import timber.log.Timber
 
 @Composable
 fun MapRoute(
-    mapViewModel: MapViewModel = hiltViewModel(),
-    navigateToDetail: (Long) -> Unit
+    mapViewModel: MapViewModel = hiltViewModel(), navigateToDetail: (Long) -> Unit
 ) {
     val mapProperties by remember {
         mutableStateOf(
@@ -155,8 +154,7 @@ fun MapScreen(
             }
             if (roads.isNotEmpty()) {
                 roads.forEach { road ->
-                    Marker(
-                        width = 20.dp,
+                    Marker(width = 20.dp,
                         height = 20.dp,
                         state = MarkerState(position = LatLng(road.acdntY, road.acdntX)),
                         icon = OverlayImage.fromResource(R.drawable.ic_ban_marker),
@@ -167,8 +165,7 @@ fun MapScreen(
                                 sheetState.show()
                             }
                             true
-                        }
-                    )
+                        })
                 }
             }
         }
@@ -176,29 +173,24 @@ fun MapScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
-                .padding(top = 110.dp, start = 10.dp, end = 10.dp),
-            state = listState
+                .padding(top = 110.dp, start = 10.dp, end = 10.dp), state = listState
         ) {
             itemsIndexed(locations) { index, location ->
-                MapChip(
-                    title = location,
-                    isSelected = selectedLocation == location,
-                    onClick = {
-                        if (selectedLocation == location) {
-                            selectedLocation = null
-                        } else {
-                            selectedLocation = location
-                            getPlaceEntity(location.id)
-                            cameraPositionState.move(
-                                CameraUpdate.scrollAndZoomTo(location.latLng, 17.0)
-                                    .animate(CameraAnimation.Easing)
-                            )
-                        }
-                        coroutineScope.launch {
-                            listState.animateScrollToItem(index)
-                        }
+                MapChip(title = location, isSelected = selectedLocation == location, onClick = {
+                    if (selectedLocation == location) {
+                        selectedLocation = null
+                    } else {
+                        selectedLocation = location
+                        getPlaceEntity(location.id)
+                        cameraPositionState.move(
+                            CameraUpdate.scrollAndZoomTo(location.latLng, 17.0)
+                                .animate(CameraAnimation.Easing)
+                        )
                     }
-                )
+                    coroutineScope.launch {
+                        listState.animateScrollToItem(index)
+                    }
+                })
             }
         }
         selectedLocation?.let { location ->
