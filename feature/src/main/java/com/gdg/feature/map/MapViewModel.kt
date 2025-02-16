@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.internal.immutableListOf
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,14 +26,16 @@ class MapViewModel @Inject constructor(
         MutableStateFlow(UiState.Empty)
     val getCongestionState: StateFlow<UiState<PlaceEntity>> get() = _getCongestionState
 
+    private val _getRoadState: MutableStateFlow<UiState<List<RoadEntity>>> = MutableStateFlow(UiState.Empty)
+    val getRoadState: StateFlow<UiState<List<RoadEntity>>> get() = _getRoadState
+
     private val _sideEffects: MutableSharedFlow<MapSideEffect> = MutableSharedFlow()
     val sideEffects: SharedFlow<MapSideEffect> get() = _sideEffects
 
-    fun getCongestion(areaId: Int) {
     private val _roads = MutableStateFlow<List<RoadEntity>>(emptyList())
     val roads: StateFlow<List<RoadEntity>> get() = _roads
 
-    fun getCongestion(areaId: Long) {
+    fun getCongestion(areaId: Int) {
         viewModelScope.launch {
             _getCongestionState.emit(UiState.Loading)
             crowdZeroRepository.getCongestion(areaId).fold(
@@ -58,17 +59,23 @@ class MapViewModel @Inject constructor(
 
     fun getRoads() {
         viewModelScope.launch {
+            _getRoadState.emit(UiState.Loading)
             _roads.emit(emptyList())
-            // 1부터 5까지의 areaId에 대해 getRoad 호출
             (1..5).forEach { areaId ->
                 crowdZeroRepository.getRoad(areaId).fold(
                     onSuccess = {
                         _roads.emit(_roads.value + it) // 기존 리스트에 도로 정보를 추가
                     },
                     onFailure = {
-
+                        _getRoadState.emit(UiState.Failure(it.message.toString()))
                     }
                 )
+            }
+            // 도로 정보를 모두 가져온 후, Success 상태로 전환
+            if (_roads.value.isNotEmpty()) {
+                _getRoadState.emit(UiState.Success(_roads.value))  // _roads.value를 Success로 전달
+            } else {
+                _getRoadState.emit(UiState.Failure("도로 정보를 가져오는 데 실패했습니다."))
             }
         }
     }

@@ -17,7 +17,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -82,10 +81,10 @@ fun MapRoute(
     }
     val getCongestionState by mapViewModel.getCongestionState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val roads by mapViewModel.roads.collectAsStateWithLifecycle()  // roads 리스트를 가져옵니다.
+    val roads by mapViewModel.roads.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        mapViewModel.getRoads()  // 1부터 5까지 도로 정보 가져오기
+        mapViewModel.getRoads()
     }
 
     LaunchedEffect(key1 = mapViewModel.sideEffects) {
