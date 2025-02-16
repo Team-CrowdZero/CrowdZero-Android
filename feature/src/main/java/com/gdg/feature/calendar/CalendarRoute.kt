@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,34 +40,45 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gdg.core.designsystem.component.calendar.CalendarComponent
+import com.gdg.core.designsystem.component.indicator.LoadingIndicator
 import com.gdg.core.designsystem.theme.CrowdZeroAndroidTheme
 import com.gdg.core.designsystem.theme.CrowdZeroTheme
+import com.gdg.core.state.UiState
 import com.gdg.core.util.TimeFormatter
 import com.gdg.domain.entity.ScheduleEntity
 import com.gdg.feature.R
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun CalendarRoute(
     paddingValues: PaddingValues,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
 ) {
-    val scheduleList by calendarViewModel.scheduleList.collectAsState() // 전체 일정 리스트
+    val getScheduleState by calendarViewModel.getScheduleState.collectAsState()
     val selectedDate by calendarViewModel.selectedDate.collectAsState()
-    val filteredSchedules = scheduleList.filter { it.date == selectedDate.toString() }
+
+    LaunchedEffect(key1 = Unit) {
+        val today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        calendarViewModel.getAssembly(today)
+    }
 
     CalendarScreen(
         paddingValues = paddingValues,
-        scheduleList = filteredSchedules, // 선택한 날짜의 일정만 전달
+        getScheduleState = getScheduleState,
         selectedDate = selectedDate,
-        onDateSelected = { calendarViewModel.updateSelectedDate(it) }
+        onDateSelected = {
+            calendarViewModel.updateSelectedDate(it)
+            calendarViewModel.getAssembly(it.toString())
+        }
     )
 }
 
 @Composable
 fun CalendarScreen(
-    scheduleList: List<ScheduleEntity>,
+    getScheduleState: UiState<List<ScheduleEntity>>,
     selectedDate: LocalDate,
     onDateSelected: (LocalDate) -> Unit,
     paddingValues: PaddingValues = PaddingValues(),
@@ -92,25 +104,25 @@ fun CalendarScreen(
                 Text(
                     text = buildAnnotatedString {
                         withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.gray900)) {
-                            append(stringResource(R.string.calender_header_1))
+                            append(stringResource(R.string.calendar_header_1))
                         }
                         withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.green700)) {
-                            append(stringResource(R.string.calender_header_2))
+                            append(stringResource(R.string.calendar_header_2))
                         }
                         withStyle(style = SpanStyle(color = CrowdZeroTheme.colors.gray900)) {
-                            append(stringResource(R.string.calender_header_3))
+                            append(stringResource(R.string.calendar_header_3))
                         }
                     },
                     style = CrowdZeroTheme.typography.h2Bold
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = stringResource(R.string.calender_sub_header_1),
+                    text = stringResource(R.string.calendar_sub_header_1),
                     style = CrowdZeroTheme.typography.h3Regular,
                     color = CrowdZeroTheme.colors.gray700
                 )
                 Text(
-                    text = stringResource(R.string.calender_sub_header_2),
+                    text = stringResource(R.string.calendar_sub_header_2),
                     style = CrowdZeroTheme.typography.h3Regular,
                     color = CrowdZeroTheme.colors.gray700
                 )
@@ -155,21 +167,45 @@ fun CalendarScreen(
                 },
                 style = CrowdZeroTheme.typography.h3Bold,
             )
-            if (scheduleList.isEmpty()) {
-                Text(
-                    text = stringResource(R.string.calender_no_info),
-                    style = CrowdZeroTheme.typography.h5Medium,
-                    color = CrowdZeroTheme.colors.gray900,
-                    modifier = Modifier.padding(top = 72.dp)
-                )
-            } else {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    items(scheduleList) { schedule ->
-                        CalendarInfoBox(data = schedule)
+            when (getScheduleState) {
+                is UiState.Empty -> {
+                    Timber.e("일정 데이터 없음")
+                }
+
+                is UiState.Loading -> {
+                    LoadingIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+
+                is UiState.Success -> {
+                    if (getScheduleState.data.isEmpty()) {
+                        Text(
+                            text = stringResource(R.string.calendar_no_info),
+                            style = CrowdZeroTheme.typography.h5Medium,
+                            color = CrowdZeroTheme.colors.gray900,
+                            modifier = Modifier.padding(top = 72.dp)
+                        )
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            items(getScheduleState.data) { schedule ->
+                                CalendarInfoBox(data = schedule)
+                            }
+                        }
                     }
+                }
+
+                is UiState.Failure -> {
+                    Timber.e("일정 데이터 오류 : ${getScheduleState.msg}")
+                    Text(
+                        text = stringResource(R.string.calendar_not_connected),
+                        style = CrowdZeroTheme.typography.h5Medium,
+                        color = CrowdZeroTheme.colors.gray900,
+                        modifier = Modifier.padding(top = 72.dp)
+                    )
                 }
             }
         }
@@ -215,7 +251,7 @@ fun CalendarInfoBox(data: ScheduleEntity) {
         ) {
             Text(
                 modifier = Modifier.padding(end = 4.dp),
-                text = stringResource(R.string.calender_people_reporting_title),
+                text = stringResource(R.string.calendar_people_reporting_title),
                 style = CrowdZeroTheme.typography.c3Regular,
                 color = CrowdZeroTheme.colors.gray600
             )
@@ -226,8 +262,14 @@ fun CalendarInfoBox(data: ScheduleEntity) {
                 color = CrowdZeroTheme.colors.gray800
             )
             Text(
+                modifier = Modifier.padding(end = 8.dp),
+                text = stringResource(R.string.calendar_slash),
+                style = CrowdZeroTheme.typography.c3Regular,
+                color = CrowdZeroTheme.colors.gray600
+            )
+            Text(
                 modifier = Modifier.padding(end = 4.dp),
-                text = stringResource(R.string.calender_jurisdiction),
+                text = stringResource(R.string.calendar_jurisdiction),
                 style = CrowdZeroTheme.typography.c3Regular,
                 color = CrowdZeroTheme.colors.gray600
             )
@@ -245,14 +287,16 @@ fun CalendarInfoBox(data: ScheduleEntity) {
 fun CalendarScreenPreview() {
     CrowdZeroAndroidTheme {
         CalendarScreen(
-            scheduleList = listOf(
-                ScheduleEntity(
-                    date = LocalDate.now().toString(),
-                    duration = "07:30 ~ 24:00",
-                    location = "두터교회 앞 인도 및 2개 차로",
-                    region = "한남동",
-                    people = "3000",
-                    jurisdiction = "용산"
+            getScheduleState = UiState.Success(
+                listOf(
+                    ScheduleEntity(
+                        date = LocalDate.now().toString(),
+                        duration = "07:30 ~ 24:00",
+                        location = "두터교회 앞 인도 및 2개 차로",
+                        region = "한남동",
+                        people = "3000",
+                        jurisdiction = "용산"
+                    )
                 )
             ),
             selectedDate = LocalDate.now(),
