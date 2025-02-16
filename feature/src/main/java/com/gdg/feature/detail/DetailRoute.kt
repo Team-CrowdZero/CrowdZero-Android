@@ -90,8 +90,8 @@ fun DetailRoute(
     val getCongestionState by detailViewModel.getCongestionState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
-        detailViewModel.getWeather(id)
-        detailViewModel.getCongestion(id)
+        detailViewModel.getWeather(id.toInt())
+        detailViewModel.getCongestion(id.toInt())
     }
 
     DetailScreen(

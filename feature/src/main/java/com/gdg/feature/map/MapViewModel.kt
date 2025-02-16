@@ -29,7 +29,7 @@ class MapViewModel @Inject constructor(
     private val _sideEffects: MutableSharedFlow<MapSideEffect> = MutableSharedFlow()
     val sideEffects: SharedFlow<MapSideEffect> get() = _sideEffects
 
-    fun getCongestion(areaId: Long) {
+    fun getCongestion(areaId: Int) {
         viewModelScope.launch {
             _getCongestionState.emit(UiState.Loading)
             crowdZeroRepository.getCongestion(areaId).fold(

@@ -48,15 +48,6 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    @ExampleRetrofit
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-        .client(okHttpClient)
-        .baseUrl(BASE_URL)
-        .build()
-
-    @Singleton
-    @Provides
     @CrowdZeroRetrofit
     fun provideCrowdZeroRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))

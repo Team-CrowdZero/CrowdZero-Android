@@ -98,7 +98,7 @@ fun MapRoute(
         locations = mapViewModel.locations,
         roads = mapViewModel.mockRoadEntity,
         congestionState = getCongestionState,
-        getPlaceEntity = { id -> mapViewModel.getCongestion(id) },
+        getPlaceEntity = { id -> mapViewModel.getCongestion(id.toInt()) },
         onButtonClick = mapViewModel::navigateToDetail
     )
 }
