@@ -17,20 +17,20 @@
     <tr>
              <td align="center">
         <a href="https://github.com/nhyeonii">
-          <img src="./app/src/main/res/drawable/user1.PNG" width="100px;" alt="nhyeonii 프로필 사진"/>
+          <img src="./app/src/main/res/drawable/user_1.png" width="100px;" alt="nhyeonii 프로필 사진"/>
           <br /><sub><b>김나현</b></sub>
         </a>
         <br />숙명여자대학교 소프트웨어융합
       <td align="center">
         <a href="https://github.com/gaeulzzang">
-          <img src="./app/src/main/res/drawable/user2.PNG" width="100px;" alt="gaeulzzang 프로필 사진"/>
+          <img src="./app/src/main/res/drawable/user_2.png" width="100px;" alt="gaeulzzang 프로필 사진"/>
           <br /><sub><b>이가을</b></sub>
         </a>
         <br />숙명여자대학교 컴퓨터과학과
       </td>
             <td align="center">
         <a href="https://github.com/jjwm10625">
-          <img src="./app/src/main/res/drawable/user3.PNG" width="100px;" alt="jjwm10625 프로필 사진"/>
+          <img src="./app/src/main/res/drawable/user_3.PNG" width="100px;" alt="jjwm10625 프로필 사진"/>
           <br /><sub><b>조영서</b></sub>
         </a>
         <br />숙명여자대학교 컴퓨터과학과
