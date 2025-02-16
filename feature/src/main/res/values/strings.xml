@@ -46,5 +46,6 @@
     <string name="calendar_people_reporting">%1$s명</string>
     <string name="calender_jurisdiction">관할시</string>
     <string name="calender_no_info">해당 날짜의 집회 정보가 없습니다</string>
+    <string name="detail_header_yeoeuido_adverb">는</string>
 
 </resources>
