@@ -19,7 +19,7 @@ class CrowdZeroDataSourceImpl @Inject constructor(
         return crowdZeroApiService.getCongestion(areaId)
     }
 
-    override suspend fun getRoad(areaId: Int): BaseResponse<RoadResponseDto> {
+    override suspend fun getRoad(areaId: Int): BaseResponse<List<RoadResponseDto>> {
         return crowdZeroApiService.getRoad(areaId)
     }
 

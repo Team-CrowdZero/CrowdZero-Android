@@ -7,5 +7,5 @@ import com.gdg.domain.entity.WeatherEntity
 interface CrowdZeroRepository {
     suspend fun getWeather(areaId: Int): Result<WeatherEntity>
     suspend fun getCongestion(areaId: Int): Result<CongestionEntity>
-    suspend fun getRoad(areaId: Int): Result<RoadEntity>
+    suspend fun getRoad(areaId: Int): Result<List<RoadEntity>>
 }

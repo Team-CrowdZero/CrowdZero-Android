@@ -8,5 +8,5 @@ import com.gdg.data.dto.response.WeatherResponseDto
 interface CrowdZeroDataSource {
     suspend fun getWeather(areaId: Int): BaseResponse<WeatherResponseDto>
     suspend fun getCongestion(areaId: Int): BaseResponse<CongestionResponseDto>
-    suspend fun getRoad(areaId: Int): BaseResponse<RoadResponseDto>
+    suspend fun getRoad(areaId: Int): BaseResponse<List<RoadResponseDto>>
 }

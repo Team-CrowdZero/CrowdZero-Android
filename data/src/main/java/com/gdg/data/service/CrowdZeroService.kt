@@ -26,5 +26,5 @@ interface CrowdZeroService {
     @GET("/$API/$ACDNT/{$AREA_ID}")
     suspend fun getRoad(
         @Path(AREA_ID) areaId: Int
-    ): BaseResponse<RoadResponseDto>
+    ): BaseResponse<List<RoadResponseDto>>
 }
