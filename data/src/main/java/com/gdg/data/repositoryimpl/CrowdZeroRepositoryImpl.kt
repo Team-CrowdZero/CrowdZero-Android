@@ -2,10 +2,9 @@ package com.gdg.data.repositoryimpl
 
 import com.gdg.data.datasource.CrowdZeroDataSource
 import com.gdg.data.mapper.toCongestionEntity
-import com.gdg.data.mapper.toExampleEntity
+import com.gdg.data.mapper.toRoadEntity
 import com.gdg.data.mapper.toScheduleEntity
 import com.gdg.data.mapper.toWeatherEntity
-import com.gdg.data.mapper.toRoadEntity
 import com.gdg.domain.entity.CongestionEntity
 import com.gdg.domain.entity.RoadEntity
 import com.gdg.domain.entity.ScheduleEntity

@@ -1,7 +1,5 @@
 package com.gdg.domain.entity
 
-import java.time.LocalDate
-
 data class ScheduleEntity(
     val date: String,
     val duration: String,
