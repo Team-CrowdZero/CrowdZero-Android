@@ -235,7 +235,7 @@ fun CalendarInfoBox(data: ScheduleEntity) {
         ) {
             Text(
                 modifier = Modifier.padding(end = 8.dp),
-                text = data.location,
+                text = data.location.chunked(45).joinToString("\n"), // 긴 문구 단어 단위로 줄바꿈
                 style = CrowdZeroTheme.typography.h5Bold,
                 color = CrowdZeroTheme.colors.gray900
             )
