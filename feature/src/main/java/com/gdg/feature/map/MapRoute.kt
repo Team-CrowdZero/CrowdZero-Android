@@ -57,6 +57,7 @@ import com.naver.maps.map.overlay.OverlayImage
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapRoute(
     mapViewModel: MapViewModel = hiltViewModel(), navigateToDetail: (Int) -> Unit
@@ -81,6 +82,9 @@ fun MapRoute(
     val getCongestionState by mapViewModel.getCongestionState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val roads by mapViewModel.roads.collectAsStateWithLifecycle()
+    var selectedRoad by remember { mutableStateOf<RoadEntity?>(null) }
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
 
     LaunchedEffect(Unit) {
         mapViewModel.getRoads()
@@ -91,7 +95,22 @@ fun MapRoute(
             when (sideEffect) {
                 is MapSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.id)
                 is MapSideEffect.ShowToast -> context.toast(sideEffect.message)
+                is MapSideEffect.ShowBottomSheet -> {
+                    selectedRoad = sideEffect.road
+                    showBottomSheet = sideEffect.road != null
+                }
             }
+        }
+    }
+
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            sheetState = sheetState,
+            onDismissRequest = { showBottomSheet = false },
+            containerColor = CrowdZeroTheme.colors.white,
+            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+        ) {
+            RoadInfoSheet(road = selectedRoad)
         }
     }
 
@@ -103,11 +122,12 @@ fun MapRoute(
         roads = roads,
         congestionState = getCongestionState,
         getPlaceEntity = { id -> mapViewModel.getCongestion(id) },
-        onButtonClick = mapViewModel::navigateToDetail
+        onButtonClick = mapViewModel::navigateToDetail,
+        onRoadMarkerClick = mapViewModel::onRoadMarkerClick
     )
 }
 
-@OptIn(ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun MapScreen(
     mapProperties: MapProperties = MapProperties(),
@@ -117,14 +137,12 @@ fun MapScreen(
     roads: List<RoadEntity>,
     congestionState: UiState<PlaceEntity> = UiState.Empty,
     getPlaceEntity: (Int) -> Unit,
-    onButtonClick: (Int) -> Unit = { }
+    onButtonClick: (Int) -> Unit = { },
+    onRoadMarkerClick: (RoadEntity) -> Unit
 ) {
     var selectedLocation by remember { mutableStateOf<LocationType?>(null) }
-    var selectedRoad by remember { mutableStateOf<RoadEntity?>(null) }
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
-    val sheetState = rememberModalBottomSheetState()
-    var showBottomSheet by remember { mutableStateOf(false) }
 
     BackHandler(
         enabled = selectedLocation != null,
@@ -159,13 +177,14 @@ fun MapScreen(
                         state = MarkerState(position = LatLng(road.acdntY, road.acdntX)),
                         icon = OverlayImage.fromResource(R.drawable.ic_ban_marker),
                         onClick = {
-                            selectedRoad = road
-                            showBottomSheet = true
-                            coroutineScope.launch {
-                                sheetState.show()
-                            }
+                            cameraPositionState.move(
+                                CameraUpdate.scrollAndZoomTo(LatLng(road.acdntY, road.acdntX), 17.0)
+                                    .animate(CameraAnimation.Easing)
+                            )
+                            onRoadMarkerClick(road)
                             true
-                        })
+                        }
+                    )
                 }
             }
         }
@@ -222,17 +241,6 @@ fun MapScreen(
                     )
                 }
             }
-        }
-    }
-
-    if (showBottomSheet) {
-        ModalBottomSheet(
-            sheetState = sheetState,
-            onDismissRequest = { showBottomSheet = false },
-            containerColor = CrowdZeroTheme.colors.white,
-            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
-        ) {
-            RoadInfoSheet(road = selectedRoad)
         }
     }
 }
