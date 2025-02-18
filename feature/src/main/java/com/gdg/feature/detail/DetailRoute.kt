@@ -63,7 +63,7 @@ import timber.log.Timber
 @Composable
 fun DetailRoute(
     detailViewModel: DetailViewModel = hiltViewModel(),
-    id: Long,
+    id: Int,
     paddingValues: PaddingValues
 ) {
     val mapProperties by remember {
@@ -88,8 +88,8 @@ fun DetailRoute(
     val getCongestionState by detailViewModel.getCongestionState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
-        detailViewModel.getWeather(id.toInt())
-        detailViewModel.getCongestion(id.toInt())
+        detailViewModel.getWeather(id)
+        detailViewModel.getCongestion(id)
     }
 
     DetailScreen(
@@ -109,7 +109,7 @@ fun DetailRoute(
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun DetailScreen(
-    id: Long = 0,
+    id: Int = 0,
     paddingValues: PaddingValues = PaddingValues(),
     weatherState: UiState<WeatherEntity> = UiState.Empty,
     congestionState: UiState<CongestionEntity> = UiState.Empty,

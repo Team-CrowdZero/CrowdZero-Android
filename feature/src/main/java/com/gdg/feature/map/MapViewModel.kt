@@ -90,7 +90,7 @@ class MapViewModel @Inject constructor(
         LocationType.YEOUIDO
     )
 
-    fun navigateToDetail(id: Long) {
+    fun navigateToDetail(id: Int) {
         viewModelScope.launch {
             _sideEffects.emit(MapSideEffect.NavigateToDetail(id))
         }

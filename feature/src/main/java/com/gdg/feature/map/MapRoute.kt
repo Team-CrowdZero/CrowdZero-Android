@@ -59,7 +59,7 @@ import timber.log.Timber
 
 @Composable
 fun MapRoute(
-    mapViewModel: MapViewModel = hiltViewModel(), navigateToDetail: (Long) -> Unit
+    mapViewModel: MapViewModel = hiltViewModel(), navigateToDetail: (Int) -> Unit
 ) {
     val mapProperties by remember {
         mutableStateOf(
@@ -102,7 +102,7 @@ fun MapRoute(
         locations = mapViewModel.locations,
         roads = roads,
         congestionState = getCongestionState,
-        getPlaceEntity = { id -> mapViewModel.getCongestion(id.toInt()) },
+        getPlaceEntity = { id -> mapViewModel.getCongestion(id) },
         onButtonClick = mapViewModel::navigateToDetail
     )
 }
@@ -116,8 +116,8 @@ fun MapScreen(
     locations: List<LocationType>,
     roads: List<RoadEntity>,
     congestionState: UiState<PlaceEntity> = UiState.Empty,
-    getPlaceEntity: (Long) -> Unit,
-    onButtonClick: (Long) -> Unit = { }
+    getPlaceEntity: (Int) -> Unit,
+    onButtonClick: (Int) -> Unit = { }
 ) {
     var selectedLocation by remember { mutableStateOf<LocationType?>(null) }
     var selectedRoad by remember { mutableStateOf<RoadEntity?>(null) }

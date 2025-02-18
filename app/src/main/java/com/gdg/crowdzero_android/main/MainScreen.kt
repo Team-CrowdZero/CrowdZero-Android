@@ -152,9 +152,7 @@ fun MainScreen(
                     startDestination = navigator.startDestination
                 ) {
                     mapNavGraph(navHostController = navigator.navController)
-                    calendarNavGraph(
-                        paddingValues = paddingValues, navHostController = navigator.navController
-                    )
+                    calendarNavGraph(paddingValues = paddingValues)
                     detailNavGraph(paddingValues = paddingValues)
                 }
             }

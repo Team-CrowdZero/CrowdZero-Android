@@ -1,7 +1,7 @@
 package com.gdg.domain.entity
 
 data class WeatherEntity(
-    val id: Long,
+    val id: Int,
     val areaNm: String,
     val skyStts: String,
     val temp: Int,

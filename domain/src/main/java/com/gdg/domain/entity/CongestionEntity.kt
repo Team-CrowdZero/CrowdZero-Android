@@ -1,7 +1,7 @@
 package com.gdg.domain.entity
 
 data class CongestionEntity(
-    val id: Long,
+    val id: Int,
     val name: String,
     val level: String,
     val message: String,
