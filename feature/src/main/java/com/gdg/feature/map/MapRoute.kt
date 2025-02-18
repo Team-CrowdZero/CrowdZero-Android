@@ -60,7 +60,8 @@ import timber.log.Timber
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapRoute(
-    mapViewModel: MapViewModel = hiltViewModel(), navigateToDetail: (Int) -> Unit
+    mapViewModel: MapViewModel = hiltViewModel(),
+    navigateToDetail: (Int) -> Unit
 ) {
     val mapProperties by remember {
         mutableStateOf(
@@ -80,6 +81,7 @@ fun MapRoute(
         position = CameraPosition(NaverMapConstants.DefaultCameraPosition.target, 13.0)
     }
     val getCongestionState by mapViewModel.getCongestionState.collectAsStateWithLifecycle()
+    val getRoadState by mapViewModel.getRoadState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val roads by mapViewModel.roads.collectAsStateWithLifecycle()
     var selectedRoad by remember { mutableStateOf<RoadEntity?>(null) }
@@ -110,7 +112,16 @@ fun MapRoute(
             containerColor = CrowdZeroTheme.colors.white,
             shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
         ) {
-            RoadInfoSheet(road = selectedRoad)
+            when (getRoadState) {
+                is UiState.Empty -> Timber.e("도로 정보 없음")
+                is UiState.Loading -> LoadingIndicator()
+                is UiState.Success -> {
+                    selectedRoad?.let { road ->
+                        RoadInfoSheet(road = road)
+                    }
+                }
+                is UiState.Failure -> Timber.e("도로 정보 실패")
+            }
         }
     }
 
