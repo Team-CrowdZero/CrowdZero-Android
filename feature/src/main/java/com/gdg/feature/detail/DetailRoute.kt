@@ -167,7 +167,7 @@ fun DetailScreen(
         }
         when (weatherState) {
             is UiState.Empty -> {
-                Timber.e("날씨 api 데이터 없음")
+                Timber.e(stringResource(R.string.detail_weather_empty))
             }
 
             is UiState.Loading -> {
@@ -184,7 +184,7 @@ fun DetailScreen(
             }
 
             is UiState.Failure -> {
-                Timber.e("날씨 api 오류 : ${weatherState.msg}")
+                Timber.e(stringResource(R.string.detail_weather_failure, weatherState.msg))
                 WeatherItem(
                     data = WeatherEntity(
                         id = id,
@@ -230,14 +230,19 @@ fun DetailScreen(
             )
         }
         when (congestionState) {
-            is UiState.Empty -> Timber.d("혼잡도 api 데이터 없음")
+            is UiState.Empty -> Timber.d(stringResource(R.string.detail_congestion_empty))
             is UiState.Loading -> LoadingIndicator(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
 
             is UiState.Success -> CongestionItem(data = congestionState.data)
             is UiState.Failure -> {
-                Timber.e("혼잡도 api 오류 : ${congestionState.msg}")
+                Timber.e(
+                    stringResource(
+                        R.string.detail_congestion_state_failure,
+                        congestionState.msg
+                    )
+                )
                 CongestionItem(
                     data = CongestionEntity(
                         id = id,

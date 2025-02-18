@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -87,9 +88,11 @@ fun MapRoute(
     var selectedRoad by remember { mutableStateOf<RoadEntity?>(null) }
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
+    val listState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
         mapViewModel.getRoads()
+        listState.scrollToItem(0)
     }
 
     LaunchedEffect(key1 = mapViewModel.sideEffects) {
@@ -113,14 +116,15 @@ fun MapRoute(
             shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
         ) {
             when (getRoadState) {
-                is UiState.Empty -> Timber.e("도로 정보 없음")
+                is UiState.Empty -> Timber.e(stringResource(R.string.map_road_empty))
                 is UiState.Loading -> LoadingIndicator()
                 is UiState.Success -> {
                     selectedRoad?.let { road ->
                         RoadInfoSheet(road = road)
                     }
                 }
-                is UiState.Failure -> Timber.e("도로 정보 실패")
+
+                is UiState.Failure -> Timber.e(stringResource(R.string.map_road_failure))
             }
         }
     }
@@ -132,6 +136,7 @@ fun MapRoute(
         locations = mapViewModel.locations,
         roads = roads,
         congestionState = getCongestionState,
+        listState = listState,
         getPlaceEntity = { id -> mapViewModel.getCongestion(id) },
         onButtonClick = mapViewModel::navigateToDetail,
         onRoadMarkerClick = mapViewModel::onRoadMarkerClick
@@ -147,13 +152,13 @@ fun MapScreen(
     locations: List<LocationType>,
     roads: List<RoadEntity>,
     congestionState: UiState<PlaceEntity> = UiState.Empty,
+    listState: LazyListState,
     getPlaceEntity: (Int) -> Unit,
     onButtonClick: (Int) -> Unit = { },
     onRoadMarkerClick: (RoadEntity) -> Unit
 ) {
     var selectedLocation by remember { mutableStateOf<LocationType?>(null) }
     val coroutineScope = rememberCoroutineScope()
-    val listState = rememberLazyListState()
 
     BackHandler(
         enabled = selectedLocation != null,
@@ -203,29 +208,34 @@ fun MapScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
-                .padding(top = 110.dp, start = 10.dp, end = 10.dp), state = listState
+                .padding(top = 110.dp, start = 10.dp, end = 10.dp),
+            state = listState
         ) {
             itemsIndexed(locations) { index, location ->
-                MapChip(title = location, isSelected = selectedLocation == location, onClick = {
-                    if (selectedLocation == location) {
-                        selectedLocation = null
-                    } else {
-                        selectedLocation = location
-                        getPlaceEntity(location.id)
-                        cameraPositionState.move(
-                            CameraUpdate.scrollAndZoomTo(location.latLng, 17.0)
-                                .animate(CameraAnimation.Easing)
-                        )
+                MapChip(
+                    title = location,
+                    isSelected = selectedLocation == location,
+                    onClick = {
+                        if (selectedLocation == location) {
+                            selectedLocation = null
+                        } else {
+                            selectedLocation = location
+                            getPlaceEntity(location.id)
+                            cameraPositionState.move(
+                                CameraUpdate.scrollAndZoomTo(location.latLng, 17.0)
+                                    .animate(CameraAnimation.Easing)
+                            )
+                        }
+                        coroutineScope.launch {
+                            listState.animateScrollToItem(index)
+                        }
                     }
-                    coroutineScope.launch {
-                        listState.animateScrollToItem(index)
-                    }
-                })
+                )
             }
         }
         selectedLocation?.let { location ->
             when (congestionState) {
-                is UiState.Empty -> Timber.e("인구 혼잡도 정보 없음")
+                is UiState.Empty -> Timber.e(stringResource(R.string.map_congestion_empty))
                 is UiState.Loading -> LoadingIndicator(modifier = Modifier.align(Alignment.BottomCenter))
                 is UiState.Success -> {
                     if (congestionState.data.id == location.id) {
@@ -238,12 +248,12 @@ fun MapScreen(
                 }
 
                 is UiState.Failure -> {
-                    Timber.e("인구 혼잡도 정보 실패")
+                    Timber.e(stringResource(R.string.map_congestion_failure))
                     PlaceInfoCard(
                         place = PlaceEntity(
                             id = location.id,
                             name = stringResource(id = location.title),
-                            congestion = "모름",
+                            congestion = stringResource(R.string.place_info_card_congestion_unknown),
                             min = 0,
                             max = 0
                         ),

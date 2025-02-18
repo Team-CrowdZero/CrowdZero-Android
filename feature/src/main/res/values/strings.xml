@@ -14,6 +14,9 @@
     <string name="detail_congestion_count">%1$s~%2$s명</string>
     <string name="detail_congestion_failure">실시간 인구 정보를 가져오지 못했어요</string>
     <string name="detail_congestion_count_min">%1$s명</string>
+    <string name="detail_weather_empty">날씨 api 데이터 없음</string>
+    <string name="detail_weather_failure">날씨 api 오류 : %1$s</string>
+    <string name="detail_congestion_empty">혼잡도 api 데이터 없음</string>
 
     <!--스플래시 -->
     <string name="splash_title1">혼잡</string>
@@ -28,12 +31,17 @@
     <string name="place_info_realtime_population_count">%1$s~%2$s명</string>
     <string name="place_info_realtime_population_count_min">%1$s명</string>
     <string name="place_info_card_buildings">"배경 빌딩 아이콘"</string>
+    <string name="place_info_card_congestion_unknown">모름</string>
     <string name="map_modal_header">통제</string>
     <string name="map_modal_generated_time">발생시간 %1$s</string>
     <string name="map_modal_complete_time">종료예정시간 %1$s</string>
     <string name="map_modal_description">[통제] %1$s</string>
     <string name="map_modal_update_time">%1$s 업데이트</string>
     <string name="map_modal_source">제공 서울시 실시간 도로통제정보</string>
+    <string name="map_road_empty">도로 정보 없음</string>
+    <string name="map_road_failure">도로 정보 실패</string>
+    <string name="map_congestion_empty">인구 혼잡도 정보 없음</string>
+    <string name="map_congestion_failure">인구 혼잡도 정보 실패</string>
 
     <!-- 캘린더 -->
     <string name="calendar_header_1">"날짜별 "</string>
@@ -47,5 +55,6 @@
     <string name="calendar_jurisdiction">관할시</string>
     <string name="calendar_no_info">해당 날짜의 집회 정보가 없습니다</string>
     <string name="calendar_not_connected">해당 날짜의 집회 정보를 가져오지 못했어요</string>
+    <string name="detail_congestion_state_failure">혼잡도 api 오류 : %1$s</string>
 
 </resources>
