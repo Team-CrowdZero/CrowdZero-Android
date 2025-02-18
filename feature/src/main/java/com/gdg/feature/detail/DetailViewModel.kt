@@ -59,5 +59,4 @@ class DetailViewModel @Inject constructor(
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
         return current.format(formatter)
     }
-
 }

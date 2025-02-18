@@ -17,8 +17,7 @@ fun NavController.navigateCalendar(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.calendarNavGraph(
-    paddingValues: PaddingValues,
-    navHostController: NavController
+    paddingValues: PaddingValues
 ) {
     composable<Calendar> {
         CalendarRoute(

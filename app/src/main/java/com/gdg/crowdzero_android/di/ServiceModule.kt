@@ -1,7 +1,6 @@
 package com.gdg.crowdzero_android.di
 
 import com.gdg.data.service.CrowdZeroService
-import com.gdg.data.service.ExampleService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,12 +11,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ServiceModule {
-
-    @Provides
-    @Singleton
-    fun provideExampleService(
-        @CrowdZeroRetrofit retrofit: Retrofit
-    ): ExampleService = retrofit.create(ExampleService::class.java)
 
     @Provides
     @Singleton

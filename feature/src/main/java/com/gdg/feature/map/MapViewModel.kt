@@ -81,6 +81,18 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    fun navigateToDetail(id: Int) {
+        viewModelScope.launch {
+            _sideEffects.emit(MapSideEffect.NavigateToDetail(id))
+        }
+    }
+
+    fun onRoadMarkerClick(road: RoadEntity) {
+        viewModelScope.launch {
+            _sideEffects.emit(MapSideEffect.ShowBottomSheet(road))
+        }
+    }
+
     @Stable
     val locations = immutableListOf(
         LocationType.GANGNAM_STATION,
@@ -89,11 +101,4 @@ class MapViewModel @Inject constructor(
         LocationType.SEOUL_STATION,
         LocationType.YEOUIDO
     )
-
-    fun navigateToDetail(id: Long) {
-        viewModelScope.launch {
-            _sideEffects.emit(MapSideEffect.NavigateToDetail(id))
-        }
-    }
-
 }

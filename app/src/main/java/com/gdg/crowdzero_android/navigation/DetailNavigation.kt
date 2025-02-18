@@ -11,7 +11,7 @@ import com.gdg.feature.detail.DetailRoute
 import kotlinx.serialization.Serializable
 
 fun NavController.navigateDetail(
-    id: Long,
+    id: Int,
     navOptions: NavOptions? = null
 ) {
     navigate(
@@ -34,5 +34,5 @@ fun NavGraphBuilder.detailNavGraph(
 
 @Serializable
 data class Detail(
-    val id: Long
+    val id: Int
 ) : Route

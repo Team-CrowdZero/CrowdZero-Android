@@ -40,7 +40,7 @@ import com.gdg.feature.R
 fun PlaceInfoCard(
     place: PlaceEntity?,
     modifier: Modifier = Modifier,
-    onButtonClick: (Long) -> Unit
+    onButtonClick: (Int) -> Unit
 ) {
     if (place == null) return
 
