@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CrowdZero-Android</string>
+    <string name="app_name">혼잡제로</string>
 
     <!-- Tab Row -->
     <string name="main_tab_map">지도</string>

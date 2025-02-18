@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="server_success">서버 통신에 성공했습니다</string>
     <string name="server_failure">서버 통신에 실패했습니다</string>
 
     <!-- 장소 상세 -->
@@ -23,7 +22,6 @@
     <string name="splash_desc">스플래시</string>
 
     <!--지도 -->
-    <string name="place_info_background_icon">배경 빌딩 아이콘</string>
     <string name="place_info_detail_view">상세보기</string>
     <string name="place_info_congestion">"인구혼잡도 "</string>
     <string name="place_info_realtime_population">"실시간 인구 "</string>
@@ -49,6 +47,5 @@
     <string name="calendar_jurisdiction">관할시</string>
     <string name="calendar_no_info">해당 날짜의 집회 정보가 없습니다</string>
     <string name="calendar_not_connected">해당 날짜의 집회 정보를 가져오지 못했어요</string>
-
 
 </resources>
