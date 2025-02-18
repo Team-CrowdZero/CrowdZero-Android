@@ -95,5 +95,4 @@ class MapViewModel @Inject constructor(
             _sideEffects.emit(MapSideEffect.NavigateToDetail(id))
         }
     }
-
 }
