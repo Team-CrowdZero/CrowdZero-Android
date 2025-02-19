@@ -274,13 +274,14 @@ fun CalendarInfoBox(data: ScheduleEntity) {
                 color = CrowdZeroTheme.colors.gray600
             )
             Text(
-                text = data.jurisdiction,
+                text = data.jurisdiction.split("\n").joinToString(" "), // 세로 배열을 가로 배열로 변경
                 style = CrowdZeroTheme.typography.c3Regular,
                 color = CrowdZeroTheme.colors.gray800
             )
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
