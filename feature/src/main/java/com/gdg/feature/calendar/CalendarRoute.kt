@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -234,12 +235,14 @@ fun CalendarInfoBox(data: ScheduleEntity) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                modifier = Modifier.padding(end = 8.dp),
-                text = data.location.chunked(45).joinToString("\n"), // 긴 문구 단어 단위로 줄바꿈
+                modifier = Modifier.padding(end = 8.dp)
+                .weight(1f),
+                text = data.location.replace("\n", " "),
                 style = CrowdZeroTheme.typography.h5Bold,
                 color = CrowdZeroTheme.colors.gray900
             )
             Text(
+                modifier = Modifier.wrapContentSize(),
                 text = data.region,
                 style = CrowdZeroTheme.typography.c4SemiBold,
                 color = CrowdZeroTheme.colors.gray600
@@ -274,7 +277,7 @@ fun CalendarInfoBox(data: ScheduleEntity) {
                 color = CrowdZeroTheme.colors.gray600
             )
             Text(
-                text = data.jurisdiction.split("\n").joinToString(stringResource(R.string.calendar_jurisdiction_rest)),
+                text = data.jurisdiction.replace("\n", " "),
                 style = CrowdZeroTheme.typography.c3Regular,
                 color = CrowdZeroTheme.colors.gray800
             )

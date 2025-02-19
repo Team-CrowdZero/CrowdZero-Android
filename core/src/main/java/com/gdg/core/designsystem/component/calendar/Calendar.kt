@@ -33,6 +33,7 @@ import com.gdg.core.designsystem.theme.CrowdZeroAndroidTheme
 import com.gdg.core.designsystem.theme.CrowdZeroTheme
 import com.gdg.core.extension.noRippleClickable
 import com.gdg.core.util.getDaysForMonth
+import okhttp3.internal.immutableListOf
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -96,7 +97,7 @@ fun CalendarComponent(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            val weekDays = listOf(
+            val weekDays = immutableListOf(
                 DayOfWeek.SUNDAY,
                 DayOfWeek.MONDAY,
                 DayOfWeek.TUESDAY,
