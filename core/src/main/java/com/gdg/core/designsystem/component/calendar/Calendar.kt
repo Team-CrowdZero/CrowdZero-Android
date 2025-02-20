@@ -34,8 +34,11 @@ import com.gdg.core.designsystem.theme.CrowdZeroTheme
 import com.gdg.core.extension.noRippleClickable
 import com.gdg.core.util.getDaysForMonth
 import okhttp3.internal.immutableListOf
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.TextStyle
+import java.util.Locale
 
 @Composable
 fun CalendarComponent(
@@ -45,6 +48,7 @@ fun CalendarComponent(
     onDateSelected: (LocalDate) -> Unit,
 ) {
     val days = remember(currentMonth) { getDaysForMonth(currentMonth) }
+    val firstDayOfWeek = DayOfWeek.SUNDAY // 일요일을 주의 시작으로 변경
 
     Column(
         modifier = Modifier
@@ -93,7 +97,17 @@ fun CalendarComponent(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            immutableListOf("일", "월", "화", "수", "목", "금", "토").forEach { day ->
+            val weekDays = immutableListOf(
+                DayOfWeek.SUNDAY,
+                DayOfWeek.MONDAY,
+                DayOfWeek.TUESDAY,
+                DayOfWeek.WEDNESDAY,
+                DayOfWeek.THURSDAY,
+                DayOfWeek.FRIDAY,
+                DayOfWeek.SATURDAY
+            )
+            weekDays.forEach { dayOfWeek ->
+                val day = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN)
                 Text(
                     text = day,
                     style = CrowdZeroTheme.typography.c2Medium2,
@@ -106,11 +120,14 @@ fun CalendarComponent(
             columns = GridCells.Fixed(7),
             modifier = Modifier.fillMaxWidth()
         ) {
+            val emptyDays = (days.first().dayOfWeek.value % 7 - firstDayOfWeek.value + 7) % 7
+            items(emptyDays) {
+                Box(modifier = Modifier.aspectRatio(1f))
+            }
             items(days) { date ->
                 val isSelected = date == selectedDate
                 Box(
                     modifier = Modifier
-                        .weight(1f)
                         .aspectRatio(1f)
                         .padding(5.dp)
                         .background(

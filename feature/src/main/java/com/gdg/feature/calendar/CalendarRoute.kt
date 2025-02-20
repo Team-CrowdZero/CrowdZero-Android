@@ -222,29 +222,33 @@ fun CalendarInfoBox(data: ScheduleEntity) {
             .background(CrowdZeroTheme.colors.white)
             .padding(dimensionResource(R.dimen.default_padding))
     ) {
-        Text(
-            text = data.duration,
-            style = CrowdZeroTheme.typography.c4SemiBold,
-            color = CrowdZeroTheme.colors.green600
-        )
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 2.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 modifier = Modifier.padding(end = 8.dp),
-                text = data.location,
-                style = CrowdZeroTheme.typography.h5Bold,
-                color = CrowdZeroTheme.colors.gray900
+                text = data.duration,
+                style = CrowdZeroTheme.typography.c4SemiBold,
+                color = CrowdZeroTheme.colors.green600
             )
             Text(
                 text = data.region,
                 style = CrowdZeroTheme.typography.c4SemiBold,
-                color = CrowdZeroTheme.colors.gray600
+                color = CrowdZeroTheme.colors.white,
+                modifier = Modifier
+                    .background(
+                        color = CrowdZeroTheme.colors.green600,
+                        shape = RoundedCornerShape(30.dp)
+                    )
+                    .padding(horizontal = 8.dp, vertical = 3.dp)
             )
         }
+        Text(
+            text = data.location.replace("\n", " "),
+            style = CrowdZeroTheme.typography.h5Bold,
+            color = CrowdZeroTheme.colors.gray900
+        )
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -274,7 +278,7 @@ fun CalendarInfoBox(data: ScheduleEntity) {
                 color = CrowdZeroTheme.colors.gray600
             )
             Text(
-                text = data.jurisdiction,
+                text = data.jurisdiction.replace("\n", " "),
                 style = CrowdZeroTheme.typography.c3Regular,
                 color = CrowdZeroTheme.colors.gray800
             )
@@ -293,6 +297,14 @@ fun CalendarScreenPreview() {
                         date = LocalDate.now().toString(),
                         duration = "07:30 ~ 24:00",
                         location = "두터교회 앞 인도 및 2개 차로",
+                        region = "한남동",
+                        people = "3000",
+                        jurisdiction = "용산"
+                    ),
+                    ScheduleEntity(
+                        date = LocalDate.now().toString(),
+                        duration = "07:30 ~ 24:00",
+                        location = "두터교회 앞 인도 및 2개 차로두터교회 앞 인도 및 2개 차로두터교회 앞 인도 및 2개 차로",
                         region = "한남동",
                         people = "3000",
                         jurisdiction = "용산"

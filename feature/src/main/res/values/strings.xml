@@ -53,6 +53,7 @@
     <string name="calendar_people_reporting">%1$s명</string>
     <string name="calendar_slash">/</string>
     <string name="calendar_jurisdiction">관할시</string>
+    <string name="calendar_jurisdiction_rest">", "</string>
     <string name="calendar_no_info">해당 날짜의 집회 정보가 없습니다</string>
     <string name="calendar_not_connected">해당 날짜의 집회 정보를 가져오지 못했어요</string>
     <string name="detail_congestion_state_failure">혼잡도 api 오류 : %1$s</string>

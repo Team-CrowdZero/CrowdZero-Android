@@ -82,7 +82,6 @@ naver-map-compose = "1.7.2"
 naver-map-location = "21.0.2"
 play-services-location = "21.0.1"
 
-
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" } # Kotlin Symbol Processing (KSP) 플러그인
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" } # Kotlin Android 플러그인
