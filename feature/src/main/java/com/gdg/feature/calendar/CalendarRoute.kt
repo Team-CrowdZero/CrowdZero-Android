@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -228,26 +229,32 @@ fun CalendarInfoBox(data: ScheduleEntity) {
             style = CrowdZeroTheme.typography.c4SemiBold,
             color = CrowdZeroTheme.colors.green600
         )
+
+        var isMultiline by remember { mutableStateOf(false) }
+
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 2.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                modifier = Modifier.padding(end = 8.dp)
-                .weight(1f),
                 text = data.location.replace("\n", " "),
                 style = CrowdZeroTheme.typography.h5Bold,
-                color = CrowdZeroTheme.colors.gray900
+                color = CrowdZeroTheme.colors.gray900,
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .then(if (isMultiline) Modifier.weight(1f) else Modifier.wrapContentWidth()),
+                onTextLayout = { textLayoutResult ->
+                    isMultiline = textLayoutResult.lineCount > 1
+                }
             )
             Text(
-                modifier = Modifier.wrapContentSize(),
                 text = data.region,
                 style = CrowdZeroTheme.typography.c4SemiBold,
-                color = CrowdZeroTheme.colors.gray600
+                color = CrowdZeroTheme.colors.gray600,
+                modifier = Modifier.wrapContentWidth()
             )
         }
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -286,6 +293,7 @@ fun CalendarInfoBox(data: ScheduleEntity) {
 }
 
 
+
 @Preview(showBackground = true)
 @Composable
 fun CalendarScreenPreview() {
@@ -300,7 +308,15 @@ fun CalendarScreenPreview() {
                         region = "한남동",
                         people = "3000",
                         jurisdiction = "용산"
-                    )
+                    ),
+                            ScheduleEntity(
+                            date = LocalDate.now().toString(),
+                    duration = "07:30 ~ 24:00",
+                    location = "두터교회 앞 인도 및 2개 차로두터교회 앞 인도 및 2개 차로두터교회 앞 인도 및 2개 차로",
+                    region = "한남동",
+                    people = "3000",
+                    jurisdiction = "용산"
+                )
                 )
             ),
             selectedDate = LocalDate.now(),
