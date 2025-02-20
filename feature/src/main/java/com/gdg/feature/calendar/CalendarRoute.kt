@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -224,36 +222,34 @@ fun CalendarInfoBox(data: ScheduleEntity) {
             .background(CrowdZeroTheme.colors.white)
             .padding(dimensionResource(R.dimen.default_padding))
     ) {
-        Text(
-            text = data.duration,
-            style = CrowdZeroTheme.typography.c4SemiBold,
-            color = CrowdZeroTheme.colors.green600
-        )
-
-        var isMultiline by remember { mutableStateOf(false) }
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = data.location.replace("\n", " "),
-                style = CrowdZeroTheme.typography.h5Bold,
-                color = CrowdZeroTheme.colors.gray900,
-                modifier = Modifier
-                    .padding(end = 8.dp)
-                    .then(if (isMultiline) Modifier.weight(1f) else Modifier.wrapContentWidth()),
-                onTextLayout = { textLayoutResult ->
-                    isMultiline = textLayoutResult.lineCount > 1
-                }
+                modifier = Modifier.padding(end = 8.dp),
+                text = data.duration,
+                style = CrowdZeroTheme.typography.c4SemiBold,
+                color = CrowdZeroTheme.colors.green600
             )
             Text(
                 text = data.region,
                 style = CrowdZeroTheme.typography.c4SemiBold,
-                color = CrowdZeroTheme.colors.gray600,
-                modifier = Modifier.wrapContentWidth()
+                color = CrowdZeroTheme.colors.white,
+                modifier = Modifier
+                    .background(
+                        color = CrowdZeroTheme.colors.green600,
+                        shape = RoundedCornerShape(30.dp)
+                    )
+                    .padding(horizontal = 8.dp, vertical = 3.dp)
             )
         }
+
+        Text(
+            text = data.location.replace("\n", " "),
+            style = CrowdZeroTheme.typography.h5Bold,
+            color = CrowdZeroTheme.colors.gray900
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -293,7 +289,6 @@ fun CalendarInfoBox(data: ScheduleEntity) {
 }
 
 
-
 @Preview(showBackground = true)
 @Composable
 fun CalendarScreenPreview() {
@@ -309,14 +304,14 @@ fun CalendarScreenPreview() {
                         people = "3000",
                         jurisdiction = "용산"
                     ),
-                            ScheduleEntity(
-                            date = LocalDate.now().toString(),
-                    duration = "07:30 ~ 24:00",
-                    location = "두터교회 앞 인도 및 2개 차로두터교회 앞 인도 및 2개 차로두터교회 앞 인도 및 2개 차로",
-                    region = "한남동",
-                    people = "3000",
-                    jurisdiction = "용산"
-                )
+                    ScheduleEntity(
+                        date = LocalDate.now().toString(),
+                        duration = "07:30 ~ 24:00",
+                        location = "두터교회 앞 인도 및 2개 차로두터교회 앞 인도 및 2개 차로두터교회 앞 인도 및 2개 차로",
+                        region = "한남동",
+                        people = "3000",
+                        jurisdiction = "용산"
+                    )
                 )
             ),
             selectedDate = LocalDate.now(),
