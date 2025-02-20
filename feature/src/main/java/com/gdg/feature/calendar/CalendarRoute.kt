@@ -244,13 +244,11 @@ fun CalendarInfoBox(data: ScheduleEntity) {
                     .padding(horizontal = 8.dp, vertical = 3.dp)
             )
         }
-
         Text(
             text = data.location.replace("\n", " "),
             style = CrowdZeroTheme.typography.h5Bold,
             color = CrowdZeroTheme.colors.gray900
         )
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -287,7 +285,6 @@ fun CalendarInfoBox(data: ScheduleEntity) {
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

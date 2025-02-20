@@ -81,8 +81,6 @@ material = "1.12.0"
 naver-map-compose = "1.7.2"
 naver-map-location = "21.0.2"
 play-services-location = "21.0.1"
-runtimeAndroid = "1.7.2"
-
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" } # Kotlin Symbol Processing (KSP) 플러그인
@@ -187,7 +185,6 @@ material = { group = "com.google.android.material", name = "material", version.r
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
-androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }
 
 [bundles]
 retrofit = ["retrofit-core", "retrofit-kotlin-serialization", "okhttp-logging"]
