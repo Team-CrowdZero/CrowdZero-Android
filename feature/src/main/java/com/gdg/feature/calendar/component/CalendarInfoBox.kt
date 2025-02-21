@@ -2,6 +2,7 @@ package com.gdg.feature.calendar.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,8 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.gdg.core.designsystem.theme.CrowdZeroAndroidTheme
 import com.gdg.core.designsystem.theme.CrowdZeroTheme
+import com.gdg.core.extension.showIf
 import com.gdg.domain.entity.ScheduleEntity
 import com.gdg.feature.R
 
@@ -27,7 +31,8 @@ fun CalendarInfoBox(data: ScheduleEntity) {
             .border(0.5.dp, CrowdZeroTheme.colors.gray500, shape = RoundedCornerShape(15.dp))
             .clip(RoundedCornerShape(15.dp))
             .background(CrowdZeroTheme.colors.white)
-            .padding(dimensionResource(R.dimen.default_padding))
+            .padding(dimensionResource(R.dimen.default_padding)),
+        verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -35,7 +40,7 @@ fun CalendarInfoBox(data: ScheduleEntity) {
         ) {
             Text(
                 modifier = Modifier.padding(end = 8.dp),
-                text = data.duration,
+                text = data.duration.replace("\n", "  "),
                 style = CrowdZeroTheme.typography.c4SemiBold,
                 color = CrowdZeroTheme.colors.green600
             )
@@ -49,6 +54,7 @@ fun CalendarInfoBox(data: ScheduleEntity) {
                         shape = RoundedCornerShape(30.dp)
                     )
                     .padding(horizontal = 8.dp, vertical = 3.dp)
+                    .showIf(data.region != "None")
             )
         }
         Text(
@@ -90,5 +96,22 @@ fun CalendarInfoBox(data: ScheduleEntity) {
                 color = CrowdZeroTheme.colors.gray800
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CalendarInfoBoxPreview() {
+    CrowdZeroAndroidTheme {
+        CalendarInfoBox(
+            ScheduleEntity(
+                date = "2021-10-01",
+                duration = "07:30 ~ 24:00",
+                location = "두터교회 앞 인도 및 2개 차로",
+                region = "한남동",
+                people = "3000",
+                jurisdiction = "용산"
+            )
+        )
     }
 }
