@@ -43,8 +43,8 @@ fun CongestionItem(
                         color = when (data.level) {
                             "여유" -> CrowdZeroTheme.colors.green600
                             "보통" -> CrowdZeroTheme.colors.yellow
-                            "약간 혼잡" -> CrowdZeroTheme.colors.orange
-                            "혼잡" -> CrowdZeroTheme.colors.red
+                            "약간 붐빔" -> CrowdZeroTheme.colors.orange
+                            "붐빔" -> CrowdZeroTheme.colors.red
                             else -> CrowdZeroTheme.colors.gray700
                         }
                     )
@@ -69,8 +69,8 @@ fun CongestionItem(
         congestionType = when (data.level) {
             "여유" -> CongestionType.GOOD
             "보통" -> CongestionType.NORMAL
-            "약간 혼잡" -> CongestionType.LITTLE_BAD
-            "혼잡" -> CongestionType.BAD
+            "약간 붐빔" -> CongestionType.LITTLE_BAD
+            "붐빔" -> CongestionType.BAD
             else -> CongestionType.UNKNOWN
         }
     )

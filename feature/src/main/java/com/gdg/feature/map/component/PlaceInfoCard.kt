@@ -105,8 +105,8 @@ fun PlaceInfoCard(
                             color = when (place.congestion) {
                                 "여유" -> CrowdZeroTheme.colors.green600
                                 "보통" -> CrowdZeroTheme.colors.yellow
-                                "약간 혼잡" -> CrowdZeroTheme.colors.orange
-                                "혼잡" -> CrowdZeroTheme.colors.red
+                                "약간 붐빔" -> CrowdZeroTheme.colors.orange
+                                "붐빔" -> CrowdZeroTheme.colors.red
                                 else -> CrowdZeroTheme.colors.gray700
                             }
                         )
@@ -125,8 +125,8 @@ fun PlaceInfoCard(
                             color = when (place.congestion) {
                                 "여유" -> CrowdZeroTheme.colors.green600
                                 "보통" -> CrowdZeroTheme.colors.yellow
-                                "약간 혼잡" -> CrowdZeroTheme.colors.orange
-                                "혼잡" -> CrowdZeroTheme.colors.red
+                                "약간 붐빔" -> CrowdZeroTheme.colors.orange
+                                "붐빔" -> CrowdZeroTheme.colors.red
                                 else -> CrowdZeroTheme.colors.gray700
                             }
                         )

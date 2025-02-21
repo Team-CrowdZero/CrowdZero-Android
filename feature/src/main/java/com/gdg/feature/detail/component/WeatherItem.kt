@@ -79,6 +79,7 @@ fun WeatherItem(
                     "좋음" -> DustConditionType.GOOD
                     "보통" -> DustConditionType.NORMAL
                     "나쁨" -> DustConditionType.BAD
+                    "매우나쁨" -> DustConditionType.VERY_BAD
                     else -> DustConditionType.UNKNOWN
                 }
             )
@@ -89,6 +90,7 @@ fun WeatherItem(
                     "좋음" -> DustConditionType.GOOD
                     "보통" -> DustConditionType.NORMAL
                     "나쁨" -> DustConditionType.BAD
+                    "매우나쁨" -> DustConditionType.VERY_BAD
                     else -> DustConditionType.UNKNOWN
                 }
             )

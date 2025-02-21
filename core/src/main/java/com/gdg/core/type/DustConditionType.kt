@@ -24,6 +24,10 @@ enum class DustConditionType(
         title = R.string.dust_condition_bad,
         color = Red
     ),
+    VERY_BAD(
+        title = R.string.dust_condition_very_bad,
+        color = Red
+    ),
     UNKNOWN(
         title = R.string.dust_condition_unknown,
         color = Gray700
