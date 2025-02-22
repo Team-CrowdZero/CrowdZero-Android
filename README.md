@@ -50,12 +50,12 @@
 
 ## 📌 프로젝트 소개
 | <img src="https://github.com/user-attachments/assets/479fe920-1691-4773-ab9b-783751544331"/> | <img src="https://github.com/user-attachments/assets/d178be92-e0d7-4d5e-bd17-bbfdb58fadb7"/> | <img src="https://github.com/user-attachments/assets/8c79d35a-19ce-49dd-b236-06f73970fff7"/> |
-|:---------:|:---------:|:---------:|
-| 앱 실행 시 로고 및 초기 로딩 화면 | 서울 도심 지도와 실시간 혼잡도를 제공 | 특정 지역 선택 시 혼잡도 및 교통 통제 정보 표시 |
+|:---------:|:---------:|:--------------------------------------------------------------------------------------------:|
+| 앱 실행 시 로고 및 초기 로딩 화면 | 서울 도심 지도와 실시간 혼잡도를 제공 |                                     특정 지역 선택 시 혼잡도 정보 표시                                     |
 
-| <img src="https://github.com/user-attachments/assets/93c059b1-cc61-4c58-8353-0012e5d4e7a8"/> | <img src="https://github.com/user-attachments/assets/790b4194-5199-4be2-866f-64e54f718fd0"/> | |
-|:---------:|:---------:|:---------:|
-| 선택된 지역의 상세 정보 및 실시간 날씨 제공 | 날짜별 집회 일정을 제공 | |
+| <img src="https://github.com/user-attachments/assets/63f1881a-18a0-4dcc-b257-3050820ab602"/> | <img src="https://github.com/user-attachments/assets/93c059b1-cc61-4c58-8353-0012e5d4e7a8"/> | <img src="https://github.com/user-attachments/assets/790b4194-5199-4be2-866f-64e54f718fd0"/> |
+|:--------------------------------------------------------------------------------------------:|:---------:|:-:|
+|                                       선택된 교통 통제 정보 표시                                        | 선택된 지역의 상세 정보 및 실시간 날씨 제공 | 날짜별 집회 일정을 제공 |
 
 
 
