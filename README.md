@@ -51,11 +51,12 @@
 ## 📌 프로젝트 소개
 | 화면                                                                                                        | 설명                        |
 |-----------------------------------------------------------------------------------------------------------|---------------------------|
-| <img src="https://github.com/user-attachments/assets/479fe920-1691-4773-ab9b-783751544331"  height="40%"/> | 앱 실행 시 로고 및 초기 로딩 화면      |
-| <img src="https://github.com/user-attachments/assets/d178be92-e0d7-4d5e-bd17-bbfdb58fadb7" height="40%"/> | 서울 도심 지도와 실시간 혼잡도를 제공     |
-| <img src="https://github.com/user-attachments/assets/8c79d35a-19ce-49dd-b236-06f73970fff7" height="40%"/> | 특정 지역 선택 시 혼잡도 및 교통 통제 정보 표시 |
-| <img src="https://github.com/user-attachments/assets/93c059b1-cc61-4c58-8353-0012e5d4e7a8" height="40%"/> | 선택된 지역의 상세 정보 및 실시간 날씨 제공 |
-| <img src="https://github.com/user-attachments/assets/790b4194-5199-4be2-866f-64e54f718fd0" height="40%"/> | 날짜별 집회 일정을 제공             |
+| <img src="https://github.com/user-attachments/assets/479fe920-1691-4773-ab9b-783751544331" height="400"/> | 앱 실행 시 로고 및 초기 로딩 화면      |
+| <img src="https://github.com/user-attachments/assets/d178be92-e0d7-4d5e-bd17-bbfdb58fadb7" height="400"/> | 서울 도심 지도와 실시간 혼잡도를 제공     |
+| <img src="https://github.com/user-attachments/assets/8c79d35a-19ce-49dd-b236-06f73970fff7" height="400"/> | 특정 지역 선택 시 혼잡도 및 교통 통제 정보 표시 |
+| <img src="https://github.com/user-attachments/assets/93c059b1-cc61-4c58-8353-0012e5d4e7a8" height="400"/> | 선택된 지역의 상세 정보 및 실시간 날씨 제공 |
+| <img src="https://github.com/user-attachments/assets/790b4194-5199-4be2-866f-64e54f718fd0" height="400"/> | 날짜별 집회 일정을 제공             |
+
 
 
 
