@@ -18,21 +18,21 @@
       <td align="center">
         <a href="https://github.com/nhyeonii">
           <img src="https://github.com/user-attachments/assets/e8af2acd-414b-47a1-996d-24e9b2b9b4cf" width="250px;" alt="nhyeonii 프로필 사진"/>
-          <br /><sub><b style="font-size: 1.5em;">김나현</b></sub>
+          <br /><sub><b style="font-size: 4em;">김나현</b></sub>
         </a>
         <br />숙명여자대학교 소프트웨어융합
       </td>
       <td align="center">
         <a href="https://github.com/gaeulzzang">
           <img src="https://github.com/user-attachments/assets/f9cc751b-e10f-4e01-9cb2-1d8e7d546045" width="250px;" alt="gaeulzzang 프로필 사진"/>
-          <br /><sub><b style="font-size: 1.5em;">이가을</b></sub>
+          <br /><sub><b style="font-size: 4em;">이가을</b></sub>
         </a>
         <br />숙명여자대학교 컴퓨터과학과
       </td>
       <td align="center">
         <a href="https://github.com/jjwm10625">
           <img src="https://github.com/user-attachments/assets/7cca1162-9d36-4db0-b118-412ea116c886" width="250px;" alt="jjwm10625 프로필 사진"/>
-          <br /><sub><b style="font-size: 1.5em;">조영서</b></sub>
+          <br /><sub><b style="font-size: 4em;">조영서</b></sub>
         </a>
         <br />숙명여자대학교 컴퓨터과학과
       </td>
