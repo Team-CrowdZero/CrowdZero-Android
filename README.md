@@ -113,7 +113,6 @@ CrowdZero-Android
 ├── 📄 build.gradle.kts
 ├── 📄 README.md
 └── 📄 .gitignore
-
 ```
 
 ## 📱 주요 화면 구성
