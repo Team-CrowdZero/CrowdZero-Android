@@ -68,7 +68,7 @@
 
 ## 📂 프로젝트 구조
 ```
-CrowdZero-Android
+📦 CrowdZero-Android
 │── 📁 app (Presentation Layer)
 │   ├── 📁 di 
 │   ├── 📁 main 
