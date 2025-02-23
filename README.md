@@ -110,9 +110,7 @@ CrowdZero-Android
 │   ├── 📁 map 
 │   ├── 📁 splash 
 │
-├── 📄 build.gradle.kts
-├── 📄 README.md
-└── 📄 .gitignore
+└── 📄 build.gradle.kts
 ```
 
 ## 📱 주요 화면 구성
