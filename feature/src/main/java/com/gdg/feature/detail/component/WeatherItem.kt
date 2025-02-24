@@ -107,6 +107,8 @@ fun WeatherItem(
             imageVector = when (data.skyStts) {
                 "맑음" -> ImageVector.vectorResource(R.drawable.ic_sunny)
                 "구름많음" -> ImageVector.vectorResource(R.drawable.ic_cloudy)
+                "흐림" -> ImageVector.vectorResource(R.drawable.ic_cloudy)
+                "소나기" -> ImageVector.vectorResource(R.drawable.ic_rainy)
                 "비" -> ImageVector.vectorResource(R.drawable.ic_rainy)
                 "눈" -> ImageVector.vectorResource(R.drawable.ic_snowy)
                 else -> ImageVector.vectorResource(R.drawable.ic_sunny_cloudy)
