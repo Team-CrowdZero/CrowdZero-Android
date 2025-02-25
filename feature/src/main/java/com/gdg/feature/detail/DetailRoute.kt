@@ -213,8 +213,8 @@ fun DetailScreen(
                     true -> when (congestionState.data.level) {
                         "여유" -> OverlayImage.fromResource(CongestionType.GOOD.icon)
                         "보통" -> OverlayImage.fromResource(CongestionType.NORMAL.icon)
-                        "약간 혼잡" -> OverlayImage.fromResource(CongestionType.LITTLE_BAD.icon)
-                        "혼잡" -> OverlayImage.fromResource(CongestionType.BAD.icon)
+                        "약간 붐빔" -> OverlayImage.fromResource(CongestionType.LITTLE_BAD.icon)
+                        "붐빔" -> OverlayImage.fromResource(CongestionType.BAD.icon)
                         else -> OverlayImage.fromResource(CongestionType.UNKNOWN.icon)
                     }
 

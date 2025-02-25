@@ -30,6 +30,7 @@ val Green600 = Color(0xFF04D181)
 val Green500 = Color(0xFF9AE5DA)
 
 // Blue Color
+val Blue300 = Color(0xFF049ED1)
 val Blue200 = Color(0xFF73CAED)
 val Blue100 = Color(0xFF98D1E8)
 
@@ -51,6 +52,7 @@ class CrowdZeroColors(
     green700: Color,
     green600: Color,
     green500: Color,
+    blue300: Color,
     blue200: Color,
     blue100: Color
 ) {
@@ -86,6 +88,8 @@ class CrowdZeroColors(
         private set
     var green500 by mutableStateOf(green500)
         private set
+    var blue300 by mutableStateOf(blue300)
+        private set
     var blue200 by mutableStateOf(blue200)
         private set
     var blue100 by mutableStateOf(blue100)
@@ -108,6 +112,7 @@ class CrowdZeroColors(
         green700 = green700,
         green600 = green600,
         green500 = green500,
+        blue300 = blue300,
         blue200 = blue200,
         blue100 = blue100
     )
@@ -152,6 +157,7 @@ fun crowdZeroColors(
     green700: Color = Green700,
     green600: Color = Green600,
     green500: Color = Green500,
+    blue300: Color = Blue300,
     blue200: Color = Blue200,
     blue100: Color = Blue100
 ) = CrowdZeroColors(
@@ -171,6 +177,7 @@ fun crowdZeroColors(
     green700 = green700,
     green600 = green600,
     green500 = green500,
+    blue300 = blue300,
     blue200 = blue200,
     blue100 = blue100
 )

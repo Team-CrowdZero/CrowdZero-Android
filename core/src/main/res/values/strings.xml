@@ -32,5 +32,6 @@
     <string name="previous_month">이전 달</string>
     <string name="next_month">다음 달</string>
     <string name="dust_condition_unknown">모름</string>
+    <string name="dust_condition_very_bad">매우나쁨</string>
 
 </resources>

@@ -1,8 +1,6 @@
 package com.gdg.feature.calendar
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,8 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -47,6 +42,7 @@ import com.gdg.core.state.UiState
 import com.gdg.core.util.TimeFormatter
 import com.gdg.domain.entity.ScheduleEntity
 import com.gdg.feature.R
+import com.gdg.feature.calendar.component.CalendarInfoBox
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.YearMonth
@@ -208,80 +204,6 @@ fun CalendarScreen(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun CalendarInfoBox(data: ScheduleEntity) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(0.5.dp, CrowdZeroTheme.colors.gray500, shape = RoundedCornerShape(15.dp))
-            .clip(RoundedCornerShape(15.dp))
-            .background(CrowdZeroTheme.colors.white)
-            .padding(dimensionResource(R.dimen.default_padding))
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier.padding(end = 8.dp),
-                text = data.duration,
-                style = CrowdZeroTheme.typography.c4SemiBold,
-                color = CrowdZeroTheme.colors.green600
-            )
-            Text(
-                text = data.region,
-                style = CrowdZeroTheme.typography.c4SemiBold,
-                color = CrowdZeroTheme.colors.white,
-                modifier = Modifier
-                    .background(
-                        color = CrowdZeroTheme.colors.green600,
-                        shape = RoundedCornerShape(30.dp)
-                    )
-                    .padding(horizontal = 8.dp, vertical = 3.dp)
-            )
-        }
-        Text(
-            text = data.location.replace("\n", " "),
-            style = CrowdZeroTheme.typography.h5Bold,
-            color = CrowdZeroTheme.colors.gray900
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier.padding(end = 4.dp),
-                text = stringResource(R.string.calendar_people_reporting_title),
-                style = CrowdZeroTheme.typography.c3Regular,
-                color = CrowdZeroTheme.colors.gray600
-            )
-            Text(
-                modifier = Modifier.padding(end = 8.dp),
-                text = stringResource(R.string.calendar_people_reporting, data.people),
-                style = CrowdZeroTheme.typography.c3Regular,
-                color = CrowdZeroTheme.colors.gray800
-            )
-            Text(
-                modifier = Modifier.padding(end = 8.dp),
-                text = stringResource(R.string.calendar_slash),
-                style = CrowdZeroTheme.typography.c3Regular,
-                color = CrowdZeroTheme.colors.gray600
-            )
-            Text(
-                modifier = Modifier.padding(end = 4.dp),
-                text = stringResource(R.string.calendar_jurisdiction),
-                style = CrowdZeroTheme.typography.c3Regular,
-                color = CrowdZeroTheme.colors.gray600
-            )
-            Text(
-                text = data.jurisdiction.replace("\n", " "),
-                style = CrowdZeroTheme.typography.c3Regular,
-                color = CrowdZeroTheme.colors.gray800
-            )
         }
     }
 }
