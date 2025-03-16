@@ -176,12 +176,14 @@ fun CalendarScreen(
 
                 is UiState.Success -> {
                     if (getScheduleState.data.isEmpty()) {
+                        Spacer(modifier = Modifier.weight(1f))
                         Text(
                             text = stringResource(R.string.calendar_no_info),
                             style = CrowdZeroTheme.typography.h5Medium,
                             color = CrowdZeroTheme.colors.gray900,
-                            modifier = Modifier.padding(top = 72.dp)
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
                         )
+                        Spacer(modifier = Modifier.weight(1f))
                     } else {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
@@ -214,24 +216,25 @@ fun CalendarScreenPreview() {
     CrowdZeroAndroidTheme {
         CalendarScreen(
             getScheduleState = UiState.Success(
-                listOf(
-                    ScheduleEntity(
-                        date = LocalDate.now().toString(),
-                        duration = "07:30 ~ 24:00",
-                        location = "두터교회 앞 인도 및 2개 차로",
-                        region = "한남동",
-                        people = "3000",
-                        jurisdiction = "용산"
-                    ),
-                    ScheduleEntity(
-                        date = LocalDate.now().toString(),
-                        duration = "07:30 ~ 24:00",
-                        location = "두터교회 앞 인도 및 2개 차로두터교회 앞 인도 및 2개 차로두터교회 앞 인도 및 2개 차로",
-                        region = "한남동",
-                        people = "3000",
-                        jurisdiction = "용산"
-                    )
-                )
+//                listOf(
+//                    ScheduleEntity(
+//                        date = LocalDate.now().toString(),
+//                        duration = "07:30 ~ 24:00",
+//                        location = "두터교회 앞 인도 및 2개 차로",
+//                        region = "한남동",
+//                        people = "3000",
+//                        jurisdiction = "용산"
+//                    ),
+//                    ScheduleEntity(
+//                        date = LocalDate.now().toString(),
+//                        duration = "07:30 ~ 24:00",
+//                        location = "두터교회 앞 인도 및 2개 차로두터교회 앞 인도 및 2개 차로두터교회 앞 인도 및 2개 차로",
+//                        region = "한남동",
+//                        people = "3000",
+//                        jurisdiction = "용산"
+//                    )
+//                )
+                emptyList()
             ),
             selectedDate = LocalDate.now(),
             onDateSelected = {}

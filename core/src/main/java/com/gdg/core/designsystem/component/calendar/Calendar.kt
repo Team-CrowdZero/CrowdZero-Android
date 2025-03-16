@@ -129,6 +129,7 @@ fun CalendarComponent(
                 Box(
                     modifier = Modifier
                         .aspectRatio(1f)
+                        .size(40.dp)
                         .padding(5.dp)
                         .background(
                             shape = CircleShape,
