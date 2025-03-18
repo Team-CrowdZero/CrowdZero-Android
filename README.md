@@ -4,10 +4,14 @@
 
 서울 도심 주요 집회 장소의 **실시간 혼잡도**와 **교통 통제 정보**를 제공하는 Android 애플리케이션입니다.
 
+## 🔗 다운로드
+<a href="https://play.google.com/store/apps/details?id=com.gdg.crowdzero_android&hl=ko"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="100"></a>
+
 ## 📌 주요 기능
 - **실시간 혼잡도 조회**: 서울시 주요 집회 장소 5곳의 혼잡도와 날씨를 실시간으로 확인할 수 있습니다.
 - **교통 통제 정보 제공**: 서울 도심 내 교통 통제 구간 정보를 실시간으로 안내합니다.
 - **집회 정보 제공**:서울경찰청의 오늘의 집회 정보를 크롤링하여 캘린더에서 일정과 상세 내용을 확인합니다.
+  
 
 ## 👩‍💻 Front-End 팀원
 
